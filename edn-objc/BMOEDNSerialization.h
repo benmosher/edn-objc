@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface edn_objc : NSObject
+@interface BMOEDNSerialization : NSObject
+
++(id)EDNObjectWithData:(NSData *)data error:(NSError **)error;
 
 @end
