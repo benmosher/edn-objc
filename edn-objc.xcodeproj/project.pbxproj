@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		B5C7A62A17C8F282005E0615 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A62917C8F282005E0615 /* Foundation.framework */; };
-		B5C7A62F17C8F282005E0615 /* edn_objc.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = B5C7A62E17C8F282005E0615 /* edn_objc.h */; };
-		B5C7A63117C8F282005E0615 /* edn_objc.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A63017C8F282005E0615 /* edn_objc.m */; };
+		B5C7A62F17C8F282005E0615 /* BMOEDNSerialization.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = B5C7A62E17C8F282005E0615 /* BMOEDNSerialization.h */; };
+		B5C7A63117C8F282005E0615 /* BMOEDNSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A63017C8F282005E0615 /* BMOEDNSerialization.m */; };
 		B5C7A63917C8F282005E0615 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A63817C8F282005E0615 /* SenTestingKit.framework */; };
 		B5C7A63B17C8F282005E0615 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A63A17C8F282005E0615 /* UIKit.framework */; };
 		B5C7A63C17C8F282005E0615 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A62917C8F282005E0615 /* Foundation.framework */; };
@@ -35,7 +35,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				B5C7A62F17C8F282005E0615 /* edn_objc.h in CopyFiles */,
+				B5C7A62F17C8F282005E0615 /* BMOEDNSerialization.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,8 +45,8 @@
 		B5C7A62617C8F282005E0615 /* libedn-objc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libedn-objc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C7A62917C8F282005E0615 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B5C7A62D17C8F282005E0615 /* edn-objc-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "edn-objc-Prefix.pch"; sourceTree = "<group>"; };
-		B5C7A62E17C8F282005E0615 /* edn_objc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = edn_objc.h; sourceTree = "<group>"; };
-		B5C7A63017C8F282005E0615 /* edn_objc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = edn_objc.m; sourceTree = "<group>"; };
+		B5C7A62E17C8F282005E0615 /* BMOEDNSerialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMOEDNSerialization.h; sourceTree = "<group>"; };
+		B5C7A63017C8F282005E0615 /* BMOEDNSerialization.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMOEDNSerialization.m; sourceTree = "<group>"; };
 		B5C7A63717C8F282005E0615 /* edn-objcTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "edn-objcTests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C7A63817C8F282005E0615 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		B5C7A63A17C8F282005E0615 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -111,8 +111,8 @@
 		B5C7A62B17C8F282005E0615 /* edn-objc */ = {
 			isa = PBXGroup;
 			children = (
-				B5C7A62E17C8F282005E0615 /* edn_objc.h */,
-				B5C7A63017C8F282005E0615 /* edn_objc.m */,
+				B5C7A62E17C8F282005E0615 /* BMOEDNSerialization.h */,
+				B5C7A63017C8F282005E0615 /* BMOEDNSerialization.m */,
 				B5C7A62C17C8F282005E0615 /* Supporting Files */,
 			);
 			path = "edn-objc";
@@ -243,7 +243,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B5C7A63117C8F282005E0615 /* edn_objc.m in Sources */,
+				B5C7A63117C8F282005E0615 /* BMOEDNSerialization.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
