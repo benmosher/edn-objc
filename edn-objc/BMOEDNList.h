@@ -8,15 +8,28 @@
 
 #import <Foundation/Foundation.h>
 
-@interface BMOEDNConsCell : NSObject
+@interface BMOEDNConsCell : NSObject {
+    @package
+    id _first;
+    id _rest;
+}
 
-@property (strong, nonatomic) id first;
-@property (strong, nonatomic) id rest;
+@property (strong, nonatomic, readonly) id first;
+@property (strong, nonatomic, readonly) id rest;
+
+-(BOOL)isEqualToConsCell:(BMOEDNConsCell *)object;
 
 @end
 
-@interface BMOEDNList : NSObject
+@interface BMOEDNList : NSObject<NSCopying> {
+    NSUInteger _hash;
+    @package
+    dispatch_once_t _hashOnceToken;
+    BMOEDNConsCell * _head;
+}
 
-@property (strong, nonatomic) BMOEDNConsCell *head;
+@property (strong, nonatomic, readonly) BMOEDNConsCell *head;
+
+-(BOOL)isEqualToList:(BMOEDNList *)list;
 
 @end

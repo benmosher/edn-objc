@@ -238,18 +238,41 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
         }
         if (newObject != nil) {
             BMOEDNConsCell *newCons = [BMOEDNConsCell new];
-            newCons.first = newObject;
+            newCons->_first = newObject;
             if (cons == nil) {
-                list.head = newCons;
+                list->_head = newCons;
             } else {
-                cons.rest = newCons;
+                cons->_rest = newCons;
             }
             cons = newCons;
         }
         [self skipWhitespace:parserState];
     }
     [parserState moveAhead];
+    list->_hashOnceToken = 0; // reset hash token, just in case iOS called it while constructing
     return list;
+}
+
+-(id)parseMap:(BMOEDNParserState *)parserState {
+    NSMutableArray *array = [self parseTokenSequenceWithTerminator:'}' parserState:parserState];
+    if (parserState.error != nil) {
+        return array; // bad things afoot
+    }
+    if (array.count%2 == 1) {
+        parserState.error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeInvalidData userInfo:nil]; // TODO: message
+        return nil;
+    }
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithCapacity:(array.count/2)];
+    
+    for (int i = 0; i < array.count; i += 2)
+    {
+        [dictionary setObject:[array objectAtIndex:i+1] forKey:[array objectAtIndex:i]];
+    }
+    if (dictionary.count != array.count/2) {
+        parserState.error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeInvalidData userInfo:nil]; // TODO: message
+        return nil;
+    }
+    return [dictionary copy];
 }
 
 -(NSMutableArray *)parseTokenSequenceWithTerminator:(unichar)terminator
@@ -342,6 +365,7 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
         [parserState moveAhead];
     }
     NSString *markedString = [parserState markedString];
+    [parserState moveAhead];
     if ([markedString length] == 0) return markedString;
     else {
         NSMutableString *string = [markedString mutableCopy];

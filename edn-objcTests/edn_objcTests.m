@@ -69,6 +69,11 @@
     do {
         STAssertEqualObjects(current.first,@(i++), @"");
     } while ((current = current.rest) != nil);
+    
+    id<NSObject> secondList = [BMOEDNSerialization EDNObjectWithData:[@"( 1 2 3 4 5 )" dataUsingEncoding:NSUTF8StringEncoding]
+                                                      error:NULL];
+    STAssertEqualObjects(list, secondList, @"");
+    STAssertEquals(list.hash, secondList.hash, @"");
 }
 
 - (void)testComments
@@ -106,6 +111,16 @@
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"#{ 1 }" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], [NSSet setWithArray:@[@1]], @"");
     id set = [NSSet setWithArray:@[@1, @2]];
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"#{ 1 2 }" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], set, @"");
+}
+
+- (void)testMaps
+{
+    id map = @{
+        @"one":@(1),
+        [BMOEDNSerialization EDNObjectWithData:[@"( 1 2 )" dataUsingEncoding:NSUTF8StringEncoding]
+                                         error:NULL]:@"two",
+        @"three":@"surprise!"};
+    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"{\"one\" 1 ( 1 2 ) \"two\" \"three\" \"surprise!\"}" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], map, @"");
 }
 
 @end
