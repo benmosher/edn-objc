@@ -17,8 +17,8 @@
 		B5C7A64517C8F282005E0615 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B5C7A64317C8F282005E0615 /* InfoPlist.strings */; };
 		B5C7A64817C8F282005E0615 /* edn_objcTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A64717C8F282005E0615 /* edn_objcTests.m */; };
 		B5C7A65317C9B35D005E0615 /* BMOEDNKeyword.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65217C9B35D005E0615 /* BMOEDNKeyword.m */; };
-		B5C7A65617C9B460005E0615 /* BMOEDNNamespace.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65517C9B460005E0615 /* BMOEDNNamespace.m */; };
 		B5C7A65917C9C1F4005E0615 /* BMOEDNList.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65817C9C1F4005E0615 /* BMOEDNList.m */; };
+		B5C7A65C17CAB740005E0615 /* BMOEDNSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65B17CAB73F005E0615 /* BMOEDNSymbol.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,10 +59,10 @@
 		B5C7A64717C8F282005E0615 /* edn_objcTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = edn_objcTests.m; sourceTree = "<group>"; };
 		B5C7A65117C9B35D005E0615 /* BMOEDNKeyword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNKeyword.h; sourceTree = "<group>"; };
 		B5C7A65217C9B35D005E0615 /* BMOEDNKeyword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNKeyword.m; sourceTree = "<group>"; };
-		B5C7A65417C9B460005E0615 /* BMOEDNNamespace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNNamespace.h; sourceTree = "<group>"; };
-		B5C7A65517C9B460005E0615 /* BMOEDNNamespace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNNamespace.m; sourceTree = "<group>"; };
 		B5C7A65717C9C1F4005E0615 /* BMOEDNList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNList.h; sourceTree = "<group>"; };
 		B5C7A65817C9C1F4005E0615 /* BMOEDNList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNList.m; sourceTree = "<group>"; };
+		B5C7A65A17CAB73F005E0615 /* BMOEDNSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNSymbol.h; sourceTree = "<group>"; };
+		B5C7A65B17CAB73F005E0615 /* BMOEDNSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNSymbol.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,8 +120,8 @@
 		B5C7A62B17C8F282005E0615 /* edn-objc */ = {
 			isa = PBXGroup;
 			children = (
-				B5C7A65417C9B460005E0615 /* BMOEDNNamespace.h */,
-				B5C7A65517C9B460005E0615 /* BMOEDNNamespace.m */,
+				B5C7A65A17CAB73F005E0615 /* BMOEDNSymbol.h */,
+				B5C7A65B17CAB73F005E0615 /* BMOEDNSymbol.m */,
 				B5C7A65117C9B35D005E0615 /* BMOEDNKeyword.h */,
 				B5C7A65217C9B35D005E0615 /* BMOEDNKeyword.m */,
 				B5C7A62E17C8F282005E0615 /* BMOEDNSerialization.h */,
@@ -260,8 +260,8 @@
 			files = (
 				B5C7A63117C8F282005E0615 /* BMOEDNSerialization.m in Sources */,
 				B5C7A65317C9B35D005E0615 /* BMOEDNKeyword.m in Sources */,
-				B5C7A65617C9B460005E0615 /* BMOEDNNamespace.m in Sources */,
 				B5C7A65917C9C1F4005E0615 /* BMOEDNList.m in Sources */,
+				B5C7A65C17CAB740005E0615 /* BMOEDNSymbol.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

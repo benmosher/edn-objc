@@ -7,17 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "BMOEDNNamespace.h"
+#import "BMOEDNSymbol.h"
 
-@interface BMOEDNKeyword : NSObject
+@interface BMOEDNKeyword : BMOEDNSymbol
 
-@property (strong,nonatomic) BMOEDNNamespace *namespace;
-@property (strong,nonatomic) NSString *symbol;
-
-#if __has_feature(objc_instancetype)
-+(instancetype)keywordMatchingString:(NSString *)string;
-#else
-+(id)keywordMatchingString:(NSString *)string;
-#endif
+-(BOOL)isEqualToKeyword:(BMOEDNKeyword *)object;
 
 @end
