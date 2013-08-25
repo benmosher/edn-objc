@@ -17,61 +17,114 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
 +(id)parseObjectWithBytes:(const void *)bytes startingFrom:(NSUInteger)index error:(NSError **)error;
 
 @end
-
-/**
- * Indicator type for collections, etc., since 'nil'
- * already means "propogate the error". Should be 
- * removed if recursion is converted to iteration.
- */
-@interface BMOEDNDiscard : NSObject
-@end
-@implementation BMOEDNDiscard
-@end
-
-@interface BMOEDNParser : NSObject {
+// TODO: profile, see if struct+functions are faster
+@interface BMOEDNParserState : NSObject {
     NSUInteger _currentIndex;
+    NSUInteger _markIndex;
     __strong NSData * _data;
     char *_chars;
-    
-    @private
-    NSCharacterSet *_whitespace,*_terminators;
 }
-#if __has_feature(objc_instancetype)
+
 -(instancetype)initWithData:(NSData *)data;
-#else
--(id)initWithData:(NSData *)data;
-#endif
 
--(id)parseObjectWithError:(NSError **)error;
--(id)parseTaggedObjectWithError:(NSError **)error;
--(id)parseVectorWithError:(NSError **)error;
--(id)parseListWithError:(NSError **)error;
--(id)parseMapWithError:(NSError **)error;
--(id)parseStringWithError:(NSError **)error;
--(id)parseLiteralWithError:(NSError **)error;
--(id)parseSetWithError:(NSError **)error;
+@property (nonatomic, readonly, getter = isValid) BOOL valid;
+/**
+ * Caller should check isValid first; if parser is not
+ * in a valid state, behavior is undefined.
+ */
+@property (nonatomic, readonly) unichar currentCharacter;
+@property (nonatomic, readonly) unichar markedCharacter;
 
--(NSMutableArray *)parseTokenSequenceWithTerminator:(unichar)terminator
-                                              error:(NSError **)error;
--(void)skipWhitespace;
-@property (strong, nonatomic, readonly) NSCharacterSet *whitespace;
-@property (strong, nonatomic, readonly) NSCharacterSet *terminators;
+@property (strong, nonatomic) NSError * error;
+
+-(void) moveAhead;
+-(void) setMark;
+-(NSUInteger) getMark;
+
+-(NSString *) markedString;
+
 @end
+@implementation BMOEDNParserState
 
-@implementation BMOEDNParser
-
-#if __has_feature(objc_instancetype)
--(instancetype)initWithData:(NSData *)data
-#else
--(id)initWithData:(NSData *)data
-#endif
-{
+-(instancetype)initWithData:(NSData *)data {
     if (self = [super init]) {
         _data = data;
         _chars = (char *)[data bytes];
         _currentIndex = 0;
     }
     return self;
+}
+
+-(BOOL)isValid {
+    return (_currentIndex < _data.length);
+}
+
+-(unichar)currentCharacter {
+    return ((unichar)_chars[_currentIndex]);
+};
+
+-(unichar)markedCharacter {
+    return ((unichar)_chars[_markIndex]);
+}
+
+-(void)moveAhead {
+    _currentIndex++;
+}
+
+-(void)setMark {
+    _markIndex = _currentIndex;
+}
+
+-(NSUInteger)getMark {
+    return _markIndex;
+}
+
+-(NSString *)markedString {
+    if (_currentIndex == _markIndex){
+        return @"";
+    }
+    return [[NSString alloc] initWithBytes:&_chars[_markIndex]
+                                                 length:(_currentIndex-_markIndex)
+                                               encoding:NSUTF8StringEncoding];
+}
+
+@end
+
+@interface BMOEDNParser : NSObject {
+    // TODO: make these static
+    @private
+    NSCharacterSet *_whitespace,*_terminators,*_quoted;
+}
+
+-(id)parse:(NSData *)data withError:(NSError **)error;
+
+-(id)parseObject:(BMOEDNParserState *)parserState;
+-(id)parseTaggedObject:(BMOEDNParserState *)parserState;
+-(id)parseVector:(BMOEDNParserState *)parserState;
+-(id)parseList:(BMOEDNParserState *)parserState;
+-(id)parseMap:(BMOEDNParserState *)parserState;
+-(id)parseString:(BMOEDNParserState *)parserState;
+-(id)parseLiteral:(BMOEDNParserState *)parserState;
+-(id)parseSet:(BMOEDNParserState *)parserState;
+
+-(NSMutableArray *)parseTokenSequenceWithTerminator:(unichar)terminator
+                                        parserState:(BMOEDNParserState *)parserState;
+-(void)skipWhitespace:(BMOEDNParserState *)parserState;
+@property (strong, nonatomic, readonly) NSCharacterSet *whitespace;
+@property (strong, nonatomic, readonly) NSCharacterSet *terminators;
+@property (strong, nonatomic, readonly) NSCharacterSet *quoted;
+@end
+
+@implementation BMOEDNParser
+
+-(id)parse:(NSData *)data withError:(NSError **)error
+{
+    BMOEDNParserState *state = [[BMOEDNParserState alloc] initWithData:data];
+    id parsed = [self parseObject:state];
+    if (parsed == nil && error != NULL) {
+        *error = state.error;
+    }
+    return parsed;
 }
 
 -(NSCharacterSet *)whitespace {
@@ -92,96 +145,98 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
     return _terminators;
 }
 
+-(NSCharacterSet *)quoted {
+    if (_quoted == nil) {
+        _quoted = [NSCharacterSet characterSetWithCharactersInString:@"\\\"rnt"];
+    }
+    return _quoted;
+}
 
--(void)skipWhitespace {
+
+-(void)skipWhitespace:(BMOEDNParserState *)parserState {
     
     BOOL comment = NO;
-    while ((_currentIndex < _data.length
-           && [self.whitespace characterIsMember:(unichar)_chars[_currentIndex]]) || comment) {
-        if (_chars[_currentIndex] == ';')
+    while ((parserState.valid && [self.whitespace characterIsMember:parserState.currentCharacter]) || comment) {
+        if (parserState.currentCharacter == ';')
             comment = YES;
-        if ( _chars[_currentIndex] == '\n')
+        if (parserState.currentCharacter == '\n')
             comment = NO;
-        _currentIndex++;
+        [parserState moveAhead];
     }
 }
 
 
--(id)parseObjectWithError:(NSError **)error {
-    [self skipWhitespace];
-    if (_currentIndex >= _data.length) {
-        if (error != NULL)
-            *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
+-(id)parseObject:(BMOEDNParserState *)parserState {
+    [self skipWhitespace:parserState];
+    if (!parserState.valid) {
+        parserState.error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
         return nil;
     }
-    // TODO: ignore leading whitespace
-    switch (_chars[_currentIndex]) {
+    switch (parserState.currentCharacter) {
         case '#':
-            return [self parseTaggedObjectWithError:error];
+            return [self parseTaggedObject:parserState];
         case '[':
-            return [self parseVectorWithError:error];
+            return [self parseVector:parserState];
         case '(':
-            return [self parseListWithError:error];
+            return [self parseList:parserState];
         case '{':
-            return [self parseMapWithError:error];
+            return [self parseMap:parserState];
         case '"':
-            return [self parseStringWithError:error];
+            return [self parseString:parserState];
         default:
-            return [self parseLiteralWithError:error];
+            return [self parseLiteral:parserState];
     }
 }
 
--(id)parseTaggedObjectWithError:(NSError **)error {
-    _currentIndex++;
-    if (_currentIndex >= _data.length) {
-        if (error != NULL)
-            *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
+-(id)parseTaggedObject:(BMOEDNParserState *)parserState {
+    [parserState moveAhead];
+    if (!parserState.valid) {
+        parserState.error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
         return nil;
     }
     
-    switch (_chars[_currentIndex]) {
+    switch (parserState.currentCharacter) {
         case '_':
-            _currentIndex++;
-            [self skipWhitespace];
-            while (_currentIndex < _data.length
-                   && ![self.terminators characterIsMember:(unichar)_chars[_currentIndex]]){
-                _currentIndex++;
+            [parserState moveAhead];
+            [self skipWhitespace:parserState];
+            while (parserState.valid
+                   && ![self.terminators characterIsMember:parserState.currentCharacter]){
+                [parserState moveAhead];
             }
-            return [BMOEDNDiscard new]; // TODO: singleton? or just figure out how to obviate?
+            return nil;
         case '{':
-            return [self parseSetWithError:error];
+            return [self parseSet:parserState];
         default:
             return nil;
             break;
     }
 }
 
--(id)parseSetWithError:(NSError **)error {
-    NSMutableArray *array = [self parseTokenSequenceWithTerminator:'}' error:error];
+-(id)parseSet:(BMOEDNParserState *)parserState {
+    NSMutableArray *array = [self parseTokenSequenceWithTerminator:'}' parserState:parserState];
     if (array == nil) return nil;
     // TODO: complain if set count != array length?
     else return [NSSet setWithArray:array];
 }
 
--(id)parseListWithError:(NSError **)error {
-    _currentIndex++;
-    if (_currentIndex >= _data.length) {
-        if (error != NULL)
-            *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
+-(id)parseList:(BMOEDNParserState *)parserState {
+    [parserState moveAhead];
+    if (!parserState.valid) {
+        parserState.error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
         return nil;
     }
     
     BMOEDNList *list = [BMOEDNList new];
     BMOEDNConsCell *cons = nil;
     
-    [self skipWhitespace];
-    while (_currentIndex < _data.length
-           && _chars[_currentIndex] != ')') {
-        id newObject = [self parseObjectWithError:error];
-        if (newObject == nil) {
+    [self skipWhitespace:parserState];
+    while (parserState.valid
+           && parserState.currentCharacter != ')') {
+        id newObject = [self parseObject:parserState];
+        if (parserState.error != nil) {
             return nil;
         }
-        if (![newObject isKindOfClass:[BMOEDNDiscard class]]) {
+        if (newObject != nil) {
             BMOEDNConsCell *newCons = [BMOEDNConsCell new];
             newCons.first = newObject;
             if (cons == nil) {
@@ -191,70 +246,62 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
             }
             cons = newCons;
         }
-        [self skipWhitespace];
+        [self skipWhitespace:parserState];
     }
-    _currentIndex++;
+    [parserState moveAhead];
     return list;
 }
 
 -(NSMutableArray *)parseTokenSequenceWithTerminator:(unichar)terminator
-                                              error:(NSError **)error {
-    _currentIndex++;
-    if (_currentIndex >= _data.length) {
-        if (error != NULL)
-            *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
+                                        parserState:(BMOEDNParserState *)parserState {
+    [parserState moveAhead];
+    if (!parserState.valid) {
+        parserState.error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
         return nil;
     }
     NSMutableArray *array = [NSMutableArray new];
-    [self skipWhitespace];
-    while (_currentIndex < _data.length
-           && _chars[_currentIndex] != terminator) {
-        id newObject = [self parseObjectWithError:error];
-        if (newObject == nil) {// something went wrong; bail
+    [self skipWhitespace:parserState];
+    while (parserState.valid
+           && parserState.currentCharacter != terminator) {
+        id newObject = [self parseObject:parserState];
+        if (parserState.error != nil) {// something went wrong; bail
             return nil;
         }
-        if (![newObject isKindOfClass:[BMOEDNDiscard class]]) {
+        if (newObject != nil) {
             [array addObject:newObject];
         }
-        [self skipWhitespace];
+        [self skipWhitespace:parserState];
     }
-    if (_currentIndex >= _data.length) {
-        if (error != NULL)
-            *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
+    if (!parserState.valid) {
+        parserState.error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
         return nil;
     }
-    _currentIndex++;
+    [parserState moveAhead];
     return array;
 }
 
--(id)parseVectorWithError:(NSError **)error {
-    NSMutableArray *array = [self parseTokenSequenceWithTerminator:']' error:error];
+-(id)parseVector:(BMOEDNParserState *)parserState {
+    NSMutableArray *array = [self parseTokenSequenceWithTerminator:']' parserState:parserState];
     if (array == nil) return nil;
     else return [NSArray arrayWithArray:array];
 }
 
--(id)parseLiteralWithError:(NSError **)error {
-    NSUInteger firstCharIndex = _currentIndex;
+-(id)parseLiteral:(BMOEDNParserState *)parserState {
     
-    while (_currentIndex < _data.length
-           && ![self.terminators characterIsMember:(unichar)_chars[_currentIndex]])
+    [parserState setMark];
+    while (parserState.valid
+           && ![self.terminators characterIsMember:parserState.currentCharacter])
     {
-        _currentIndex++;
+        [parserState moveAhead];
     }
-    
-    if (_currentIndex == firstCharIndex){
-        // TODO: userinfo
-        if (error != NULL)
-            *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain
-                                     code:BMOEDNSerializationErrorCodeUnexpectedEndOfData
-                                 userInfo:nil];
+    NSString *literal = [parserState markedString];
+    if ([literal length] == 0) {
+        parserState.error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
         return nil;
     }
-    NSString *literal = [[NSString alloc] initWithBytes:&_chars[firstCharIndex]
-                                                 length:(_currentIndex-firstCharIndex)
-                                               encoding:NSUTF8StringEncoding];
+    
     // TODO: keyword/symbol support
-    if ([[NSCharacterSet decimalDigitCharacterSet] characterIsMember:(unichar)_chars[firstCharIndex]]){
+    if ([[NSCharacterSet decimalDigitCharacterSet] characterIsMember:parserState.markedCharacter]){
         // TODO: rational number preservation/support?
         // TODO: 'N'-suffix for arbitrary precision (i.e. BigX) support?
         NSNumberFormatter *nf = [NSNumberFormatter new];
@@ -270,25 +317,34 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
     
     // failed to parse a valid literal
     // TODO: userinfo
-    if (error != NULL)
-        *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain
+    parserState.error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain
                                  code:BMOEDNSerializationErrorCodeInvalidData
                              userInfo:nil];
     return nil;
 }
 
--(id)parseStringWithError:(NSError **)error {
-    NSUInteger firstChar = ++_currentIndex;
-    while(_currentIndex < _data.length && (_chars[_currentIndex] != '"' || _chars[_currentIndex-1] == '\\')){
-        _currentIndex++;
+-(id)parseString:(BMOEDNParserState *)parserState {
+    [parserState moveAhead];
+    [parserState setMark];
+    BOOL quoting = NO;
+    while(parserState.valid && (parserState.currentCharacter != '"' || quoting)){
+        if (quoting) {
+            if (![self.quoted characterIsMember:parserState.currentCharacter]) {
+                // TODO: provide erroneous index
+                parserState.error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain
+                                                        code:BMOEDNSerializationErrorCodeInvalidData
+                                                    userInfo:nil];
+                return nil;
+            } else quoting = NO;
+        } else if (parserState.currentCharacter == '\\') {
+            quoting = YES;
+        }
+        [parserState moveAhead];
     }
-    if (_currentIndex == firstChar){
-        return @"";
-    }
+    NSString *markedString = [parserState markedString];
+    if ([markedString length] == 0) return markedString;
     else {
-        NSMutableString *string = [[NSMutableString alloc] initWithBytes:&_chars[firstChar]
-                                                           length:(_currentIndex-firstChar)
-                                                         encoding:NSUTF8StringEncoding];
+        NSMutableString *string = [markedString mutableCopy];
         // replace escapes with proper values
         [string replaceOccurrencesOfString:@"\\\"" withString:@"\"" options:0 range:NSMakeRange(0, string.length)];
         [string replaceOccurrencesOfString:@"\\t" withString:@"\t" options:0 range:NSMakeRange(0, string.length)];
@@ -297,6 +353,7 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
         [string replaceOccurrencesOfString:@"\\\\" withString:@"\\" options:0 range:NSMakeRange(0, string.length)];
         return [NSString stringWithString:string]; // immutabilityyyy
     }
+
 }
 
 @end
@@ -304,13 +361,7 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
 @implementation BMOEDNSerialization
 
 +(id)EDNObjectWithData:(NSData *)data error:(NSError **)error {
-    id parsed = [[[BMOEDNParser alloc] initWithData:data] parseObjectWithError:error];
-    if ([parsed isKindOfClass:[BMOEDNDiscard class]]) {
-        if (error != NULL)
-            *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeNoData userInfo:nil];
-        parsed = nil;
-    }
-    return parsed;
+    return [[BMOEDNParser new] parse:data withError:error];
 }
 
 @end
