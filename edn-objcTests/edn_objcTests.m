@@ -7,6 +7,7 @@
 //
 
 #import "edn_objcTests.h"
+#import "BMOEDNSerialization.h"
 
 @implementation edn_objcTests
 
@@ -24,9 +25,10 @@
     [super tearDown];
 }
 
-- (void)testExample
+- (void) testParseStrings
 {
-    STFail(@"Unit tests are not implemented yet in edn-objcTests");
+    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"\"whee\"" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], @"whee", @"");
+    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"\"I have a \\\"mid-quoted\\\" string in me.\\nAnd two lines.\\r\\nWindows file: \\\"C:\\\\a file.txt\\\"\"" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], @"I have a \"mid-quoted\" string in me.\nAnd two lines.\r\nWindows file: \"C:\\a file.txt\"", @"");
 }
 
 @end
