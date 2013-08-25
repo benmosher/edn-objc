@@ -71,4 +71,11 @@
     } while ((current = current.rest) != nil);
 }
 
+- (void)testComments
+{
+    id array = @[@1, @2];
+    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"[ 1 ;; mid-array comment\n 2 ]" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], array, @"");
+    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"[ 1;3\n2 ]" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], array, @"");
+}
+
 @end

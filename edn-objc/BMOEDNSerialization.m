@@ -65,9 +65,14 @@ enum BMOEDNSerializationErrorCode {
 
 -(void)skipWhitespace {
     NSMutableCharacterSet *ws = [NSMutableCharacterSet whitespaceAndNewlineCharacterSet];
-    [ws addCharactersInString:@","];
-    while (_currentIndex < _data.length
-           && [ws characterIsMember:(unichar)_chars[_currentIndex]]) {
+    [ws addCharactersInString:@",;"];
+    BOOL comment = NO;
+    while ((_currentIndex < _data.length
+           && [ws characterIsMember:(unichar)_chars[_currentIndex]]) || comment) {
+        if (_chars[_currentIndex] == ';')
+            comment = YES;
+        if ( _chars[_currentIndex] == '\n')
+            comment = NO;
         _currentIndex++;
     }
 }
@@ -154,7 +159,7 @@ enum BMOEDNSerializationErrorCode {
 
 -(id)parseLiteralWithError:(NSError **)error {
     NSMutableCharacterSet *terminators = [NSMutableCharacterSet whitespaceAndNewlineCharacterSet];
-    [terminators addCharactersInString:@"}]),"];
+    [terminators addCharactersInString:@"}]),;"];
     NSUInteger firstCharIndex = _currentIndex;
     
     while (_currentIndex < _data.length

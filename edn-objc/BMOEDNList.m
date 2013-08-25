@@ -14,6 +14,7 @@
 
 
 // TODO: fast enumeration, recursive equality testing
+// TODO: immutability + XOR'd hashes of cons cell contents? for set membership?
 @implementation BMOEDNList
 
 @end
