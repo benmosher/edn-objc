@@ -12,23 +12,29 @@
 NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
 #define BMOEDNSerializationErrorDomain ((NSString *)_BMOEDNSerializationErrorDomain)
 
-enum BMOEDNSerializationErrorCode {
-    BMOEDNSerializationErrorCodeNone = 0,
-    BMOEDNSerializationErrorCodeNoData,
-    BMOEDNSerializationErrorCodeInvalidData,
-    BMOEDNSerializationErrorCodeUnexpectedEndOfData,
-    };
-
 @interface BMOEDNSerialization ()
 
 +(id)parseObjectWithBytes:(const void *)bytes startingFrom:(NSUInteger)index error:(NSError **)error;
 
 @end
 
+/**
+ * Indicator type for collections, etc., since 'nil'
+ * already means "propogate the error". Should be 
+ * removed if recursion is converted to iteration.
+ */
+@interface BMOEDNDiscard : NSObject
+@end
+@implementation BMOEDNDiscard
+@end
+
 @interface BMOEDNParser : NSObject {
     NSUInteger _currentIndex;
     __strong NSData * _data;
     char *_chars;
+    
+    @private
+    NSCharacterSet *_whitespace,*_terminators;
 }
 #if __has_feature(objc_instancetype)
 -(instancetype)initWithData:(NSData *)data;
@@ -45,6 +51,8 @@ enum BMOEDNSerializationErrorCode {
 -(id)parseLiteralWithError:(NSError **)error;
 
 -(void)skipWhitespace;
+@property (strong, nonatomic, readonly) NSCharacterSet *whitespace;
+@property (strong, nonatomic, readonly) NSCharacterSet *terminators;
 @end
 
 @implementation BMOEDNParser
@@ -63,12 +71,30 @@ enum BMOEDNSerializationErrorCode {
     return self;
 }
 
+-(NSCharacterSet *)whitespace {
+    if (_whitespace == nil) {
+        NSMutableCharacterSet *ws = [NSMutableCharacterSet whitespaceAndNewlineCharacterSet];
+        [ws addCharactersInString:@",;"];
+        _whitespace =  [ws copy];
+    }
+    return _whitespace;
+}
+
+-(NSCharacterSet *)terminators {
+    if (_terminators == nil) {
+        NSMutableCharacterSet *terms = [NSMutableCharacterSet characterSetWithCharactersInString:@"]})"];
+        [terms formUnionWithCharacterSet:self.whitespace];
+        _terminators = [terms copy];
+    }
+    return _terminators;
+}
+
+
 -(void)skipWhitespace {
-    NSMutableCharacterSet *ws = [NSMutableCharacterSet whitespaceAndNewlineCharacterSet];
-    [ws addCharactersInString:@",;"];
+    
     BOOL comment = NO;
     while ((_currentIndex < _data.length
-           && [ws characterIsMember:(unichar)_chars[_currentIndex]]) || comment) {
+           && [self.whitespace characterIsMember:(unichar)_chars[_currentIndex]]) || comment) {
         if (_chars[_currentIndex] == ';')
             comment = YES;
         if ( _chars[_currentIndex] == '\n')
@@ -101,6 +127,29 @@ enum BMOEDNSerializationErrorCode {
     }
 }
 
+-(id)parseTaggedObjectWithError:(NSError **)error {
+    _currentIndex++;
+    if (_currentIndex >= _data.length) {
+        *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
+        return nil;
+    }
+    
+    switch (_chars[_currentIndex]) {
+        case '_':
+            _currentIndex++;
+            [self skipWhitespace];
+            while (_currentIndex < _data.length
+                   && ![self.terminators characterIsMember:(unichar)_chars[_currentIndex]]){
+                _currentIndex++;
+            }
+            return [BMOEDNDiscard new]; // TODO: singleton? or just figure out how to obviate?
+            
+        default:
+            return nil;
+            break;
+    }
+}
+
 -(id)parseListWithError:(NSError **)error {
     _currentIndex++;
     if (_currentIndex >= _data.length) {
@@ -115,18 +164,19 @@ enum BMOEDNSerializationErrorCode {
     while (_currentIndex < _data.length
            && _chars[_currentIndex] != ')') {
         id newObject = [self parseObjectWithError:error];
-        if (newObject == nil) // something went wrong; bail
+        if (newObject == nil) {
             return nil;
-        
-        BMOEDNConsCell *newCons = [BMOEDNConsCell new];
-        newCons.first = newObject;
-        if (cons == nil) {
-            list.head = newCons;
-        } else {
-            cons.rest = newCons;
         }
-        
-        cons = newCons;
+        if (![newObject isKindOfClass:[BMOEDNDiscard class]]) {
+            BMOEDNConsCell *newCons = [BMOEDNConsCell new];
+            newCons.first = newObject;
+            if (cons == nil) {
+                list.head = newCons;
+            } else {
+                cons.rest = newCons;
+            }
+            cons = newCons;
+        }
         [self skipWhitespace];
     }
     return list;
@@ -143,10 +193,12 @@ enum BMOEDNSerializationErrorCode {
     while (_currentIndex < _data.length
            && _chars[_currentIndex] != ']') {
         id newObject = [self parseObjectWithError:error];
-        if (newObject == nil) // something went wrong; bail
+        if (newObject == nil) {// something went wrong; bail
             return nil;
-        
-        [array addObject:newObject];
+        }
+        if (![newObject isKindOfClass:[BMOEDNDiscard class]]) {
+            [array addObject:newObject];
+        }
         [self skipWhitespace];
     }
     if (_currentIndex >= _data.length) {
@@ -158,12 +210,10 @@ enum BMOEDNSerializationErrorCode {
 }
 
 -(id)parseLiteralWithError:(NSError **)error {
-    NSMutableCharacterSet *terminators = [NSMutableCharacterSet whitespaceAndNewlineCharacterSet];
-    [terminators addCharactersInString:@"}]),;"];
     NSUInteger firstCharIndex = _currentIndex;
     
     while (_currentIndex < _data.length
-           && ![terminators characterIsMember:(unichar)_chars[_currentIndex]])
+           && ![self.terminators characterIsMember:(unichar)_chars[_currentIndex]])
     {
         _currentIndex++;
     }
@@ -228,7 +278,12 @@ enum BMOEDNSerializationErrorCode {
 @implementation BMOEDNSerialization
 
 +(id)EDNObjectWithData:(NSData *)data error:(NSError **)error {
-    return [[[BMOEDNParser alloc] initWithData:data] parseObjectWithError:error];
+    id parsed = [[[BMOEDNParser alloc] initWithData:data] parseObjectWithError:error];
+    if ([parsed isKindOfClass:[BMOEDNDiscard class]]) {
+        *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeNoData userInfo:nil];
+        parsed = nil;
+    }
+    return parsed;
 }
 
 @end

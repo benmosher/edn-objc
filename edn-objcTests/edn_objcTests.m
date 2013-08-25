@@ -78,4 +78,25 @@
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"[ 1;3\n2 ]" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], array, @"");
 }
 
+- (void)testDiscards
+{
+    id array = @[@1, @2];
+    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"[ 1 #_ foo 2 ]" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], array, @"");
+    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"[ 1 2 #_foo ]" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], array, @"");
+    NSError *err = nil;
+    id obj = [BMOEDNSerialization EDNObjectWithData:[@"  #_fooooo  " dataUsingEncoding:NSUTF8StringEncoding] error:&err];
+    STAssertNil(obj, @"");
+    STAssertNotNil(err, @"");
+    STAssertEquals(err.code, (NSInteger)BMOEDNSerializationErrorCodeNoData, @"");
+    
+    BMOEDNList *list = (BMOEDNList *)[BMOEDNSerialization EDNObjectWithData:[@"( 1 #_foo 2 3 4 5 #_bar)" dataUsingEncoding:NSUTF8StringEncoding] error:NULL];
+    STAssertTrue([list isKindOfClass:[BMOEDNList class]], @"");
+    STAssertNotNil([list head], @"");
+    BMOEDNConsCell *current = list.head;
+    int i = 1;
+    do {
+        STAssertEqualObjects(current.first,@(i++), @"");
+    } while ((current = current.rest) != nil);
+}
+
 @end

@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum  {
+    BMOEDNSerializationErrorCodeNone = 0,
+    BMOEDNSerializationErrorCodeNoData,
+    BMOEDNSerializationErrorCodeInvalidData,
+    BMOEDNSerializationErrorCodeUnexpectedEndOfData,
+} BMOEDNSerializationErrorCode;
+
 @interface BMOEDNSerialization : NSObject
 
 +(id)EDNObjectWithData:(NSData *)data error:(NSError **)error;
