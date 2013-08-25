@@ -8,11 +8,13 @@
 
 #import "BMOEDNSerialization.h"
 
-NSString const * BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
+NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
+#define BMOEDNSerializationErrorDomain ((NSString *)_BMOEDNSerializationErrorDomain)
 
 enum BMOEDNSerializationErrorCode {
     BMOEDNSerializationErrorCodeNone = 0,
     BMOEDNSerializationErrorCodeNoData,
+    BMOEDNSerializationErrorCodeInvalidData,
     BMOEDNSerializationErrorCodeUnexpectedEndOfData,
     };
 
@@ -53,7 +55,7 @@ enum BMOEDNSerializationErrorCode {
     if (self = [super init])
     {
         _data = data;
-        _chars = [data bytes];
+        _chars = (char *)[data bytes];
         _currentIndex = 0;
     }
     return self;
@@ -65,7 +67,7 @@ enum BMOEDNSerializationErrorCode {
         *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
         return nil;
     }
-    
+    // TODO: ignore leading whitespace
     switch (_chars[_currentIndex]) {
         case '#':
             return [self parseTaggedObjectWithError:error];
@@ -80,6 +82,50 @@ enum BMOEDNSerializationErrorCode {
         default:
             return [self parseLiteralWithError:error];
     }
+}
+
+-(id)parseLiteralWithError:(NSError **)error {
+    NSMutableCharacterSet *terminators = [NSMutableCharacterSet whitespaceAndNewlineCharacterSet];
+    [terminators addCharactersInString:@"}]),"];
+    NSUInteger firstCharIndex = _currentIndex;
+    
+    while (_currentIndex < _data.length
+           && ![terminators characterIsMember:(unichar)_chars[_currentIndex]])
+    {
+        _currentIndex++;
+    }
+    
+    if (_currentIndex == firstCharIndex){
+        // TODO: userinfo
+        *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain
+                                     code:BMOEDNSerializationErrorCodeUnexpectedEndOfData
+                                 userInfo:nil];
+        return nil;
+    }
+    NSString *literal = [[NSString alloc] initWithBytes:&_chars[firstCharIndex]
+                                                 length:(_currentIndex-firstCharIndex)
+                                               encoding:NSUTF8StringEncoding];
+    // TODO: keyword/symbol support
+    if ([[NSCharacterSet decimalDigitCharacterSet] characterIsMember:(unichar)_chars[firstCharIndex]]){
+        // TODO: rational number preservation/support?
+        // TODO: 'N'-suffix for arbitrary precision (i.e. BigX) support?
+        NSNumberFormatter *nf = [NSNumberFormatter new];
+        nf.numberStyle = NSNumberFormatterNoStyle;
+        return [nf numberFromString:literal];
+    } else if ([literal isEqualToString:@"nil"]){
+        return [NSNull null];
+    } else if ([literal isEqualToString:@"true"]){
+        return (__bridge NSNumber *)kCFBooleanTrue;
+    } else if ([literal isEqualToString:@"false"]){
+        return (__bridge NSNumber *)kCFBooleanFalse;
+    }
+    
+    // failed to parse a valid literal
+    // TODO: userinfo
+    *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain
+                                 code:BMOEDNSerializationErrorCodeInvalidData
+                             userInfo:nil];
+    return nil;
 }
 
 -(id)parseStringWithError:(NSError **)error
