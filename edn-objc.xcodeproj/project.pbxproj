@@ -18,6 +18,7 @@
 		B5C7A64817C8F282005E0615 /* edn_objcTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A64717C8F282005E0615 /* edn_objcTests.m */; };
 		B5C7A65317C9B35D005E0615 /* BMOEDNKeyword.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65217C9B35D005E0615 /* BMOEDNKeyword.m */; };
 		B5C7A65617C9B460005E0615 /* BMOEDNNamespace.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65517C9B460005E0615 /* BMOEDNNamespace.m */; };
+		B5C7A65917C9C1F4005E0615 /* BMOEDNList.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65817C9C1F4005E0615 /* BMOEDNList.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,8 @@
 		B5C7A65217C9B35D005E0615 /* BMOEDNKeyword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNKeyword.m; sourceTree = "<group>"; };
 		B5C7A65417C9B460005E0615 /* BMOEDNNamespace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNNamespace.h; sourceTree = "<group>"; };
 		B5C7A65517C9B460005E0615 /* BMOEDNNamespace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNNamespace.m; sourceTree = "<group>"; };
+		B5C7A65717C9C1F4005E0615 /* BMOEDNList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNList.h; sourceTree = "<group>"; };
+		B5C7A65817C9C1F4005E0615 /* BMOEDNList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNList.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +127,8 @@
 				B5C7A62E17C8F282005E0615 /* BMOEDNSerialization.h */,
 				B5C7A63017C8F282005E0615 /* BMOEDNSerialization.m */,
 				B5C7A62C17C8F282005E0615 /* Supporting Files */,
+				B5C7A65717C9C1F4005E0615 /* BMOEDNList.h */,
+				B5C7A65817C9C1F4005E0615 /* BMOEDNList.m */,
 			);
 			path = "edn-objc";
 			sourceTree = "<group>";
@@ -256,6 +261,7 @@
 				B5C7A63117C8F282005E0615 /* BMOEDNSerialization.m in Sources */,
 				B5C7A65317C9B35D005E0615 /* BMOEDNKeyword.m in Sources */,
 				B5C7A65617C9B460005E0615 /* BMOEDNNamespace.m in Sources */,
+				B5C7A65917C9C1F4005E0615 /* BMOEDNList.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

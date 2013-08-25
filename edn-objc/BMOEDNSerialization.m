@@ -7,6 +7,7 @@
 //
 
 #import "BMOEDNSerialization.h"
+#import "BMOEDNList.h"
 
 NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
 #define BMOEDNSerializationErrorDomain ((NSString *)_BMOEDNSerializationErrorDomain)
@@ -54,8 +55,7 @@ enum BMOEDNSerializationErrorCode {
 -(id)initWithData:(NSData *)data
 #endif
 {
-    if (self = [super init])
-    {
+    if (self = [super init]) {
         _data = data;
         _chars = (char *)[data bytes];
         _currentIndex = 0;
@@ -75,8 +75,7 @@ enum BMOEDNSerializationErrorCode {
 
 -(id)parseObjectWithError:(NSError **)error {
     [self skipWhitespace];
-    if (_currentIndex >= _data.length)
-    {
+    if (_currentIndex >= _data.length) {
         *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
         return nil;
     }
@@ -97,18 +96,47 @@ enum BMOEDNSerializationErrorCode {
     }
 }
 
+-(id)parseListWithError:(NSError **)error {
+    _currentIndex++;
+    if (_currentIndex >= _data.length) {
+        *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
+        return nil;
+    }
+    
+    BMOEDNList *list = [BMOEDNList new];
+    BMOEDNConsCell *cons = nil;
+    
+    [self skipWhitespace];
+    while (_currentIndex < _data.length
+           && _chars[_currentIndex] != ')') {
+        id newObject = [self parseObjectWithError:error];
+        if (newObject == nil) // something went wrong; bail
+            return nil;
+        
+        BMOEDNConsCell *newCons = [BMOEDNConsCell new];
+        newCons.first = newObject;
+        if (cons == nil) {
+            list.head = newCons;
+        } else {
+            cons.rest = newCons;
+        }
+        
+        cons = newCons;
+        [self skipWhitespace];
+    }
+    return list;
+}
+
 -(id)parseVectorWithError:(NSError **)error {
     _currentIndex++;
-    if (_currentIndex >= _data.length)
-    {
+    if (_currentIndex >= _data.length) {
         *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
         return nil;
     }
     NSMutableArray *array = [NSMutableArray new];
     [self skipWhitespace];
     while (_currentIndex < _data.length
-           && _chars[_currentIndex] != ']')
-    {
+           && _chars[_currentIndex] != ']') {
         id newObject = [self parseObjectWithError:error];
         if (newObject == nil) // something went wrong; bail
             return nil;
@@ -116,8 +144,7 @@ enum BMOEDNSerializationErrorCode {
         [array addObject:newObject];
         [self skipWhitespace];
     }
-    if (_currentIndex >= _data.length)
-    {
+    if (_currentIndex >= _data.length) {
         *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
         return nil;
     }
@@ -169,8 +196,7 @@ enum BMOEDNSerializationErrorCode {
     return nil;
 }
 
--(id)parseStringWithError:(NSError **)error
-{
+-(id)parseStringWithError:(NSError **)error {
     NSUInteger firstChar = ++_currentIndex;
     while(_currentIndex < _data.length && (_chars[_currentIndex] != '"' || _chars[_currentIndex-1] == '\\')){
         _currentIndex++;
