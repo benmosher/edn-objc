@@ -61,7 +61,7 @@
     STAssertTrue([list isKindOfClass:[BMOEDNList class]], @"");
     STAssertNil([list head], @"");
     
-    list = (BMOEDNList *)[BMOEDNSerialization EDNObjectWithData:[@"( 1 2 3 4 5 )" dataUsingEncoding:NSUTF8StringEncoding] error:NULL];
+    list = (BMOEDNList *)[[BMOEDNSerialization EDNObjectWithData:[@"[( 1 2 3 4 5 ) 1]" dataUsingEncoding:NSUTF8StringEncoding] error:NULL] objectAtIndex:0];
     STAssertTrue([list isKindOfClass:[BMOEDNList class]], @"");
     STAssertNotNil([list head], @"");
     BMOEDNConsCell *current = list.head;
@@ -97,6 +97,14 @@
     do {
         STAssertEqualObjects(current.first,@(i++), @"");
     } while ((current = current.rest) != nil);
+}
+
+- (void)testSets
+{
+    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"#{}" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], [NSSet setWithArray:@[]], @"");
+    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"#{ 1 }" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], [NSSet setWithArray:@[@1]], @"");
+    id set = [NSSet setWithArray:@[@1, @2]];
+    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"#{ 1 2 }" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], set, @"");
 }
 
 @end
