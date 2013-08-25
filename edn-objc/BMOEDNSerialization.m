@@ -42,6 +42,8 @@ enum BMOEDNSerializationErrorCode {
 -(id)parseMapWithError:(NSError **)error;
 -(id)parseStringWithError:(NSError **)error;
 -(id)parseLiteralWithError:(NSError **)error;
+
+-(void)skipWhitespace;
 @end
 
 @implementation BMOEDNParser
@@ -61,7 +63,18 @@ enum BMOEDNSerializationErrorCode {
     return self;
 }
 
+-(void)skipWhitespace {
+    NSMutableCharacterSet *ws = [NSMutableCharacterSet whitespaceAndNewlineCharacterSet];
+    [ws addCharactersInString:@","];
+    while (_currentIndex < _data.length
+           && [ws characterIsMember:(unichar)_chars[_currentIndex]]) {
+        _currentIndex++;
+    }
+}
+
+
 -(id)parseObjectWithError:(NSError **)error {
+    [self skipWhitespace];
     if (_currentIndex >= _data.length)
     {
         *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
@@ -82,6 +95,34 @@ enum BMOEDNSerializationErrorCode {
         default:
             return [self parseLiteralWithError:error];
     }
+}
+
+-(id)parseVectorWithError:(NSError **)error {
+    _currentIndex++;
+    if (_currentIndex >= _data.length)
+    {
+        *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
+        return nil;
+    }
+    NSMutableArray *array = [NSMutableArray new];
+    [self skipWhitespace];
+    while (_currentIndex < _data.length
+           && _chars[_currentIndex] != ']')
+    {
+        id newObject = [self parseObjectWithError:error];
+        if (newObject == nil) // something went wrong; bail
+            return nil;
+        
+        [array addObject:newObject];
+        [self skipWhitespace];
+    }
+    if (_currentIndex >= _data.length)
+    {
+        *error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
+        return nil;
+    }
+    _currentIndex++;
+    return [NSArray arrayWithArray:array];
 }
 
 -(id)parseLiteralWithError:(NSError **)error {
