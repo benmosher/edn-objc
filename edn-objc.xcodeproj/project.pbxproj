@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		B5C7A62A17C8F282005E0615 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A62917C8F282005E0615 /* Foundation.framework */; };
-		B5C7A62F17C8F282005E0615 /* BMOEDNSerialization.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = B5C7A62E17C8F282005E0615 /* BMOEDNSerialization.h */; };
 		B5C7A63117C8F282005E0615 /* BMOEDNSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A63017C8F282005E0615 /* BMOEDNSerialization.m */; };
 		B5C7A63917C8F282005E0615 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A63817C8F282005E0615 /* SenTestingKit.framework */; };
 		B5C7A63B17C8F282005E0615 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A63A17C8F282005E0615 /* UIKit.framework */; };
@@ -19,6 +18,8 @@
 		B5C7A65317C9B35D005E0615 /* BMOEDNKeyword.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65217C9B35D005E0615 /* BMOEDNKeyword.m */; };
 		B5C7A65917C9C1F4005E0615 /* BMOEDNList.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65817C9C1F4005E0615 /* BMOEDNList.m */; };
 		B5C7A65C17CAB740005E0615 /* BMOEDNSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65B17CAB73F005E0615 /* BMOEDNSymbol.m */; };
+		B5C7A65F17CC590A005E0615 /* NSString+EDNValue.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65E17CC590A005E0615 /* NSString+EDNValue.m */; };
+		B5C7A66117CC5A31005E0615 /* edn-objc.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = B5C7A66017CC599B005E0615 /* edn-objc.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +39,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				B5C7A62F17C8F282005E0615 /* BMOEDNSerialization.h in CopyFiles */,
+				B5C7A66117CC5A31005E0615 /* edn-objc.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +64,9 @@
 		B5C7A65817C9C1F4005E0615 /* BMOEDNList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNList.m; sourceTree = "<group>"; };
 		B5C7A65A17CAB73F005E0615 /* BMOEDNSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNSymbol.h; sourceTree = "<group>"; };
 		B5C7A65B17CAB73F005E0615 /* BMOEDNSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNSymbol.m; sourceTree = "<group>"; };
+		B5C7A65D17CC590A005E0615 /* NSString+EDNValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+EDNValue.h"; sourceTree = "<group>"; };
+		B5C7A65E17CC590A005E0615 /* NSString+EDNValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+EDNValue.m"; sourceTree = "<group>"; };
+		B5C7A66017CC599B005E0615 /* edn-objc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "edn-objc.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +124,7 @@
 		B5C7A62B17C8F282005E0615 /* edn-objc */ = {
 			isa = PBXGroup;
 			children = (
+				B5C7A66017CC599B005E0615 /* edn-objc.h */,
 				B5C7A65A17CAB73F005E0615 /* BMOEDNSymbol.h */,
 				B5C7A65B17CAB73F005E0615 /* BMOEDNSymbol.m */,
 				B5C7A65117C9B35D005E0615 /* BMOEDNKeyword.h */,
@@ -129,6 +134,8 @@
 				B5C7A62C17C8F282005E0615 /* Supporting Files */,
 				B5C7A65717C9C1F4005E0615 /* BMOEDNList.h */,
 				B5C7A65817C9C1F4005E0615 /* BMOEDNList.m */,
+				B5C7A65D17CC590A005E0615 /* NSString+EDNValue.h */,
+				B5C7A65E17CC590A005E0615 /* NSString+EDNValue.m */,
 			);
 			path = "edn-objc";
 			sourceTree = "<group>";
@@ -262,6 +269,7 @@
 				B5C7A65317C9B35D005E0615 /* BMOEDNKeyword.m in Sources */,
 				B5C7A65917C9C1F4005E0615 /* BMOEDNList.m in Sources */,
 				B5C7A65C17CAB740005E0615 /* BMOEDNSymbol.m in Sources */,
+				B5C7A65F17CC590A005E0615 /* NSString+EDNValue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,6 +390,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "edn-objc/edn-objc-Prefix.pch";
 				INFOPLIST_FILE = "edn-objcTests/edn-objcTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-objc",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -397,6 +409,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "edn-objc/edn-objc-Prefix.pch";
 				INFOPLIST_FILE = "edn-objcTests/edn-objcTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-objc",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = octest;
 			};

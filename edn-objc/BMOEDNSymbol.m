@@ -28,7 +28,7 @@
 }
 
 -(BOOL)isEqualToSymbol:(BMOEDNSymbol *)object {
-    return [self.ns isEqualToString:object.ns]
+    return (self.ns == object.ns || [self.ns isEqualToString:object.ns])
         && [self.name isEqualToString:object.name];
 }
 

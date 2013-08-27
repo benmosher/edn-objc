@@ -8,9 +8,13 @@
 
 #import "BMOEDNSerialization.h"
 #import "BMOEDNList.h"
+#import "BMOEDNSymbol.h"
+#import "BMOEDNKeyword.h"
 
 NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
 #define BMOEDNSerializationErrorDomain ((NSString *)_BMOEDNSerializationErrorDomain)
+// TODO: add message version (and use it)
+#define BMOEDNError(errCode) ([NSError errorWithDomain:BMOEDNSerializationErrorDomain code:errCode userInfo:nil])
 
 @interface BMOEDNSerialization ()
 
@@ -104,6 +108,7 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
 -(id)parseList:(BMOEDNParserState *)parserState;
 -(id)parseMap:(BMOEDNParserState *)parserState;
 -(id)parseString:(BMOEDNParserState *)parserState;
+-(id)parseKeyword:(BMOEDNParserState *)parserState;
 -(id)parseLiteral:(BMOEDNParserState *)parserState;
 -(id)parseSet:(BMOEDNParserState *)parserState;
 
@@ -183,6 +188,8 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
             return [self parseMap:parserState];
         case '"':
             return [self parseString:parserState];
+        case ':':
+            return [self parseKeyword:parserState];
         default:
             return [self parseLiteral:parserState];
     }
@@ -206,6 +213,7 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
             return nil;
         case '{':
             return [self parseSet:parserState];
+            
         default:
             return nil;
             break;
@@ -307,6 +315,30 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
     NSMutableArray *array = [self parseTokenSequenceWithTerminator:']' parserState:parserState];
     if (array == nil) return nil;
     else return [NSArray arrayWithArray:array];
+}
+
+// TODO: interning, probably via a map of namespaces
+-(id)parseKeyword:(BMOEDNParserState *)parserState {
+    [parserState moveAhead];
+    [parserState setMark];
+    while (parserState.valid
+           && ![self.terminators characterIsMember:parserState.currentCharacter])
+    {
+        [parserState moveAhead];
+    }
+    NSArray *keywordComponents = [[parserState markedString] componentsSeparatedByString:@"/"];
+    if (keywordComponents.count > 2
+        || ![[keywordComponents objectAtIndex:0] length]
+        || ([keywordComponents count] == 2 && ![[keywordComponents objectAtIndex:1] length])) {
+        // TODO: message(s)
+        parserState.error = BMOEDNError(BMOEDNSerializationErrorCodeInvalidData);
+        return nil;
+    }
+    if (keywordComponents.count == 1) {
+        return [[BMOEDNKeyword alloc] initWithNamespace:nil name:[keywordComponents objectAtIndex:0]];
+    } else {
+        return [[BMOEDNKeyword alloc] initWithNamespace:[keywordComponents objectAtIndex:0] name:[keywordComponents objectAtIndex:1]];
+    }
 }
 
 -(id)parseLiteral:(BMOEDNParserState *)parserState {

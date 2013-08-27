@@ -7,8 +7,8 @@
 //
 
 #import "edn_objcTests.h"
-#import "BMOEDNSerialization.h"
-#import "BMOEDNList.h"
+#import "edn-objc.h"
+
 
 @implementation edn_objcTests
 
@@ -122,5 +122,16 @@
         @"three":@"surprise!"};
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"{\"one\" 1 ( 1 2 ) \"two\" \"three\" \"surprise!\"}" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], map, @"");
 }
+
+- (void)testStringCategory {
+    STAssertEqualObjects([@"\"string\"" ednValue], @"string", @"");
+    STAssertEqualObjects([@"[ 1 2 3 ]" ednValue], (@[(@1),(@2),(@3)]), @"");
+}
+
+- (void)testKeywords
+{
+    STAssertEqualObjects([@":keyword" ednValue], [[BMOEDNKeyword alloc] initWithNamespace:nil name:@"keyword"], @"");
+}
+
 
 @end
