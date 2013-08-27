@@ -43,6 +43,18 @@
 {
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"0" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], [NSNumber numberWithInt:0], @"");
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"1.1E1" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], [NSNumber numberWithDouble:11.0], @"");
+    STAssertEqualObjects([@"-2" ednValue], @(-2), @"");
+    STAssertEqualObjects([@"+0" ednValue], @(0), @"");
+    STAssertEqualObjects([@"10000N" ednValue], @(10000), @"");
+    STAssertEqualObjects([@"1000.1M" ednValue], [NSDecimalNumber decimalNumberWithMantissa:10001 exponent:-1 isNegative:NO], @"");
+}
+
+- (void)testCMathWorksHowIExpect
+{
+    // word on the street is that NSIntegers are converted to NSUInteger
+    // during comparison/arithmetic; if overflow wraps, the conversion
+    // should not impact addition
+    STAssertEquals(NSUIntegerMax+((NSInteger)-1), NSUIntegerMax-1, @"");
 }
 
 - (void)testParseVectors
@@ -111,6 +123,7 @@
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"#{ 1 }" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], [NSSet setWithArray:@[@1]], @"");
     id set = [NSSet setWithArray:@[@1, @2]];
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"#{ 1 2 }" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], set, @"");
+    STAssertNil([@"#{ 1 1 2 3 5 }" ednValue], @"Repeated set members should fail.");
 }
 
 - (void)testMaps
@@ -121,6 +134,15 @@
                                          error:NULL]:@"two",
         @"three":@"surprise!"};
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"{\"one\" 1 ( 1 2 ) \"two\" \"three\" \"surprise!\"}" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], map, @"");
+    
+    STAssertEqualObjects([@"{ :one one :two + :three - :four \"four\" }" ednValue],
+                         (@{
+                          [@":one" ednValue]: [@"one" ednValue],
+                          [@":two" ednValue]: [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"+"],
+                          [@":three" ednValue]: [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"-"],
+                          [@":four" ednValue]: @"four"
+                          }), @"");
+    STAssertNil([@"{:one 1 :one \"one\"}" ednValue],@"Repeat keys should fail.");
 }
 
 - (void)testStringCategory {
@@ -131,6 +153,21 @@
 - (void)testKeywords
 {
     STAssertEqualObjects([@":keyword" ednValue], [[BMOEDNKeyword alloc] initWithNamespace:nil name:@"keyword"], @"");
+    STAssertEqualObjects([@":namespaced/keyword" ednValue], [[BMOEDNKeyword alloc] initWithNamespace:@"namespaced" name:@"keyword"], @"");
+    STAssertThrows([[BMOEDNKeyword alloc] initWithNamespace:@"something" name:nil], @"");
+    STAssertNil([@":/nonamespace" ednValue], @"");
+    STAssertNil([@":so/many/names/paces" ednValue], @"");
+    STAssertFalse([[@":keywordsymbol" ednValue] isEqual:[@"keywordsymbol" ednValue]], @"");
+    STAssertFalse([[@"symbolkeyword" ednValue] isEqual:[@":symbolkeyword" ednValue]], @"");
+}
+
+- (void)testSymbols
+{
+    STAssertEqualObjects([@"symbol" ednValue], [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"symbol"], @"");
+    STAssertEqualObjects([@"namespaced/symbol" ednValue], [[BMOEDNSymbol alloc] initWithNamespace:@"namespaced" name:@"symbol"], @"");
+    STAssertThrows([[BMOEDNSymbol alloc] initWithNamespace:@"something" name:nil], @"");
+    STAssertNil([@"/nonamespace" ednValue], @"");
+    STAssertNil([@"so/many/names/paces" ednValue], @"");
 }
 
 

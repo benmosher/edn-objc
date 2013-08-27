@@ -15,12 +15,8 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
 #define BMOEDNSerializationErrorDomain ((NSString *)_BMOEDNSerializationErrorDomain)
 // TODO: add message version (and use it)
 #define BMOEDNError(errCode) ([NSError errorWithDomain:BMOEDNSerializationErrorDomain code:errCode userInfo:nil])
+#define BMOEDNErrorMessage(errCode,message) BMOEDNError(errCode)
 
-@interface BMOEDNSerialization ()
-
-+(id)parseObjectWithBytes:(const void *)bytes startingFrom:(NSUInteger)index error:(NSError **)error;
-
-@end
 // TODO: profile, see if struct+functions are faster
 @interface BMOEDNParserState : NSObject {
     NSUInteger _currentIndex;
@@ -33,19 +29,33 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
 
 @property (nonatomic, readonly, getter = isValid) BOOL valid;
 /**
- * Caller should check isValid first; if parser is not
- * in a valid state, behavior is undefined.
+ Caller should check isValid first; if parser is not
+ in a valid state, behavior is undefined.
  */
 @property (nonatomic, readonly) unichar currentCharacter;
 @property (nonatomic, readonly) unichar markedCharacter;
+/**
+ @return '\0' if out of range
+ */
+-(unichar)characterOffsetFromMark:(NSInteger)offset;
+/**
+ @return '\0' if out of range
+ */
+-(unichar)characterOffsetFromCurrent:(NSInteger)offset;
 
 @property (strong, nonatomic) NSError * error;
 
 -(void) moveAhead;
+/**
+ @throws NSRangeException if mark would be placed outside data
+ */
+-(void) moveMarkByOffset:(NSInteger)offset;
+/**
+ Set mark to current parser index.
+ */
 -(void) setMark;
--(NSUInteger) getMark;
-
--(NSString *) markedString;
+-(NSUInteger) markedLength;
+-(NSMutableString *) markedString;
 
 @end
 @implementation BMOEDNParserState
@@ -71,6 +81,33 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
     return ((unichar)_chars[_markIndex]);
 }
 
+BOOL BMOOffsetInRange(NSUInteger loc, NSUInteger len, NSInteger offset) {
+    // fancy comparison to ensure integer sign conversion does not occur unpredictably
+    return (offset == 0 ||
+            (offset > 0  && (len - loc) > (NSUInteger)offset) || // off the end
+            (offset < 0 && loc >= (NSUInteger)(-1 * offset)));   // before the beginning
+}
+
+unichar BMOGetOffsetChar(char* array, NSUInteger length, NSUInteger index, NSInteger offset) {
+    if (!BMOOffsetInRange(index, length, offset))
+        return '\0';
+     // any non-null comparisons should fail OR check for '\0' for out-of-range
+    else return ((unichar)array[index+offset]);
+}
+
+-(void)moveMarkByOffset:(NSInteger)offset {
+    if (!BMOOffsetInRange(_markIndex, _data.length, offset))
+        @throw [NSException exceptionWithName:NSRangeException reason:@"Cannot move mark out of range of data." userInfo:nil];
+    _markIndex += offset;
+}
+
+-(unichar)characterOffsetFromCurrent:(NSInteger)offset {
+    return BMOGetOffsetChar(_chars, _data.length, _currentIndex, offset);
+}
+-(unichar)characterOffsetFromMark:(NSInteger)offset {
+    return BMOGetOffsetChar(_chars, _data.length, _markIndex, offset);
+}
+
 -(void)moveAhead {
     _currentIndex++;
 }
@@ -79,26 +116,26 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
     _markIndex = _currentIndex;
 }
 
--(NSUInteger)getMark {
-    return _markIndex;
+-(NSUInteger)markedLength {
+    return (_currentIndex > _markIndex)
+    ? _currentIndex - _markIndex
+    : 0;
 }
 
--(NSString *)markedString {
+-(NSMutableString *)markedString {
     if (_currentIndex == _markIndex){
-        return @"";
+        return [@"" mutableCopy];
     }
-    return [[NSString alloc] initWithBytes:&_chars[_markIndex]
-                                                 length:(_currentIndex-_markIndex)
-                                               encoding:NSUTF8StringEncoding];
+    return [[NSMutableString alloc] initWithBytes:&_chars[_markIndex]
+                                    length:(_currentIndex-_markIndex)
+                                  encoding:NSUTF8StringEncoding];
 }
 
 @end
 
-@interface BMOEDNParser : NSObject {
-    // TODO: make these static
-    @private
-    NSCharacterSet *_whitespace,*_terminators,*_quoted;
-}
+static NSCharacterSet *whitespace,*terminators,*quoted,*numberPrefix,*digits;
+
+@interface BMOEDNParser : NSObject
 
 -(id)parse:(NSData *)data withError:(NSError **)error;
 
@@ -115,9 +152,7 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
 -(NSMutableArray *)parseTokenSequenceWithTerminator:(unichar)terminator
                                         parserState:(BMOEDNParserState *)parserState;
 -(void)skipWhitespace:(BMOEDNParserState *)parserState;
-@property (strong, nonatomic, readonly) NSCharacterSet *whitespace;
-@property (strong, nonatomic, readonly) NSCharacterSet *terminators;
-@property (strong, nonatomic, readonly) NSCharacterSet *quoted;
+
 @end
 
 @implementation BMOEDNParser
@@ -132,36 +167,34 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
     return parsed;
 }
 
--(NSCharacterSet *)whitespace {
-    if (_whitespace == nil) {
++(void)initialize {
+    if (whitespace == nil) {
         NSMutableCharacterSet *ws = [NSMutableCharacterSet whitespaceAndNewlineCharacterSet];
         [ws addCharactersInString:@",;"];
-        _whitespace =  [ws copy];
+        whitespace =  [ws copy];
     }
-    return _whitespace;
-}
-
--(NSCharacterSet *)terminators {
-    if (_terminators == nil) {
+    if (terminators == nil) {
         NSMutableCharacterSet *terms = [NSMutableCharacterSet characterSetWithCharactersInString:@"]})"];
-        [terms formUnionWithCharacterSet:self.whitespace];
-        _terminators = [terms copy];
+        [terms formUnionWithCharacterSet:whitespace];
+        terminators = [terms copy];
     }
-    return _terminators;
-}
-
--(NSCharacterSet *)quoted {
-    if (_quoted == nil) {
-        _quoted = [NSCharacterSet characterSetWithCharactersInString:@"\\\"rnt"];
+    if (quoted == nil) {
+        quoted = [NSCharacterSet characterSetWithCharactersInString:@"\\\"rnt"];
     }
-    return _quoted;
+    if (numberPrefix == nil) {
+        numberPrefix = [NSCharacterSet characterSetWithCharactersInString:@"+-"];
+    }
+    if (digits == nil)
+    {
+        digits = [NSCharacterSet decimalDigitCharacterSet];
+    }
 }
 
 
 -(void)skipWhitespace:(BMOEDNParserState *)parserState {
     
     BOOL comment = NO;
-    while ((parserState.valid && [self.whitespace characterIsMember:parserState.currentCharacter]) || comment) {
+    while ((parserState.valid && [whitespace characterIsMember:parserState.currentCharacter]) || comment) {
         if (parserState.currentCharacter == ';')
             comment = YES;
         if (parserState.currentCharacter == '\n')
@@ -207,7 +240,7 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
             [parserState moveAhead];
             [self skipWhitespace:parserState];
             while (parserState.valid
-                   && ![self.terminators characterIsMember:parserState.currentCharacter]){
+                   && ![terminators characterIsMember:parserState.currentCharacter]){
                 [parserState moveAhead];
             }
             return nil;
@@ -223,8 +256,12 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
 -(id)parseSet:(BMOEDNParserState *)parserState {
     NSMutableArray *array = [self parseTokenSequenceWithTerminator:'}' parserState:parserState];
     if (array == nil) return nil;
-    // TODO: complain if set count != array length?
-    else return [NSSet setWithArray:array];
+    NSSet *set = [NSSet setWithArray:array];
+    if (set.count != array.count) {
+        parserState.error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData, @"Sets must contain only unique elements.");
+        return nil;
+    }
+    return set;
 }
 
 -(id)parseList:(BMOEDNParserState *)parserState {
@@ -317,27 +354,46 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
     else return [NSArray arrayWithArray:array];
 }
 
+NSError * BMOValidateSymbolComponents(NSArray *components) {
+    if (components.count > 2) {
+        // too many components
+        // TODO: message(s)
+        return BMOEDNError(BMOEDNSerializationErrorCodeInvalidData);
+    }
+    if (![[components lastObject] length]) {
+        // name of 0 length
+        // TODO: message(s)
+        return BMOEDNError(BMOEDNSerializationErrorCodeInvalidData);
+    }
+    if (![[components objectAtIndex:0] length]) {
+        // namespace of 0 length
+        // TODO: message(s)
+        return BMOEDNError(BMOEDNSerializationErrorCodeInvalidData);
+    }
+    return nil;
+}
+
 // TODO: interning, probably via a map of namespaces
 -(id)parseKeyword:(BMOEDNParserState *)parserState {
     [parserState moveAhead];
     [parserState setMark];
     while (parserState.valid
-           && ![self.terminators characterIsMember:parserState.currentCharacter])
+           && ![terminators characterIsMember:parserState.currentCharacter])
     {
         [parserState moveAhead];
     }
     NSArray *keywordComponents = [[parserState markedString] componentsSeparatedByString:@"/"];
-    if (keywordComponents.count > 2
-        || ![[keywordComponents objectAtIndex:0] length]
-        || ([keywordComponents count] == 2 && ![[keywordComponents objectAtIndex:1] length])) {
-        // TODO: message(s)
-        parserState.error = BMOEDNError(BMOEDNSerializationErrorCodeInvalidData);
+    
+    NSError *err = BMOValidateSymbolComponents(keywordComponents);
+    if (err) {
+        parserState.error = err;
         return nil;
     }
-    if (keywordComponents.count == 1) {
-        return [[BMOEDNKeyword alloc] initWithNamespace:nil name:[keywordComponents objectAtIndex:0]];
+    
+    if (keywordComponents.count == 2) {
+        return [[BMOEDNKeyword alloc] initWithNamespace:[keywordComponents objectAtIndex:0] name:[keywordComponents lastObject]];
     } else {
-        return [[BMOEDNKeyword alloc] initWithNamespace:[keywordComponents objectAtIndex:0] name:[keywordComponents objectAtIndex:1]];
+        return [[BMOEDNKeyword alloc] initWithNamespace:nil name:[keywordComponents lastObject]];
     }
 }
 
@@ -345,36 +401,62 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
     
     [parserState setMark];
     while (parserState.valid
-           && ![self.terminators characterIsMember:parserState.currentCharacter])
+           && ![terminators characterIsMember:parserState.currentCharacter])
     {
         [parserState moveAhead];
     }
-    NSString *literal = [parserState markedString];
-    if ([literal length] == 0) {
+    if ([parserState markedLength] == 0) {
         parserState.error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
         return nil;
     }
-    
+    NSMutableString *literal = [parserState markedString];
     // TODO: keyword/symbol support
-    if ([[NSCharacterSet decimalDigitCharacterSet] characterIsMember:parserState.markedCharacter]){
-        // TODO: rational number preservation/support?
-        // TODO: 'N'-suffix for arbitrary precision (i.e. BigX) support?
-        NSNumberFormatter *nf = [NSNumberFormatter new];
-        nf.numberStyle = NSNumberFormatterNoStyle;
-        return [nf numberFromString:literal];
+    if ([digits characterIsMember:parserState.markedCharacter] ||
+        ([numberPrefix characterIsMember:parserState.markedCharacter]
+         && [digits characterIsMember:[parserState characterOffsetFromMark:1]])){
+ 
+        if ([literal hasSuffix:@"M"]) {
+            [literal deleteCharactersInRange:NSMakeRange(literal.length-1, 1)];
+            // must use '.' as the decimal separator for format compliance
+            return [NSDecimalNumber decimalNumberWithString:literal locale:[NSLocale systemLocale]];
+        } else {
+            // remove leading '+' (NSNumberFormatter won't like it)
+            if ([literal hasPrefix:@"+"]) {
+                [literal deleteCharactersInRange:NSMakeRange(0, 1)];
+            }
+            if ([literal hasSuffix:@"N"]) {
+                // TODO: 'N'-suffix for arbitrary precision (i.e. BigX) support?
+                [literal deleteCharactersInRange:NSMakeRange(literal.length-1, 1)];
+            }
+            NSNumberFormatter *nf = [NSNumberFormatter new];
+            nf.numberStyle = NSNumberFormatterNoStyle;
+            return [nf numberFromString:literal];
+        }
     } else if ([literal isEqualToString:@"nil"]){
         return [NSNull null];
     } else if ([literal isEqualToString:@"true"]){
         return (__bridge NSNumber *)kCFBooleanTrue;
     } else if ([literal isEqualToString:@"false"]){
         return (__bridge NSNumber *)kCFBooleanFalse;
-    }
+    } else {
+        NSArray *symbolComponents = [literal componentsSeparatedByString:@"/"];
+        NSError *err = BMOValidateSymbolComponents(symbolComponents);
+        if (err) {
+            parserState.error = err;
+            return nil;
+        }
     
+        if (symbolComponents.count == 2) {
+            return [[BMOEDNSymbol alloc] initWithNamespace:[symbolComponents objectAtIndex:0] name:[symbolComponents lastObject]];
+        } else {
+            return [[BMOEDNSymbol alloc] initWithNamespace:nil name:[symbolComponents lastObject]];
+        }
+    }
     // failed to parse a valid literal
     // TODO: userinfo
     parserState.error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain
-                                 code:BMOEDNSerializationErrorCodeInvalidData
-                             userInfo:nil];
+                                        code:BMOEDNSerializationErrorCodeInvalidData
+                                    userInfo:nil];
     return nil;
 }
 
@@ -384,7 +466,7 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
     BOOL quoting = NO;
     while(parserState.valid && (parserState.currentCharacter != '"' || quoting)){
         if (quoting) {
-            if (![self.quoted characterIsMember:parserState.currentCharacter]) {
+            if (![quoted characterIsMember:parserState.currentCharacter]) {
                 // TODO: provide erroneous index
                 parserState.error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain
                                                         code:BMOEDNSerializationErrorCodeInvalidData
@@ -396,20 +478,23 @@ NSString const * _BMOEDNSerializationErrorDomain = @"BMOEDNSerialization";
         }
         [parserState moveAhead];
     }
-    NSString *markedString = [parserState markedString];
-    [parserState moveAhead];
-    if ([markedString length] == 0) return markedString;
-    else {
-        NSMutableString *string = [markedString mutableCopy];
-        // replace escapes with proper values
-        [string replaceOccurrencesOfString:@"\\\"" withString:@"\"" options:0 range:NSMakeRange(0, string.length)];
-        [string replaceOccurrencesOfString:@"\\t" withString:@"\t" options:0 range:NSMakeRange(0, string.length)];
-        [string replaceOccurrencesOfString:@"\\r" withString:@"\r" options:0 range:NSMakeRange(0, string.length)];
-        [string replaceOccurrencesOfString:@"\\n" withString:@"\n" options:0 range:NSMakeRange(0, string.length)];
-        [string replaceOccurrencesOfString:@"\\\\" withString:@"\\" options:0 range:NSMakeRange(0, string.length)];
-        return [NSString stringWithString:string]; // immutabilityyyy
+    
+    NSString *string = @"";
+    
+    if ([parserState markedLength] > 0) {
+        NSMutableString *markedString = [parserState markedString];
+        // Replace escapes with proper values
+        // Have to regen the range each time, as the string may
+        // get shorter if replacements occur.
+        [markedString replaceOccurrencesOfString:@"\\\"" withString:@"\"" options:0 range:NSMakeRange(0, markedString.length)];
+        [markedString replaceOccurrencesOfString:@"\\t" withString:@"\t" options:0 range:NSMakeRange(0, markedString.length)];
+        [markedString replaceOccurrencesOfString:@"\\r" withString:@"\r" options:0 range:NSMakeRange(0, markedString.length)];
+        [markedString replaceOccurrencesOfString:@"\\n" withString:@"\n" options:0 range:NSMakeRange(0, markedString.length)];
+        [markedString replaceOccurrencesOfString:@"\\\\" withString:@"\\" options:0 range:NSMakeRange(0, markedString.length)];
+        string = [markedString copy]; // immutabilityyyy
     }
-
+    [parserState moveAhead];
+    return string;
 }
 
 @end

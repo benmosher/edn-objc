@@ -41,4 +41,8 @@
     else return [NSString stringWithFormat:@"%@/%@",self.ns,self.name];
 }
 
+-(id)copyWithZone:(NSZone *)zone {
+    return self;
+}
+
 @end

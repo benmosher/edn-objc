@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface BMOEDNSymbol : NSObject
+@interface BMOEDNSymbol : NSObject <NSCopying>
 
 @property (strong, nonatomic, readonly) NSString *ns;
 @property (strong, nonatomic, readonly) NSString *name;
