@@ -180,5 +180,13 @@
     STAssertEqualObjects(([[NSString stringWithFormat:@"#uuid \"%@\"",uuid.UUIDString] ednValue]), uuid, @"");
 }
 
+- (void)testDeserializeInstTag
+{
+    NSString *date = @"#inst \"1985-04-12T23:20:50.52Z\"";
+    NSDate *forComparison = [NSDate dateWithTimeIntervalSince1970:482196050.52];
+    
+    STAssertEqualObjects([date ednValue], forComparison, @"");
+}
+
 
 @end

@@ -549,11 +549,29 @@ static NSDictionary * stockResolvers;
             }
             return ret;
         };
-    stockResolvers =
+        NSString * rfc3339 = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SS'Z'";
+        TaggedEntityResolver instBlock = ^(id obj, NSError **error) {
+            if (![obj isKindOfClass:[NSString class]]) {
+                *error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData,@"'inst'-tagged objects must be an RFC3339-formatted string.");
+                return (id)nil;
+            } else {
+                NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                [df setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
+                [df setDateFormat:rfc3339];
+                [df setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+                NSDate *date = [df dateFromString:obj];
+                if (date == nil) {
+                    *error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData,@"'inst'-tagged object must be an RFC3339-formatted string.");
+                }
+                return (id)date;
+            }
+        };
+        stockResolvers =
         @{
           [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"uuid"]:
               [uuidBlock copy],
-                                                                            
+          [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"inst"]:
+              [instBlock copy],
           };
     }
 }
