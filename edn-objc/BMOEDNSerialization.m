@@ -133,9 +133,13 @@ unichar BMOGetOffsetChar(char* array, NSUInteger length, NSUInteger index, NSInt
 
 @end
 
-static NSCharacterSet *whitespace,*terminators,*quoted,*numberPrefix,*digits;
+static NSCharacterSet *whitespace,*quoted,*numberPrefix,*digits,*symbolChars;
 
 @interface BMOEDNParser : NSObject
+
+-(instancetype)initWithResolvers:(NSDictionary *)resolvers;
+
+@property (strong, readonly, nonatomic) NSDictionary * resolvers;
 
 -(id)parse:(NSData *)data withError:(NSError **)error;
 
@@ -155,7 +159,54 @@ static NSCharacterSet *whitespace,*terminators,*quoted,*numberPrefix,*digits;
 
 @end
 
+#pragma mark - Helper functions
+
+NSError * BMOValidateSymbolComponents(NSString *ns, NSString *name) {
+    if ([name rangeOfString:@"/"].location != NSNotFound && name.length > 1) {
+        // too many /'s
+        // TODO: message(s)
+        return BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData,@"Symbol name (of length > 1) must not contain '/'.");
+    }
+    if (!name.length) {
+        // name of 0 length
+        return BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData,@"Symbol must not end with '/'.");
+    }
+    if (ns && !ns.length) {
+        // non-nil namespace of 0 length
+        return BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData,@"Symbol must not start with '/'.");
+    }
+    // TODO: number format checking against name; namespace should be clean
+    return nil;
+}
+
+
+id BMOParseSymbolType(BMOEDNParserState *parserState, Class symbolClass) {
+    NSString *ns = nil, *name;
+    NSMutableString *symbol = parserState.markedString;
+    NSRange namespaceFulcrum = [symbol rangeOfString:@"/"];
+    if (namespaceFulcrum.location == NSNotFound || symbol.length == 1) {
+        name = [symbol copy];
+    } else {
+        ns = [symbol substringToIndex:namespaceFulcrum.location];
+        name = [symbol substringFromIndex:(namespaceFulcrum.location+namespaceFulcrum.length)];
+    }
+    
+    NSError *err = BMOValidateSymbolComponents(ns,name);
+    if (err) {
+        parserState.error = err;
+        return nil;
+    }
+    return [[symbolClass alloc] initWithNamespace:ns name:name];
+}
+
 @implementation BMOEDNParser
+
+-(instancetype)initWithResolvers:(NSDictionary *)resolvers {
+    if (self = [super init]) {
+        _resolvers = resolvers;
+    }
+    return self;
+}
 
 -(id)parse:(NSData *)data withError:(NSError **)error
 {
@@ -173,20 +224,18 @@ static NSCharacterSet *whitespace,*terminators,*quoted,*numberPrefix,*digits;
         [ws addCharactersInString:@",;"];
         whitespace =  [ws copy];
     }
-    if (terminators == nil) {
-        NSMutableCharacterSet *terms = [NSMutableCharacterSet characterSetWithCharactersInString:@"]})"];
-        [terms formUnionWithCharacterSet:whitespace];
-        terminators = [terms copy];
-    }
     if (quoted == nil) {
         quoted = [NSCharacterSet characterSetWithCharactersInString:@"\\\"rnt"];
     }
     if (numberPrefix == nil) {
-        numberPrefix = [NSCharacterSet characterSetWithCharactersInString:@"+-"];
+        numberPrefix = [NSCharacterSet characterSetWithCharactersInString:@"+-."];
     }
-    if (digits == nil)
-    {
-        digits = [NSCharacterSet decimalDigitCharacterSet];
+    if (digits == nil) {
+        digits = [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
+    }
+    if (symbolChars == nil) {
+        symbolChars = [NSCharacterSet characterSetWithCharactersInString:
+            @"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.*+!-_?$%&=:#/"];
     }
 }
 
@@ -240,15 +289,33 @@ static NSCharacterSet *whitespace,*terminators,*quoted,*numberPrefix,*digits;
             [parserState moveAhead];
             [self skipWhitespace:parserState];
             while (parserState.valid
-                   && ![terminators characterIsMember:parserState.currentCharacter]){
+                   && [symbolChars characterIsMember:parserState.currentCharacter]){
                 [parserState moveAhead];
             }
             return nil;
         case '{':
             return [self parseSet:parserState];
-            
         default:
-            return nil;
+            [parserState setMark];
+            while (parserState.valid
+                   && [symbolChars characterIsMember:parserState.currentCharacter]) {
+                [parserState moveAhead];
+            }
+            id tag = BMOParseSymbolType(parserState,[BMOEDNSymbol class]);
+            TaggedEntityResolver resolver = self.resolvers[tag];
+            if (resolver == nil) {
+                // TODO: reversible tagged object implementation
+                parserState.error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData, @"Tag for tagged data type not recognized; arbitrary tags not currently supported.");
+                return nil;
+            } else {
+                id innards = [self parseObject:parserState];
+                if (parserState.error) return nil;
+                NSError *err = nil;
+                id resolvedObject = resolver(innards,&err);
+                if (err) parserState.error = err;
+                return resolvedObject;
+            }
+            
             break;
     }
 }
@@ -354,63 +421,38 @@ static NSCharacterSet *whitespace,*terminators,*quoted,*numberPrefix,*digits;
     else return [NSArray arrayWithArray:array];
 }
 
-NSError * BMOValidateSymbolComponents(NSArray *components) {
-    if (components.count > 2) {
-        // too many components
-        // TODO: message(s)
-        return BMOEDNError(BMOEDNSerializationErrorCodeInvalidData);
-    }
-    if (![[components lastObject] length]) {
-        // name of 0 length
-        // TODO: message(s)
-        return BMOEDNError(BMOEDNSerializationErrorCodeInvalidData);
-    }
-    if (![[components objectAtIndex:0] length]) {
-        // namespace of 0 length
-        // TODO: message(s)
-        return BMOEDNError(BMOEDNSerializationErrorCodeInvalidData);
-    }
-    return nil;
-}
-
 // TODO: interning, probably via a map of namespaces
 -(id)parseKeyword:(BMOEDNParserState *)parserState {
     [parserState moveAhead];
     [parserState setMark];
     while (parserState.valid
-           && ![terminators characterIsMember:parserState.currentCharacter])
+           && [symbolChars characterIsMember:parserState.currentCharacter])
     {
         [parserState moveAhead];
     }
-    NSArray *keywordComponents = [[parserState markedString] componentsSeparatedByString:@"/"];
     
-    NSError *err = BMOValidateSymbolComponents(keywordComponents);
-    if (err) {
-        parserState.error = err;
+    if ([parserState markedLength] == 0) {
+        parserState.error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData, @"Keyword must not be empty.");
         return nil;
     }
     
-    if (keywordComponents.count == 2) {
-        return [[BMOEDNKeyword alloc] initWithNamespace:[keywordComponents objectAtIndex:0] name:[keywordComponents lastObject]];
-    } else {
-        return [[BMOEDNKeyword alloc] initWithNamespace:nil name:[keywordComponents lastObject]];
-    }
+    return BMOParseSymbolType(parserState, [BMOEDNKeyword class]);
 }
 
 -(id)parseLiteral:(BMOEDNParserState *)parserState {
-    
     [parserState setMark];
     while (parserState.valid
-           && ![terminators characterIsMember:parserState.currentCharacter])
+           && [symbolChars characterIsMember:parserState.currentCharacter])
     {
         [parserState moveAhead];
     }
+    
     if ([parserState markedLength] == 0) {
         parserState.error = [NSError errorWithDomain:BMOEDNSerializationErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
         return nil;
     }
+    
     NSMutableString *literal = [parserState markedString];
-    // TODO: keyword/symbol support
     if ([digits characterIsMember:parserState.markedCharacter] ||
         ([numberPrefix characterIsMember:parserState.markedCharacter]
          && [digits characterIsMember:[parserState characterOffsetFromMark:1]])){
@@ -439,18 +481,7 @@ NSError * BMOValidateSymbolComponents(NSArray *components) {
     } else if ([literal isEqualToString:@"false"]){
         return (__bridge NSNumber *)kCFBooleanFalse;
     } else {
-        NSArray *symbolComponents = [literal componentsSeparatedByString:@"/"];
-        NSError *err = BMOValidateSymbolComponents(symbolComponents);
-        if (err) {
-            parserState.error = err;
-            return nil;
-        }
-    
-        if (symbolComponents.count == 2) {
-            return [[BMOEDNSymbol alloc] initWithNamespace:[symbolComponents objectAtIndex:0] name:[symbolComponents lastObject]];
-        } else {
-            return [[BMOEDNSymbol alloc] initWithNamespace:nil name:[symbolComponents lastObject]];
-        }
+        return BMOParseSymbolType(parserState, [BMOEDNSymbol class]);
     }
     // failed to parse a valid literal
     // TODO: userinfo
@@ -499,10 +530,49 @@ NSError * BMOValidateSymbolComponents(NSArray *components) {
 
 @end
 
+static NSDictionary * stockResolvers;
+
 @implementation BMOEDNSerialization
 
++(void)initialize {
+    if (stockResolvers == nil) {
+        TaggedEntityResolver uuidBlock = ^(id obj, NSError **error) { 
+            id ret = nil;
+            if (![obj isKindOfClass:[NSString class]]) {
+                *error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData,@"'uuid'-tagged objects should be just a string");
+                return (id)nil;
+            } else {
+                ret = [[NSUUID alloc] initWithUUIDString:obj];
+                if (ret == nil) {
+                    *error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData,@"'uuid' format did not match expected format.");
+                }
+            }
+            return ret;
+        };
+    stockResolvers =
+        @{
+          [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"uuid"]:
+              [uuidBlock copy],
+                                                                            
+          };
+    }
+}
+
 +(id)EDNObjectWithData:(NSData *)data error:(NSError **)error {
-    return [[BMOEDNParser new] parse:data withError:error];
+    return [self EDNObjectWithData:data resolvers:nil error:error];
+}
+
++(id)EDNObjectWithData:(NSData *)data
+             resolvers:(NSDictionary *)resolvers
+                 error:(NSError **)error {
+    if (resolvers == nil) {
+        resolvers = stockResolvers;
+    } else if (resolvers != stockResolvers) {
+        NSMutableDictionary *tempResolvers = [resolvers mutableCopy];
+        [tempResolvers addEntriesFromDictionary:stockResolvers];
+        resolvers = [tempResolvers copy];
+    }
+    return [[[BMOEDNParser alloc] initWithResolvers:resolvers] parse:data withError:error];
 }
 
 @end

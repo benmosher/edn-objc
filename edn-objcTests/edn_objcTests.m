@@ -155,6 +155,7 @@
     STAssertEqualObjects([@":keyword" ednValue], [[BMOEDNKeyword alloc] initWithNamespace:nil name:@"keyword"], @"");
     STAssertEqualObjects([@":namespaced/keyword" ednValue], [[BMOEDNKeyword alloc] initWithNamespace:@"namespaced" name:@"keyword"], @"");
     STAssertThrows([[BMOEDNKeyword alloc] initWithNamespace:@"something" name:nil], @"");
+    STAssertNil([@":" ednValue],@"");
     STAssertNil([@":/nonamespace" ednValue], @"");
     STAssertNil([@":so/many/names/paces" ednValue], @"");
     STAssertFalse([[@":keywordsymbol" ednValue] isEqual:[@"keywordsymbol" ednValue]], @"");
@@ -168,6 +169,15 @@
     STAssertThrows([[BMOEDNSymbol alloc] initWithNamespace:@"something" name:nil], @"");
     STAssertNil([@"/nonamespace" ednValue], @"");
     STAssertNil([@"so/many/names/paces" ednValue], @"");
+    // '/' is a special case...
+    STAssertEqualObjects([@"/" ednValue], [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"/"], @"");
+    STAssertEqualObjects([@"foo//" ednValue], [[BMOEDNSymbol alloc] initWithNamespace:@"foo" name:@"/"], @"");
+}
+
+- (void)testDeserializeUuidTag
+{
+    NSUUID *uuid = [NSUUID UUID];
+    STAssertEqualObjects(([[NSString stringWithFormat:@"#uuid \"%@\"",uuid.UUIDString] ednValue]), uuid, @"");
 }
 
 
