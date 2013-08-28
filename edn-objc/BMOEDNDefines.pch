@@ -1,0 +1,26 @@
+//
+//  BMOEDNDefines.h
+//  edn-objc
+//
+//  Created by Ben Mosher on 8/28/13.
+//  Copyright (c) 2013 Ben Mosher. All rights reserved.
+//
+
+#ifndef edn_objc_BMOEDNDefines_h
+#define edn_objc_BMOEDNDefines_hs
+
+typedef enum  {
+    BMOEDNSerializationErrorCodeNone = 0,
+    BMOEDNSerializationErrorCodeNoData,
+    BMOEDNSerializationErrorCodeInvalidData,
+    BMOEDNSerializationErrorCodeUnexpectedEndOfData,
+} BMOEDNSerializationErrorCode;
+
+typedef id (^TaggedEntityResolver)(id, NSError **);
+
+#define BMOEDNSerializationErrorDomain (@"BMOEDNSerialization")
+// TODO: use message version
+#define BMOEDNError(errCode) ([NSError errorWithDomain:BMOEDNSerializationErrorDomain code:errCode userInfo:nil])
+#define BMOEDNErrorMessage(errCode,message) BMOEDNError(errCode)
+
+#endif

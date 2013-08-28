@@ -7,15 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
-typedef enum  {
-    BMOEDNSerializationErrorCodeNone = 0,
-    BMOEDNSerializationErrorCodeNoData,
-    BMOEDNSerializationErrorCodeInvalidData,
-    BMOEDNSerializationErrorCodeUnexpectedEndOfData,
-} BMOEDNSerializationErrorCode;
-
-typedef id (^TaggedEntityResolver)(id, NSError **);
+#import "BMOEDNDefines.pch"
 
 @interface BMOEDNSerialization : NSObject
 
