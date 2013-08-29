@@ -194,7 +194,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
     return self;
 }
 
--(id)parse:(NSData *)data withError:(NSError **)error
+-(id)parse:(NSData *)data error:(NSError **)error
 {
     BMOEDNReaderState *state = [[BMOEDNReaderState alloc] initWithData:data];
     id parsed = [self parseObject:state];

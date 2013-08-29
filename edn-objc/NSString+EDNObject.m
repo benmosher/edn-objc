@@ -1,16 +1,16 @@
 //
-//  NSString+EDNValue.m
+//  NSString+EDNObject.m
 //  edn-objc
 //
 //  Created by Ben Mosher on 8/26/13.
 //  Copyright (c) 2013 Ben Mosher. All rights reserved.
 //
 
-#import "NSString+EDNValue.h"
+#import "NSString+EDNObject.h"
 #import "BMOEDNSerialization.h"
-@implementation NSString (EDNValue)
+@implementation NSString (EDNObject)
 
--(id)ednValue {
+-(id)ednObject {
     return [BMOEDNSerialization EDNObjectWithData:[self dataUsingEncoding:NSUTF8StringEncoding] error:NULL];
 }
 

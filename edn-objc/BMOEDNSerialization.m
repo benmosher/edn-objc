@@ -11,6 +11,7 @@
 #import "BMOEDNSymbol.h"
 #import "BMOEDNKeyword.h"
 #import "BMOEDNReader.h"
+#import "BMOEDNWriter.h"
 
 static NSDictionary * stockReadResolvers;
 
@@ -74,7 +75,12 @@ static NSDictionary * stockReadResolvers;
         [tempResolvers addEntriesFromDictionary:stockReadResolvers];
         resolvers = [tempResolvers copy];
     }
-    return [[[BMOEDNReader alloc] initWithResolvers:resolvers] parse:data withError:error];
+    return [[[BMOEDNReader alloc] initWithResolvers:resolvers] parse:data error:error];
+}
+
++(NSData *)dataWithEDNObject:(id)obj error:(NSError **)error {
+    BMOEDNWriter *writer = [[BMOEDNWriter alloc] init];
+    return [writer write:obj error:error];
 }
 
 @end

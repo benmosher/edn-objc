@@ -30,6 +30,7 @@
 {
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"\"whee\"" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], @"whee", @"");
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"\"I have a \\\"mid-quoted\\\" string in me.\\nAnd two lines.\\r\\nWindows file: \\\"C:\\\\a file.txt\\\"\"" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], @"I have a \"mid-quoted\" string in me.\nAnd two lines.\r\nWindows file: \"C:\\a file.txt\"", @"");
+    STAssertEqualObjects([@"\"\\\\\\\"\"" ednObject], @"\\\"", @"Backslash city.");
 }
 
 - (void)testParseLiterals
@@ -43,10 +44,10 @@
 {
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"0" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], [NSNumber numberWithInt:0], @"");
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"1.1E1" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], [NSNumber numberWithDouble:11.0], @"");
-    STAssertEqualObjects([@"-2" ednValue], @(-2), @"");
-    STAssertEqualObjects([@"+0" ednValue], @(0), @"");
-    STAssertEqualObjects([@"10000N" ednValue], @(10000), @"");
-    STAssertEqualObjects([@"1000.1M" ednValue], [NSDecimalNumber decimalNumberWithMantissa:10001 exponent:-1 isNegative:NO], @"");
+    STAssertEqualObjects([@"-2" ednObject], @(-2), @"");
+    STAssertEqualObjects([@"+0" ednObject], @(0), @"");
+    STAssertEqualObjects([@"10000N" ednObject], @(10000), @"");
+    STAssertEqualObjects([@"1000.1M" ednObject], [NSDecimalNumber decimalNumberWithMantissa:10001 exponent:-1 isNegative:NO], @"");
 }
 
 - (void)testCMathWorksHowIExpect
@@ -123,7 +124,7 @@
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"#{ 1 }" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], [NSSet setWithArray:@[@1]], @"");
     id set = [NSSet setWithArray:@[@1, @2]];
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"#{ 1 2 }" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], set, @"");
-    STAssertNil([@"#{ 1 1 2 3 5 }" ednValue], @"Repeated set members should fail.");
+    STAssertNil([@"#{ 1 1 2 3 5 }" ednObject], @"Repeated set members should fail.");
 }
 
 - (void)testMaps
@@ -135,49 +136,49 @@
         @"three":@"surprise!"};
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"{\"one\" 1 ( 1 2 ) \"two\" \"three\" \"surprise!\"}" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], map, @"");
     
-    STAssertEqualObjects([@"{ :one one :two + :three - :four \"four\" }" ednValue],
+    STAssertEqualObjects([@"{ :one one :two + :three - :four \"four\" }" ednObject],
                          (@{
-                          [@":one" ednValue]: [@"one" ednValue],
-                          [@":two" ednValue]: [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"+"],
-                          [@":three" ednValue]: [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"-"],
-                          [@":four" ednValue]: @"four"
+                          [@":one" ednObject]: [@"one" ednObject],
+                          [@":two" ednObject]: [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"+"],
+                          [@":three" ednObject]: [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"-"],
+                          [@":four" ednObject]: @"four"
                           }), @"");
-    STAssertNil([@"{:one 1 :one \"one\"}" ednValue],@"Repeat keys should fail.");
+    STAssertNil([@"{:one 1 :one \"one\"}" ednObject],@"Repeat keys should fail.");
 }
 
 - (void)testStringCategory {
-    STAssertEqualObjects([@"\"string\"" ednValue], @"string", @"");
-    STAssertEqualObjects([@"[ 1 2 3 ]" ednValue], (@[(@1),(@2),(@3)]), @"");
+    STAssertEqualObjects([@"\"string\"" ednObject], @"string", @"");
+    STAssertEqualObjects([@"[ 1 2 3 ]" ednObject], (@[(@1),(@2),(@3)]), @"");
 }
 
 - (void)testKeywords
 {
-    STAssertEqualObjects([@":keyword" ednValue], [[BMOEDNKeyword alloc] initWithNamespace:nil name:@"keyword"], @"");
-    STAssertEqualObjects([@":namespaced/keyword" ednValue], [[BMOEDNKeyword alloc] initWithNamespace:@"namespaced" name:@"keyword"], @"");
+    STAssertEqualObjects([@":keyword" ednObject], [[BMOEDNKeyword alloc] initWithNamespace:nil name:@"keyword"], @"");
+    STAssertEqualObjects([@":namespaced/keyword" ednObject], [[BMOEDNKeyword alloc] initWithNamespace:@"namespaced" name:@"keyword"], @"");
     STAssertThrows([[BMOEDNKeyword alloc] initWithNamespace:@"something" name:nil], @"");
-    STAssertNil([@":" ednValue],@"");
-    STAssertNil([@":/nonamespace" ednValue], @"");
-    STAssertNil([@":so/many/names/paces" ednValue], @"");
-    STAssertFalse([[@":keywordsymbol" ednValue] isEqual:[@"keywordsymbol" ednValue]], @"");
-    STAssertFalse([[@"symbolkeyword" ednValue] isEqual:[@":symbolkeyword" ednValue]], @"");
+    STAssertNil([@":" ednObject],@"");
+    STAssertNil([@":/nonamespace" ednObject], @"");
+    STAssertNil([@":so/many/names/paces" ednObject], @"");
+    STAssertFalse([[@":keywordsymbol" ednObject] isEqual:[@"keywordsymbol" ednObject]], @"");
+    STAssertFalse([[@"symbolkeyword" ednObject] isEqual:[@":symbolkeyword" ednObject]], @"");
 }
 
 - (void)testSymbols
 {
-    STAssertEqualObjects([@"symbol" ednValue], [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"symbol"], @"");
-    STAssertEqualObjects([@"namespaced/symbol" ednValue], [[BMOEDNSymbol alloc] initWithNamespace:@"namespaced" name:@"symbol"], @"");
+    STAssertEqualObjects([@"symbol" ednObject], [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"symbol"], @"");
+    STAssertEqualObjects([@"namespaced/symbol" ednObject], [[BMOEDNSymbol alloc] initWithNamespace:@"namespaced" name:@"symbol"], @"");
     STAssertThrows([[BMOEDNSymbol alloc] initWithNamespace:@"something" name:nil], @"");
-    STAssertNil([@"/nonamespace" ednValue], @"");
-    STAssertNil([@"so/many/names/paces" ednValue], @"");
+    STAssertNil([@"/nonamespace" ednObject], @"");
+    STAssertNil([@"so/many/names/paces" ednObject], @"");
     // '/' is a special case...
-    STAssertEqualObjects([@"/" ednValue], [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"/"], @"");
-    STAssertEqualObjects([@"foo//" ednValue], [[BMOEDNSymbol alloc] initWithNamespace:@"foo" name:@"/"], @"");
+    STAssertEqualObjects([@"/" ednObject], [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"/"], @"");
+    STAssertEqualObjects([@"foo//" ednObject], [[BMOEDNSymbol alloc] initWithNamespace:@"foo" name:@"/"], @"");
 }
 
 - (void)testDeserializeUuidTag
 {
     NSUUID *uuid = [NSUUID UUID];
-    STAssertEqualObjects(([[NSString stringWithFormat:@"#uuid \"%@\"",uuid.UUIDString] ednValue]), uuid, @"");
+    STAssertEqualObjects(([[NSString stringWithFormat:@"#uuid \"%@\"",uuid.UUIDString] ednObject]), uuid, @"");
 }
 
 - (void)testDeserializeInstTag
@@ -185,8 +186,24 @@
     NSString *date = @"#inst \"1985-04-12T23:20:50.52Z\"";
     NSDate *forComparison = [NSDate dateWithTimeIntervalSince1970:482196050.52];
     
-    STAssertEqualObjects([date ednValue], forComparison, @"");
+    STAssertEqualObjects([date ednObject], forComparison, @"");
 }
 
+#pragma mark - Writer tests
+
+- (void)testSerializeNumerals {
+    STAssertEqualObjects([@(1) ednString], @"1", @"");
+    // TODO: test decimals, floats, etc. (esp for precision)
+}
+
+- (void)testSerializeString {
+    STAssertEqualObjects([@"hello, world!" ednData], [@"\"hello, world!\"" dataUsingEncoding:NSUTF8StringEncoding], @"");
+    STAssertEqualObjects([@"\\\"" ednString], @"\"\\\\\\\"\"", @"Backslash city.");
+}
+
+- (void)testSerializeVector {
+    STAssertEqualObjects([(@[@1, @2, @"three"]) ednString], @"[ 1 2 \"three\" ]", @"");
+    // TODO: whitespace options?
+}
 
 @end

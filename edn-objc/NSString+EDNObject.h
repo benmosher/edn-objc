@@ -1,5 +1,5 @@
 //
-//  NSString+EDNValue.h
+//  NSString+EDNObject.h
 //  edn-objc
 //
 //  Created by Ben Mosher on 8/26/13.
@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSString (EDNValue)
+@interface NSString (EDNObject)
 
-- (id)ednValue;
+- (id)ednObject;
 
 @end
