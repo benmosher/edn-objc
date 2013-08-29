@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "BMOEDNDefines.pch"
 
-@interface BMOEDNParser : NSObject
+@interface BMOEDNReader : NSObject
 
 -(instancetype)initWithResolvers:(NSDictionary *)resolvers;
 

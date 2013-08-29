@@ -10,14 +10,14 @@
 #import "BMOEDNList.h"
 #import "BMOEDNSymbol.h"
 #import "BMOEDNKeyword.h"
-#import "BMOEDNParser.h"
+#import "BMOEDNReader.h"
 
-static NSDictionary * stockResolvers;
+static NSDictionary * stockReadResolvers;
 
 @implementation BMOEDNSerialization
 
 +(void)initialize {
-    if (stockResolvers == nil) {
+    if (stockReadResolvers == nil) {
         TaggedEntityResolver uuidBlock = ^(id obj, NSError **error) { 
             id ret = nil;
             if (![obj isKindOfClass:[NSString class]]) {
@@ -48,7 +48,7 @@ static NSDictionary * stockResolvers;
                 return (id)date;
             }
         };
-        stockResolvers =
+        stockReadResolvers =
         @{
           [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"uuid"]:
               [uuidBlock copy],
@@ -62,17 +62,19 @@ static NSDictionary * stockResolvers;
     return [self EDNObjectWithData:data resolvers:nil error:error];
 }
 
+// TODO: throw an error if non-namespaced tags are provided (stock or not?)
+
 +(id)EDNObjectWithData:(NSData *)data
              resolvers:(NSDictionary *)resolvers
                  error:(NSError **)error {
     if (resolvers == nil) {
-        resolvers = stockResolvers;
-    } else if (resolvers != stockResolvers) {
+        resolvers = stockReadResolvers;
+    } else if (resolvers != stockReadResolvers) {
         NSMutableDictionary *tempResolvers = [resolvers mutableCopy];
-        [tempResolvers addEntriesFromDictionary:stockResolvers];
+        [tempResolvers addEntriesFromDictionary:stockReadResolvers];
         resolvers = [tempResolvers copy];
     }
-    return [[[BMOEDNParser alloc] initWithResolvers:resolvers] parse:data withError:error];
+    return [[[BMOEDNReader alloc] initWithResolvers:resolvers] parse:data withError:error];
 }
 
 @end
