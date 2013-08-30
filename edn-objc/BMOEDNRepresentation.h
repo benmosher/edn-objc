@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol BMOEDNObject <NSObject>
+@protocol BMOEDNRepresentation <NSObject>
 
--(id)ednObject;
+-(id)ednRepresentation;
++(instancetype) objectWithEDNRepresentation:(id)ednRepresentation;
 
 @end

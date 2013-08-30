@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B5B837D717D038B900AEA457 /* BMOEDNObject.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B837D617D038B900AEA457 /* BMOEDNObject.h */; };
+		B5B837D717D038B900AEA457 /* BMOEDNRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B837D617D038B900AEA457 /* BMOEDNRepresentation.h */; };
+		B5B837DA17D03B2900AEA457 /* BMOEDNTaggedElement.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B837D817D03B2900AEA457 /* BMOEDNTaggedElement.h */; };
+		B5B837DB17D03B2900AEA457 /* BMOEDNTaggedElement.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */; };
 		B5C7A62A17C8F282005E0615 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A62917C8F282005E0615 /* Foundation.framework */; };
 		B5C7A63117C8F282005E0615 /* BMOEDNSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A63017C8F282005E0615 /* BMOEDNSerialization.m */; };
 		B5C7A63917C8F282005E0615 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A63817C8F282005E0615 /* SenTestingKit.framework */; };
@@ -58,7 +60,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		B5B837D617D038B900AEA457 /* BMOEDNObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNObject.h; sourceTree = "<group>"; };
+		B5B837D617D038B900AEA457 /* BMOEDNRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNRepresentation.h; sourceTree = "<group>"; };
+		B5B837D817D03B2900AEA457 /* BMOEDNTaggedElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNTaggedElement.h; sourceTree = "<group>"; };
+		B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNTaggedElement.m; sourceTree = "<group>"; };
 		B5C7A62617C8F282005E0615 /* libedn-objc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libedn-objc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C7A62917C8F282005E0615 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B5C7A62D17C8F282005E0615 /* edn-objc-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "edn-objc-Prefix.pch"; sourceTree = "<group>"; };
@@ -115,7 +119,7 @@
 		B5B837D517D0389B00AEA457 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				B5B837D617D038B900AEA457 /* BMOEDNObject.h */,
+				B5B837D617D038B900AEA457 /* BMOEDNRepresentation.h */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";
@@ -169,6 +173,8 @@
 				B5C7A66417CDBE73005E0615 /* BMOEDNReader.m */,
 				B5C7A67117CEF1AE005E0615 /* BMOEDNWriter.h */,
 				B5C7A67217CEF1AE005E0615 /* BMOEDNWriter.m */,
+				B5B837D817D03B2900AEA457 /* BMOEDNTaggedElement.h */,
+				B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */,
 			);
 			path = "edn-objc";
 			sourceTree = "<group>";
@@ -226,7 +232,8 @@
 				B5C7A66F17CDC21A005E0615 /* NSString+BMOEDN.h in Headers */,
 				B5C7A67317CEF1AE005E0615 /* BMOEDNWriter.h in Headers */,
 				B5C7A67817CEFB26005E0615 /* NSObject+BMOEDN.h in Headers */,
-				B5B837D717D038B900AEA457 /* BMOEDNObject.h in Headers */,
+				B5B837D717D038B900AEA457 /* BMOEDNRepresentation.h in Headers */,
+				B5B837DA17D03B2900AEA457 /* BMOEDNTaggedElement.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,6 +344,7 @@
 				B5C7A66517CDBE74005E0615 /* BMOEDNReader.m in Sources */,
 				B5C7A67417CEF1AE005E0615 /* BMOEDNWriter.m in Sources */,
 				B5C7A67917CEFB26005E0615 /* NSObject+BMOEDN.m in Sources */,
+				B5B837DB17D03B2900AEA457 /* BMOEDNTaggedElement.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
