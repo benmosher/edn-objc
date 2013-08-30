@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B5B837D717D038B900AEA457 /* BMOEDNObject.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B837D617D038B900AEA457 /* BMOEDNObject.h */; };
 		B5C7A62A17C8F282005E0615 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A62917C8F282005E0615 /* Foundation.framework */; };
 		B5C7A63117C8F282005E0615 /* BMOEDNSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A63017C8F282005E0615 /* BMOEDNSerialization.m */; };
 		B5C7A63917C8F282005E0615 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A63817C8F282005E0615 /* SenTestingKit.framework */; };
@@ -57,6 +58,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B5B837D617D038B900AEA457 /* BMOEDNObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNObject.h; sourceTree = "<group>"; };
 		B5C7A62617C8F282005E0615 /* libedn-objc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libedn-objc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C7A62917C8F282005E0615 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B5C7A62D17C8F282005E0615 /* edn-objc-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "edn-objc-Prefix.pch"; sourceTree = "<group>"; };
@@ -110,6 +112,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B5B837D517D0389B00AEA457 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				B5B837D617D038B900AEA457 /* BMOEDNObject.h */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
 		B5C7A61D17C8F282005E0615 = {
 			isa = PBXGroup;
 			children = (
@@ -142,6 +152,7 @@
 		B5C7A62B17C8F282005E0615 /* edn-objc */ = {
 			isa = PBXGroup;
 			children = (
+				B5B837D517D0389B00AEA457 /* Protocols */,
 				B5C7A67517CEFAE5005E0615 /* Categories */,
 				B5C7A66017CC599B005E0615 /* edn-objc.h */,
 				B5C7A66617CDBF30005E0615 /* BMOEDNDefines.pch */,
@@ -215,6 +226,7 @@
 				B5C7A66F17CDC21A005E0615 /* NSString+BMOEDN.h in Headers */,
 				B5C7A67317CEF1AE005E0615 /* BMOEDNWriter.h in Headers */,
 				B5C7A67817CEFB26005E0615 /* NSObject+BMOEDN.h in Headers */,
+				B5B837D717D038B900AEA457 /* BMOEDNObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

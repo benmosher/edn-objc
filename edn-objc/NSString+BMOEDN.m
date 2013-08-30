@@ -10,7 +10,7 @@
 #import "BMOEDNSerialization.h"
 @implementation NSString (BMOEDN)
 
--(id)ednObject {
+-(id)objectFromEDNString {
     return [BMOEDNSerialization EDNObjectWithData:[self dataUsingEncoding:NSUTF8StringEncoding] error:NULL];
 }
 

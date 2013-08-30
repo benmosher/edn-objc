@@ -59,7 +59,7 @@
 -(void)appendList:(BMOEDNList *)obj toState:(BMOEDNWriterState *)state;
 -(void)appendMap:(NSDictionary *)obj toState:(BMOEDNWriterState *)state;
 -(void)appendString:(NSString *)obj toState:(BMOEDNWriterState *)state;
--(void)appendKeyword:(BMOEDNKeyword *)obj toState:(BMOEDNWriterState *)state;
+-(void)appendSymbol:(BMOEDNSymbol *)obj toState:(BMOEDNWriterState *)state;
 -(void)appendLiteral:(id)obj toState:(BMOEDNWriterState *)state;
 -(void)appendNumber:(NSNumber *)obj toState:(BMOEDNWriterState *)state;
 -(void)appendSet:(NSSet *)obj toState:(BMOEDNWriterState *)state;
@@ -103,6 +103,8 @@
         [self appendSet:obj toState:state];
     else if ([obj isKindOfClass:[NSNumber class]])
         [self appendNumber:obj toState:state];
+    else if ([obj isKindOfClass:[BMOEDNSymbol class]])
+        [self appendSymbol:obj toState:state];
     else {
         state.error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData, @"Provided object cannot be EDN-serialized.");
         return;
@@ -162,6 +164,10 @@
     [state appendString:@"#{ "];
     [self appendEnumerable:obj toState:state whitespace:@" "];
     [state appendString:@"}"];
+}
+
+-(void)appendSymbol:(BMOEDNSymbol *)obj toState:(BMOEDNWriterState *)state {
+    [state appendString:[obj description]];
 }
 
 @end
