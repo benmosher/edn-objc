@@ -14,7 +14,7 @@
 
 @property (strong, readonly, nonatomic) NSDictionary * resolvers;
 
-// TODO: write into an existing NSData?
--(NSData *)write:(id)obj error:(NSError **)error;
-
+// TODO: write into (or append to) an existing NSData?
+-(NSData *)writeToData:(id)obj error:(NSError **)error;
+-(NSString *)writeToString:(id)obj error:(NSError **)error;
 @end

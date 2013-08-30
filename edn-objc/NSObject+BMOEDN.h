@@ -1,5 +1,5 @@
 //
-//  NSObject+EDNData.h
+//  NSObject+BMOEDN.h
 //  edn-objc
 //
 //  Created by Ben Mosher on 8/28/13.
@@ -8,10 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSObject (EDNData)
+@interface NSObject (BMOEDN)
 
 - (NSData *)ednData;
-
 - (NSString *)ednString;
 
 @end

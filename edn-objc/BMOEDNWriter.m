@@ -8,38 +8,46 @@
 
 #import "BMOEDNWriter.h"
 #import "BMOEDNDefines.pch"
-
+#import "BMOEDNKeyword.h"
+#import "BMOEDNSymbol.h"
+#import "BMOEDNList.h"
 // TODO: struct + functions
 
 @interface BMOEDNWriterState : NSObject {
     NSUInteger _currentIndex;
-    NSMutableData *_data;
+    NSMutableString *_mutableString;
 }
 @property (strong, nonatomic) NSError *error;
 
--(instancetype)initWithMutableData:(NSMutableData *)data;
+-(instancetype)init;
 
--(void)appendCharacter:(unichar)character;
 -(void)appendData:(NSData *)data;
--(void)appendBytes:(const void *)bytes length:(NSUInteger)length;
+
+-(NSData *)writtenData;
+-(NSString *)writtenString;
+
 @end
 
 @implementation BMOEDNWriterState
 
--(instancetype)initWithMutableData:(NSMutableData *)data {
+-(instancetype)init{
     if (self = [super init]) {
-        _data = data;
+        _mutableString = [NSMutableString new];
         _currentIndex = 0;
     }
     return self;
 }
 
--(void)appendData:(NSData *)data {
-    [_data appendData:data];
+-(void)appendString:(NSString *)string {
+    [_mutableString appendString:string];
 }
 
--(void)appendBytes:(const void *)bytes length:(NSUInteger)length {
-    [_data appendBytes:bytes length:length];
+-(NSData *)writtenData {
+    return [_mutableString dataUsingEncoding:NSUTF8StringEncoding];
+}
+
+-(NSString *)writtenString {
+    return [_mutableString copy];
 }
 
 @end
@@ -48,27 +56,40 @@
 -(void)appendObject:(id)obj toState:(BMOEDNWriterState *)state;
 -(void)appendTaggedObject:(id)obj toState:(BMOEDNWriterState *)state;
 -(void)appendVector:(NSArray *)obj toState:(BMOEDNWriterState *)state;
--(void)appendList:(id)obj toState:(BMOEDNWriterState *)state;
--(void)appendMap:(id)obj toState:(BMOEDNWriterState *)state;
+-(void)appendList:(BMOEDNList *)obj toState:(BMOEDNWriterState *)state;
+-(void)appendMap:(NSDictionary *)obj toState:(BMOEDNWriterState *)state;
 -(void)appendString:(NSString *)obj toState:(BMOEDNWriterState *)state;
--(void)appendKeyword:(id)obj toState:(BMOEDNWriterState *)state;
+-(void)appendKeyword:(BMOEDNKeyword *)obj toState:(BMOEDNWriterState *)state;
 -(void)appendLiteral:(id)obj toState:(BMOEDNWriterState *)state;
 -(void)appendNumber:(NSNumber *)obj toState:(BMOEDNWriterState *)state;
--(void)appendSet:(id)obj toState:(BMOEDNWriterState *)state;
+-(void)appendSet:(NSSet *)obj toState:(BMOEDNWriterState *)state;
+
+#pragma mark Helpers
+-(void)appendEnumerable:(id<NSFastEnumeration>) obj
+                toState:(BMOEDNWriterState *)state
+             whitespace:(NSString *)ws;
 @end
 
 @implementation BMOEDNWriter
 
-#pragma mark - external write method
+#pragma mark - external write methods
 
--(NSData *)write:(id)obj error:(NSError **)error {
-    NSData * data = [NSMutableData new];
-    BMOEDNWriterState *state = [[BMOEDNWriterState alloc] initWithMutableData:data];
+-(NSData *)writeToData:(id)obj error:(NSError **)error {
+    BMOEDNWriterState *state = [[BMOEDNWriterState alloc] init];
     [self appendObject:obj toState:state];
     if (state.error) {
         if (error != NULL) *error = state.error;
         return nil;
-    } else return [data copy];
+    } else return [state writtenData];
+}
+
+-(NSString *)writeToString:(id)obj error:(NSError **)error {
+    BMOEDNWriterState *state = [[BMOEDNWriterState alloc] init];
+    [self appendObject:obj toState:state];
+    if (state.error) {
+        if (error != NULL) *error = state.error;
+        return nil;
+    } else return [state writtenString];
 }
 
 #pragma mark - internal write methods
@@ -78,6 +99,8 @@
         [self appendString:obj toState:state];
     else if ([obj isKindOfClass:[NSArray class]])
         [self appendVector:obj toState:state];
+    else if ([obj isKindOfClass:[NSSet class]])
+        [self appendSet:obj toState:state];
     else if ([obj isKindOfClass:[NSNumber class]])
         [self appendNumber:obj toState:state];
     else {
@@ -88,38 +111,57 @@
 
 -(void)appendString:(NSString *)obj toState:(BMOEDNWriterState *)state {
     // TODO: profile and optimize... correctness is still job one ATM
-    NSMutableString *ednString = [obj mutableCopy];
+    
+    // wrap in quotes; note that the range on each replacement operation is 1,length-2
+    NSMutableString *ednString = [NSMutableString stringWithFormat:@"\"%@\"",obj];
     
     // quote-town USA
-    [ednString replaceOccurrencesOfString:@"\\" withString:@"\\\\" options:0 range:NSMakeRange(0, ednString.length)];
-    [ednString replaceOccurrencesOfString:@"\"" withString:@"\\\"" options:0 range:NSMakeRange(0, ednString.length)];
+    [ednString replaceOccurrencesOfString:@"\\" withString:@"\\\\" options:0 range:NSMakeRange(1, ednString.length-2)];
+    [ednString replaceOccurrencesOfString:@"\"" withString:@"\\\"" options:0 range:NSMakeRange(1, ednString.length-2)];
     
     // TODO: decide if the following 3 are necessary
-    [ednString replaceOccurrencesOfString:@"\r" withString:@"\\r" options:0 range:NSMakeRange(0, ednString.length)];
-    [ednString replaceOccurrencesOfString:@"\n" withString:@"\\n" options:0 range:NSMakeRange(0, ednString.length)];
-    [ednString replaceOccurrencesOfString:@"\t" withString:@"\\t" options:0 range:NSMakeRange(0, ednString.length)];
-    
-    // put the endquotes on
-    [ednString insertString:@"\"" atIndex:0];
-    [ednString appendString:@"\""];
+    [ednString replaceOccurrencesOfString:@"\r" withString:@"\\r" options:0 range:NSMakeRange(1, ednString.length-2)];
+    [ednString replaceOccurrencesOfString:@"\n" withString:@"\\n" options:0 range:NSMakeRange(1, ednString.length-2)];
+    [ednString replaceOccurrencesOfString:@"\t" withString:@"\\t" options:0 range:NSMakeRange(1, ednString.length-2)];
     
     // write it (cut it paste it save it)
-    [state appendData:[ednString dataUsingEncoding:NSUTF8StringEncoding]];
+    [state appendString:ednString];
 }
 
 -(void)appendNumber:(NSNumber *)obj toState:(BMOEDNWriterState *)state {
     // TODO: care more about formatting... also, booleans probably end up here
-    [state appendData:[[obj stringValue] dataUsingEncoding:NSUTF8StringEncoding]];
+    NSString *stringValue;
+    if ((__bridge CFBooleanRef)obj == kCFBooleanTrue) {
+        stringValue = @"true";
+    } else if ((__bridge CFBooleanRef)obj == kCFBooleanFalse) {
+        stringValue = @"false";
+    } else {
+        stringValue = [obj stringValue];
+    }
+    [state appendString:stringValue];
+}
+
+-(void)appendEnumerable:(id<NSFastEnumeration>) obj
+                toState:(BMOEDNWriterState *)state
+             whitespace:(NSString *)ws {
+    for (id o in obj) {
+        [self appendObject:o toState:state];
+        if (state.error) return;
+        [state appendString:ws];
+    }
 }
 
 -(void)appendVector:(NSArray *)obj toState:(BMOEDNWriterState *)state {
-    const void * buffer = "[ ]";
-    [state appendBytes:buffer length:2];
-    for (id o in obj) {
-        [self appendObject:o toState:state];
-        [state appendBytes:&buffer[1] length:1];
-    }
-    [state appendBytes:&buffer[2] length:1];
+    // TODO: minimal whitespace (and commas instead of spaces?) version
+    [state appendString:@"[ "];
+    [self appendEnumerable:obj toState:state whitespace:@" "];
+    [state appendString:@"]"];
+}
+
+-(void)appendSet:(NSSet *)obj toState:(BMOEDNWriterState *)state {
+    [state appendString:@"#{ "];
+    [self appendEnumerable:obj toState:state whitespace:@" "];
+    [state appendString:@"}"];
 }
 
 @end

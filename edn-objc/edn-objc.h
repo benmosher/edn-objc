@@ -13,7 +13,7 @@
 #import "BMOEDNList.h"
 #import "BMOEDNSymbol.h"
 #import "BMOEDNKeyword.h"
-#import "NSString+EDNObject.h"
-#import "NSObject+EDNData.h"
+#import "NSString+BMOEDN.h"
+#import "NSObject+BMOEDN.h"
 
 #endif

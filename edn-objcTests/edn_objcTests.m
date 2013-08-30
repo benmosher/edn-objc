@@ -206,4 +206,11 @@
     // TODO: whitespace options?
 }
 
+- (void)testSerializeSet {
+    // Since sets come out unordered, simplest way to test is to
+    // parse back in and see if it matches.
+    id set = [NSSet setWithArray:(@[@1, @2, @3])];
+    STAssertEqualObjects([[set ednString] ednObject], set, @"");
+}
+
 @end

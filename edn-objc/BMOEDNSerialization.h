@@ -26,6 +26,10 @@
                    resolvers:(NSDictionary *)resolvers
                        error:(NSError **)error;
 
++(NSString *)stringWithEDNObject:(id)obj error:(NSError **)error;
++(NSString *)stringWithEDNObject:(id)obj
+                   resolvers:(NSDictionary *)resolvers
+                       error:(NSError **)error;
 
 /**
  Checks whether 'obj' can be written out to valid EDN (with stock tagged-object resolvers).

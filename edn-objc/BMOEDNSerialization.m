@@ -80,7 +80,12 @@ static NSDictionary * stockReadResolvers;
 
 +(NSData *)dataWithEDNObject:(id)obj error:(NSError **)error {
     BMOEDNWriter *writer = [[BMOEDNWriter alloc] init];
-    return [writer write:obj error:error];
+    return [writer writeToData:obj error:error];
+}
+
++(NSString *)stringWithEDNObject:(id)obj error:(NSError **)error {
+    BMOEDNWriter *writer = [[BMOEDNWriter alloc] init];
+    return [writer writeToString:obj error:error];
 }
 
 @end
