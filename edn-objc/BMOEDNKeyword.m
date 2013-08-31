@@ -10,6 +10,10 @@
 
 @implementation BMOEDNKeyword
 
++(BMOEDNKeyword *)keywordWithNamespace:(NSString *)ns name:(NSString *)name {
+    return [[BMOEDNKeyword alloc] initWithNamespace:ns name:name];
+}
+
 -(BOOL)isEqual:(id)object {
     if (object == self) return YES;
     if (![object isMemberOfClass:[BMOEDNKeyword class]]) return NO;

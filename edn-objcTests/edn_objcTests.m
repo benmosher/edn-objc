@@ -215,10 +215,11 @@
 
 - (void)testSerializeSymbol {
     id foo = @"foo//";
-    STAssertEqualObjects([[foo objectFromEDNString] ednString], foo, @"");
+    STAssertEqualObjects([[BMOEDNSymbol symbolWithNamespace:@"foo" name:@"/"] ednString], foo, @"");
     id bar = @":my/bar";
     STAssertEqualObjects([[bar objectFromEDNString] ednString], bar, @"");
 }
+
 - (void)testSerializeTaggedElements {
     // uuid
     NSUUID *uuid = [NSUUID UUID];
@@ -235,5 +236,11 @@
     STAssertEqualObjects([taggedElement ednString], taggedElementString, @"");
 }
 
+- (void)testSerializeMap {
+    id map = @{[BMOEDNKeyword keywordWithNamespace:@"my" name:@"one"]:@1,
+               [BMOEDNKeyword keywordWithNamespace:@"your" name:@"two"]:@2,
+               @3:[BMOEDNSymbol symbolWithNamespace:@"surprise" name:@"three"]};
+    STAssertEqualObjects([[map ednString] objectFromEDNString], map, @"Ordering is not guaranteed, so we round-trip it up.");
+}
 
 @end

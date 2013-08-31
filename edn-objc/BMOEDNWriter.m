@@ -98,6 +98,8 @@
 -(void)appendObject:(id)obj toState:(BMOEDNWriterState *)state {
     if ([obj isKindOfClass:[NSString class]])
         [self appendString:obj toState:state];
+    else if ([obj isKindOfClass:[NSDictionary class]])
+        [self appendMap:obj toState:state];
     else if ([obj isKindOfClass:[NSArray class]])
         [self appendVector:obj toState:state];
     else if ([obj isKindOfClass:[NSSet class]])
@@ -184,6 +186,17 @@
     [state appendString:@" "]; // todo: whitespace option
     [self appendObject:obj.element toState:state];
     if (state.error) return;
+}
+
+-(void)appendMap:(NSDictionary *)obj toState:(BMOEDNWriterState *)state {
+    [state appendString:@"{ "]; // TODO: whitespace option
+    [obj enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        [self appendObject:key toState:state];
+        [state appendString:@" "]; // TODO: whitespace options
+        [self appendObject:obj toState:state];
+        [state appendString:@" "];
+    }];
+    [state appendString:@"}"];
 }
 
 @end
