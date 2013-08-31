@@ -263,4 +263,10 @@
     }
 }
 
+- (void)testSerializeList {
+    NSString *listString = @"( 1 2 3 4 my/symbol 6 7 8 9 #{ 10 :a :b see } 11 \"twelve\" 13 14 15 16 17 18 19 20 )";
+    BMOEDNList *list = (BMOEDNList *)[listString objectFromEDNString];
+    STAssertEqualObjects([[list EDNString] objectFromEDNString], list, @"");
+}
+
 @end

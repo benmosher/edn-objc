@@ -103,7 +103,6 @@
 
 -(void)appendObject:(id)obj toState:(BMOEDNWriterState *)state {
     
-    
     if ([obj conformsToProtocol:@protocol(BMOEDNRepresentation)])
         [self appendTaggedObject:[obj EDNRepresentation] toState:state];
     else if ([obj isKindOfClass:[BMOEDNTaggedElement class]])
@@ -114,6 +113,8 @@
         [self appendMap:obj toState:state];
     else if ([obj isKindOfClass:[NSArray class]])
         [self appendVector:obj toState:state];
+    else if ([obj isKindOfClass:[BMOEDNList class]])
+        [self appendList:obj toState:state];
     else if ([obj isKindOfClass:[NSSet class]])
         [self appendSet:obj toState:state];
     else if ([obj isKindOfClass:[NSNumber class]])
