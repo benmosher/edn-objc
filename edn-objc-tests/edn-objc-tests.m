@@ -299,4 +299,20 @@
     NSLog(@"ULLONG_MAX * (2^64 + 1) / 10: %@",number);
     STAssertEqualObjects([[[number stringByAppendingString:@"N"] EDNObject] EDNString],number, @"");
 }
+
+- (void)testParseMetadata {
+    NSString *mapWithMeta = @"^{ :my/metaKey true } { :key1 1 :key2 ^{ :my/metaKey false } 2 :listKey ( 1 2 ^{ :my/foo bar } 3 ) }";
+    
+    id obj = (@{ [@":key1" EDNObject]: @1, [@":key2" EDNObject]: @2, [@":listKey" EDNObject]: [@"( 1 2 3 )" EDNObject]});
+    
+    id parsedObj = [mapWithMeta EDNObject];
+    STAssertEqualObjects(parsedObj, obj, @"Meta should not be factored into equality checks.");
+    
+    STAssertEqualObjects([@"{ :my/metaKey true }" EDNObject], [parsedObj EDNMetadata], @"Find the metadata.");
+    
+    STAssertNil([obj EDNMetadata], @"Unparsed object has no meta.");
+    
+    STAssertNil([@"^{ :foo \"firstMeta\" } ^{ :bar \"secondMeta\"} nil" EDNObject], @"Double-meta is invalid.");
+}
+
 @end

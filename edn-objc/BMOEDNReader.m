@@ -13,6 +13,7 @@
 #import "BMOEDNTaggedElement.h"
 #import "BMOEDNRepresentation.h"
 #import "BMOEDNRegistry.h"
+#import "NSObject+BMOEDN.h"
 
 // TODO: profile, see if struct+functions are faster
 @interface BMOEDNReaderState : NSObject {
@@ -248,22 +249,47 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
         parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
         return nil;
     }
+    
+    id parsed = nil;
     switch (parserState.currentCharacter) {
+        case '^':
+        {
+            [parserState moveAhead];
+            id meta = [self parseMap:parserState];
+            if (parserState.error) return nil;
+            parsed = [self parseObject:parserState];
+            if (parserState.error) return nil;
+            if ([parsed EDNMetadata] != nil) {
+                parserState.error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData, @"Metadata cannot be applied to parsed object with existing metadata.");
+                return nil;
+            } else {
+                [parsed setEDNMetadata:meta];
+            }
+            break;
+        }
         case '#':
-            return [self parseTaggedObject:parserState];
+            parsed = [self parseTaggedObject:parserState];
+            break;
         case '[':
-            return [self parseVector:parserState];
+            parsed = [self parseVector:parserState];
+            break;
         case '(':
-            return [self parseList:parserState];
+            parsed = [self parseList:parserState];
+            break;
         case '{':
-            return [self parseMap:parserState];
+            parsed = [self parseMap:parserState];
+            break;
         case '"':
-            return [self parseString:parserState];
+            parsed = [self parseString:parserState];
+            break;
         case ':':
-            return [self parseKeyword:parserState];
+            parsed = [self parseKeyword:parserState];
+            break;
         default:
-            return [self parseLiteral:parserState];
+            parsed = [self parseLiteral:parserState];
+            break;
     }
+    return parsed;
 }
 
 -(id)parseTaggedObject:(BMOEDNReaderState *)parserState {

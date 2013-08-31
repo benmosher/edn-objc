@@ -13,4 +13,6 @@
 - (NSData *)EDNData;
 - (NSString *)EDNString;
 
+@property (copy, nonatomic) NSDictionary * EDNMetadata;
+
 @end

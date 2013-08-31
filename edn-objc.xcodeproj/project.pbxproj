@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		B539281F17D1D31C00B94545 /* edn-objc-tests.m in Sources */ = {isa = PBXBuildFile; fileRef = B539281E17D1D31C00B94545 /* edn-objc-tests.m */; };
-		B539282117D1D32E00B94545 /* edn-objc-tests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B539282017D1D32E00B94545 /* edn-objc-tests-Info.plist */; };
 		B53AE3D017D16E2F000CBCC0 /* NSUUID+BMOEDN.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AE3CE17D16E2F000CBCC0 /* NSUUID+BMOEDN.h */; };
 		B53AE3D117D16E2F000CBCC0 /* NSUUID+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = B53AE3CF17D16E2F000CBCC0 /* NSUUID+BMOEDN.m */; };
 		B53AE3D417D1728E000CBCC0 /* BMOEDNRegistry.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AE3D317D1728E000CBCC0 /* BMOEDNRegistry.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -337,7 +336,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B539282117D1D32E00B94545 /* edn-objc-tests-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
