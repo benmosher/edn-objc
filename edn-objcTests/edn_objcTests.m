@@ -46,6 +46,8 @@
     STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"1.1E1" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], [NSNumber numberWithDouble:11.0], @"");
     STAssertEqualObjects([@"-2" objectFromEDNString], @(-2), @"");
     STAssertEqualObjects([@"+0" objectFromEDNString], @(0), @"");
+    STAssertEqualObjects([@"-0" objectFromEDNString], @(0), @"");
+    STAssertEqualObjects([@"0" objectFromEDNString], @(0), @"");
     STAssertEqualObjects([@"10000N" objectFromEDNString], @(10000), @"");
     STAssertEqualObjects([@"1000.1M" objectFromEDNString], [NSDecimalNumber decimalNumberWithMantissa:10001 exponent:-1 isNegative:NO], @"");
 }
