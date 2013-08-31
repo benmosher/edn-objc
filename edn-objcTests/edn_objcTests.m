@@ -275,7 +275,12 @@
     BMOEDNList *popped = [@"(3 2 1)" objectFromEDNString];
     STAssertEqualObjects([list push:@5], pushed, @"");
     STAssertEqualObjects([list pop], popped, @"");
-    
+}
+
+- (void)testSerializeNull {
+    STAssertEqualObjects([[NSNull null] EDNString], @"nil", @"");
+    id nullList = [@"( nil nil 1 nil )" objectFromEDNString];
+    STAssertEqualObjects(nullList, [[nullList EDNString] objectFromEDNString], @"");
 }
 
 @end

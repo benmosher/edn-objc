@@ -212,11 +212,11 @@
 				B5C7A66617CDBF30005E0615 /* BMOEDNDefines.pch */,
 				B5C7A62E17C8F282005E0615 /* BMOEDNSerialization.h */,
 				B5C7A63017C8F282005E0615 /* BMOEDNSerialization.m */,
-				B5C7A62C17C8F282005E0615 /* Supporting Files */,
 				B5C7A66317CDBE73005E0615 /* BMOEDNReader.h */,
 				B5C7A66417CDBE73005E0615 /* BMOEDNReader.m */,
 				B5C7A67117CEF1AE005E0615 /* BMOEDNWriter.h */,
 				B5C7A67217CEF1AE005E0615 /* BMOEDNWriter.m */,
+				B5C7A62C17C8F282005E0615 /* Supporting Files */,
 			);
 			path = "edn-objc";
 			sourceTree = "<group>";

@@ -121,6 +121,8 @@
         [self appendNumber:obj toState:state];
     else if ([obj isKindOfClass:[BMOEDNSymbol class]])
         [self appendSymbol:obj toState:state];
+    else if ([obj isEqual:[NSNull null]])
+        [state appendString:@"nil"];
     else {
         // have to iterate over all registered transmogrifiers
         // with isKindOfClass predicate
