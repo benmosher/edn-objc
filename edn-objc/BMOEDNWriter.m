@@ -73,6 +73,13 @@
 
 @implementation BMOEDNWriter
 
+-(instancetype)initWithTransmogrifiers:(NSDictionary *)transmogrifiers {
+    if (self = [super init]) {
+        _transmogrifiers = transmogrifiers;
+    }
+    return self;
+}
+
 #pragma mark - external write methods
 
 -(NSData *)writeToData:(id)obj error:(NSError **)error {
@@ -96,7 +103,13 @@
 #pragma mark - internal write methods
 
 -(void)appendObject:(id)obj toState:(BMOEDNWriterState *)state {
-    if ([obj isKindOfClass:[NSString class]])
+    
+    
+    if ([obj conformsToProtocol:@protocol(BMOEDNRepresentation)])
+        [self appendTaggedObject:[obj EDNRepresentation] toState:state];
+    else if ([obj isKindOfClass:[BMOEDNTaggedElement class]])
+        [self appendTaggedObject:obj toState:state];
+    else if ([obj isKindOfClass:[NSString class]])
         [self appendString:obj toState:state];
     else if ([obj isKindOfClass:[NSDictionary class]])
         [self appendMap:obj toState:state];
@@ -108,13 +121,28 @@
         [self appendNumber:obj toState:state];
     else if ([obj isKindOfClass:[BMOEDNSymbol class]])
         [self appendSymbol:obj toState:state];
-    else if ([obj conformsToProtocol:@protocol(BMOEDNRepresentation)])
-        [self appendTaggedObject:[obj EDNRepresentation] toState:state];
-    else if ([obj isKindOfClass:[BMOEDNTaggedElement class]])
-        [self appendTaggedObject:obj toState:state];
     else {
-        state.error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData, @"Provided object cannot be EDN-serialized.");
-        return;
+        // have to iterate over all registered transmogrifiers
+        // with isKindOfClass predicate
+        __block BMOEDNTransmogrifier transmogrifier = nil;
+        [self.transmogrifiers enumerateKeysAndObjectsUsingBlock:^(id key, id val, BOOL *stop) {
+            if ([obj isKindOfClass:(Class)key]) {
+                transmogrifier = (BMOEDNTransmogrifier)val;
+                *stop = YES;
+            };
+        }];
+        if (transmogrifier){
+            NSError *err;
+            BMOEDNTaggedElement *transmogrifiedObject = transmogrifier(obj,&err);
+            if (err) {
+                state.error = err;
+                return;
+            }
+            [self appendTaggedObject:transmogrifiedObject toState:state];
+        } else {
+            state.error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData, @"Provided object cannot be EDN-serialized.");
+            return;
+        }
     }
 }
 

@@ -10,8 +10,8 @@
 @class BMOEDNSymbol;
 
 /**
- Transmogrifiers can be registered to a tag at runtime
- to bind without a category (or re-bind to a class with
+ Transmogrifiers can be registered to a tag or class at runtime
+ to bind without a category (or re-bind to a class or tag with
  an existing or stock category).
  */
 typedef id (^BMOEDNTransmogrifier)(id, NSError **);

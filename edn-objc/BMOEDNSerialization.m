@@ -21,9 +21,8 @@
 }
 
 +(id)EDNObjectWithData:(NSData *)data
-             transmogrifiers:(NSDictionary *)transmogrifiers
+       transmogrifiers:(NSDictionary *)transmogrifiers
                  error:(NSError **)error {
-    
     return [[[BMOEDNReader alloc] initWithTransmogrifiers:transmogrifiers] parse:data error:error];
 }
 
@@ -32,8 +31,22 @@
     return [writer writeToData:obj error:error];
 }
 
++(NSData *)dataWithEDNObject:(id)obj
+             transmogrifiers:(NSDictionary *)transmogrifiers
+                       error:(NSError **)error {
+    BMOEDNWriter *writer = [[BMOEDNWriter alloc] initWithTransmogrifiers:transmogrifiers];
+    return [writer writeToData:obj error:error];
+}
+
 +(NSString *)stringWithEDNObject:(id)obj error:(NSError **)error {
     BMOEDNWriter *writer = [[BMOEDNWriter alloc] init];
+    return [writer writeToString:obj error:error];
+}
+
++(NSString *)stringWithEDNObject:(id)obj
+                 transmogrifiers:(NSDictionary *)transmogrifiers
+                           error:(NSError **)error {
+    BMOEDNWriter *writer = [[BMOEDNWriter alloc] initWithTransmogrifiers:transmogrifiers];
     return [writer writeToString:obj error:error];
 }
 

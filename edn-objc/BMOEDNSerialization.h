@@ -16,7 +16,7 @@
         that turn an EDN object graph into some root object
  */
 +(id)EDNObjectWithData:(NSData *)data
-             resolvers:(NSDictionary *)resolvers
+       transmogrifiers:(NSDictionary *)transmogrifiers
                  error:(NSError **)error;
 
 
@@ -33,14 +33,14 @@
 /**
  Checks whether 'obj' can be written out to valid EDN (with stock tagged-object resolvers).
  */
-+(BOOL)isValidEDNObject:(id)obj;
+//+(BOOL)isValidEDNObject:(id)obj;
 
 /**
  Checks whether 'obj' can be written out to valid EDN
  with stock resolvers, and the provided additional resolvers.
  Note that redefinition of existing resolvers will not stick (will be ignored).
  */
-+(BOOL)isValidEDNObject:(id)obj withResolvers:(NSDictionary *)resolvers;
+//+(BOOL)isValidEDNObject:(id)obj withResolvers:(NSDictionary *)resolvers;
 
 
 @end

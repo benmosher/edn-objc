@@ -10,9 +10,9 @@
 
 @interface BMOEDNWriter : NSObject
 
--(instancetype)initWithResolvers:(NSDictionary *)resolvers;
+-(instancetype)initWithTransmogrifiers:(NSDictionary *)transmogrifiers;
 
-@property (strong, readonly, nonatomic) NSDictionary * resolvers;
+@property (strong, readonly, nonatomic) NSDictionary * transmogrifiers;
 
 // TODO: write into (or append to) an existing NSData?
 -(NSData *)writeToData:(id)obj error:(NSError **)error;
