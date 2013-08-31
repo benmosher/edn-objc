@@ -273,8 +273,8 @@
     BMOEDNList *list = [@"(4 3 2 1)" objectFromEDNString];
     BMOEDNList *pushed = [@"(5 4 3 2 1)" objectFromEDNString];
     BMOEDNList *popped = [@"(3 2 1)" objectFromEDNString];
-    STAssertEqualObjects([list push:@5], pushed, @"");
-    STAssertEqualObjects([list pop], popped, @"");
+    STAssertEqualObjects([list listByPushing:@5], pushed, @"");
+    STAssertEqualObjects([list listByPopping], popped, @"");
 }
 
 - (void)testSerializeNull {

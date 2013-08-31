@@ -37,11 +37,11 @@
  Returns a new list with the provided object
  as the new head.
  */
--(BMOEDNList *)push:(id)head;
+-(BMOEDNList *)listByPushing:(id)head;
 /**
  Returns a new list with the rest object as
  the new head.
  */
--(BMOEDNList *)pop;
+-(BMOEDNList *)listByPopping;
 
 @end

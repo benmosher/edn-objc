@@ -96,7 +96,7 @@
 
 #pragma mark - Push and pop
 
--(BMOEDNList *)push:(id)head {
+-(BMOEDNList *)listByPushing:(id)head {
     // new list and head cell
     BMOEDNList *newList = [[BMOEDNList alloc] init];
     BMOEDNConsCell *newHead = [[BMOEDNConsCell alloc] init];
@@ -108,7 +108,7 @@
     return newList;
 }
 
--(BMOEDNList *)pop {
+-(BMOEDNList *)listByPopping {
     // new list
     BMOEDNList *newList = [[BMOEDNList alloc] init];
     
