@@ -5,6 +5,8 @@
 //  Created by Ben Mosher on 8/30/13.
 //  Copyright (c) 2013 Ben Mosher. All rights reserved.
 //
+//  Register a class during load time (pre-`main` execution)
+//  to ensure all de/serialization properly binds.
 
 #import <Foundation/NSObjCRuntime.h>
 @class BMOEDNSymbol;

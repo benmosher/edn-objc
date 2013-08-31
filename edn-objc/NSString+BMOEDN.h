@@ -10,6 +10,6 @@
 
 @interface NSString (BMOEDN)
 
-- (id)objectFromEDNString;
+- (id)EDNObject;
 
 @end

@@ -8,7 +8,7 @@
 //  Defines a two-way street between EDN and an arbitrary obj-c class.
 
 #import <Foundation/Foundation.h>
-#import "BMOEDNDefines.pch"
+#import "BMOEDNError.h"
 #import "BMOEDNSymbol.h"
 #import "BMOEDNTaggedElement.h"
 #import "BMOEDNRegistry.h" // imported for implementation convenience

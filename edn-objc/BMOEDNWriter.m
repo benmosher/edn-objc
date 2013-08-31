@@ -7,7 +7,7 @@
 //
 
 #import "BMOEDNWriter.h"
-#import "BMOEDNDefines.pch"
+#import "BMOEDNError.h"
 #import "BMOEDNKeyword.h"
 #import "BMOEDNSymbol.h"
 #import "BMOEDNList.h"

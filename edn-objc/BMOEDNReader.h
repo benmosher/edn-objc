@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "BMOEDNDefines.pch"
+#import "BMOEDNError.h"
 
 @interface BMOEDNReader : NSObject
 

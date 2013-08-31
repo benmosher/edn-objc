@@ -7,12 +7,14 @@
 //
 
 #import "BMOEDNSerialization.h"
-#import "BMOEDNDefines.pch"
+#import "BMOEDNError.h"
 #import "BMOEDNList.h"
 #import "BMOEDNSymbol.h"
 #import "BMOEDNKeyword.h"
 #import "BMOEDNReader.h"
 #import "BMOEDNWriter.h"
+
+FOUNDATION_EXTERN NSString *const BMOEDNErrorDomain =  @"BMOEDNSerialization";
 
 @implementation BMOEDNSerialization
 

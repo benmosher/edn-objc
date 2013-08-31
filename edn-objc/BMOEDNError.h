@@ -1,13 +1,13 @@
 //
-//  BMOEDNDefines.h
+//  BMOEDNError.h
 //  edn-objc
 //
 //  Created by Ben Mosher on 8/28/13.
 //  Copyright (c) 2013 Ben Mosher. All rights reserved.
 //
 
-#ifndef edn_objc_BMOEDNDefines_h
-#define edn_objc_BMOEDNDefines_hs
+#ifndef edn_objc_BMOEDNError_h
+#define edn_objc_BMOEDNError_h
 
 typedef enum  {
     BMOEDNSerializationErrorCodeNone = 0,
@@ -16,9 +16,10 @@ typedef enum  {
     BMOEDNSerializationErrorCodeUnexpectedEndOfData,
 } BMOEDNSerializationErrorCode;
 
-#define BMOEDNSerializationErrorDomain (@"BMOEDNSerialization")
+FOUNDATION_EXPORT NSString *const BMOEDNErrorDomain;
+
 // TODO: use message version
-#define BMOEDNError(errCode) ([NSError errorWithDomain:BMOEDNSerializationErrorDomain code:errCode userInfo:nil])
+#define BMOEDNError(errCode) ([NSError errorWithDomain:BMOEDNErrorDomain code:errCode userInfo:nil])
 #define BMOEDNErrorMessage(errCode,message) BMOEDNError(errCode)
 
 #endif
