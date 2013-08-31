@@ -288,4 +288,11 @@
     
 }
 
+// roughly 128 bits at this point.
+- (void)testGiganticInteger {
+    NSString *ullMax = [NSString stringWithFormat:@"%llu",ULLONG_MAX];
+    NSString *number = [[ullMax stringByAppendingString:ullMax] substringToIndex:ullMax.length*2-1];
+    NSLog(@"ULLONG_MAX * (2^64 + 1) / 10: %@",number);
+    STAssertEqualObjects([[[number stringByAppendingString:@"N"] objectFromEDNString] EDNString],number, @"");
+}
 @end

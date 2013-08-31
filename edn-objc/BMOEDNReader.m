@@ -460,23 +460,19 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
         ([numberPrefix characterIsMember:parserState.markedCharacter]
          && [digits characterIsMember:[parserState characterOffsetFromMark:1]])){
             
-            if ([literal hasSuffix:@"M"]) {
+            if ([literal hasSuffix:@"M"] || [literal hasSuffix:@"N"]) {
                 [literal deleteCharactersInRange:NSMakeRange(literal.length-1, 1)];
-                // must use '.' as the decimal separator for format compliance
                 return [NSDecimalNumber decimalNumberWithString:literal locale:[NSLocale systemLocale]];
-            } else {
-                // remove leading '+' (NSNumberFormatter won't like it)
-                if ([literal hasPrefix:@"+"]) {
-                    [literal deleteCharactersInRange:NSMakeRange(0, 1)];
-                }
-                if ([literal hasSuffix:@"N"]) {
-                    // TODO: 'N'-suffix for arbitrary precision (i.e. BigX) support?
-                    [literal deleteCharactersInRange:NSMakeRange(literal.length-1, 1)];
-                }
-                NSNumberFormatter *nf = [NSNumberFormatter new];
-                nf.numberStyle = NSNumberFormatterNoStyle;
-                return [nf numberFromString:literal];
             }
+            // remove leading '+' (NSNumberFormatter won't like it)
+            if ([literal hasPrefix:@"+"]) {
+                [literal deleteCharactersInRange:NSMakeRange(0, 1)];
+            }
+            NSNumberFormatter *nf = [NSNumberFormatter new];
+            nf.numberStyle = NSNumberFormatterNoStyle;
+            nf.locale = [NSLocale systemLocale];
+            return [nf numberFromString:literal];
+            
         } else if ([literal isEqualToString:@"nil"]){
             return [NSNull null];
         } else if ([literal isEqualToString:@"true"]){
