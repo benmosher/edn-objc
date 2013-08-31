@@ -283,4 +283,9 @@
     STAssertEqualObjects(nullList, [[nullList EDNString] objectFromEDNString], @"");
 }
 
+- (void)testSerializeBooleans {
+    STAssertEqualObjects([(@[(__bridge NSNumber *)kCFBooleanTrue, (__bridge NSNumber *)kCFBooleanFalse]) EDNString], @"[ true false ]", @"");
+    
+}
+
 @end
