@@ -45,12 +45,14 @@
 }
 
 -(BOOL)isEqualToList:(BMOEDNList *)list {
-    return [self.head isEqualToConsCell:list.head];
+    return _count == list->_count && [self.head isEqualToConsCell:list.head];
 }
 
 -(id)copyWithZone:(NSZone *)zone {
     return self;
 }
+
+#pragma mark - Fast enumeration
 
 // implementation adapted from
 // http://www.mikeash.com/pyblog/friday-qa-2010-04-16-implementing-fast-enumeration.html
@@ -65,7 +67,7 @@
         // state 0 means it's the first call, so get things set up
         // we won't try to detect mutations, so make mutationsPtr
         // point somewhere that's guaranteed not to change
-        state->mutationsPtr = &_mutations;
+        state->mutationsPtr = &_count;
         
         // set up extra[0] to point to the head to start in the right place
         state->extra[0] = (unsigned long)_head;
@@ -90,6 +92,30 @@
     state->extra[0] = (unsigned long)currentCell;
     
     return i;
+}
+
+#pragma mark - Push and pop
+
+-(BMOEDNList *)push:(id)head {
+    // new list and head cell
+    BMOEDNList *newList = [[BMOEDNList alloc] init];
+    BMOEDNConsCell *newHead = [[BMOEDNConsCell alloc] init];
+    
+    newHead->_first = head;
+    newHead->_rest = _head;
+    newList->_count = _count + 1;
+    newList->_head = newHead;
+    return newList;
+}
+
+-(BMOEDNList *)pop {
+    // new list
+    BMOEDNList *newList = [[BMOEDNList alloc] init];
+    
+    newList->_head = _head->_rest;
+    newList->_count = _count - 1;
+    
+    return newList;
 }
 
 @end

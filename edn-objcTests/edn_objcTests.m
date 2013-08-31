@@ -269,4 +269,13 @@
     STAssertEqualObjects([[list EDNString] objectFromEDNString], list, @"");
 }
 
+- (void)testListOperations {
+    BMOEDNList *list = [@"(4 3 2 1)" objectFromEDNString];
+    BMOEDNList *pushed = [@"(5 4 3 2 1)" objectFromEDNString];
+    BMOEDNList *popped = [@"(3 2 1)" objectFromEDNString];
+    STAssertEqualObjects([list push:@5], pushed, @"");
+    STAssertEqualObjects([list pop], popped, @"");
+    
+}
+
 @end

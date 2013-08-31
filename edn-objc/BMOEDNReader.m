@@ -349,6 +349,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
         if (parserState.error != nil) {
             return nil;
         }
+        // mutation alert!
         if (newObject != nil) {
             BMOEDNConsCell *newCons = [BMOEDNConsCell new];
             newCons->_first = newObject;
@@ -358,6 +359,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
                 cons->_rest = newCons;
             }
             cons = newCons;
+            list->_count++;
         }
         [self skipWhitespace:parserState];
     }

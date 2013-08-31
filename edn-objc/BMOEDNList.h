@@ -24,13 +24,24 @@
 @interface BMOEDNList : NSObject<NSCopying, NSFastEnumeration> {
     NSUInteger _hash;
     @package
-    dispatch_once_t _hashOnceToken;
     BMOEDNConsCell * _head;
-    unsigned long _mutations; // yayyy fast enumeration
+    dispatch_once_t _hashOnceToken;
+    unsigned long _count; // for fast comparison and fast enumeration
 }
 
 @property (strong, nonatomic, readonly) BMOEDNConsCell *head;
 
 -(BOOL)isEqualToList:(BMOEDNList *)list;
+
+/**
+ Returns a new list with the provided object
+ as the new head.
+ */
+-(BMOEDNList *)push:(id)head;
+/**
+ Returns a new list with the rest object as
+ the new head.
+ */
+-(BMOEDNList *)pop;
 
 @end

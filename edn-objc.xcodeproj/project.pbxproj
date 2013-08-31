@@ -148,6 +148,21 @@
 			name = "Representation Implementations";
 			sourceTree = "<group>";
 		};
+		B597CD7017D1AB3F00FFF8F4 /* Primitives */ = {
+			isa = PBXGroup;
+			children = (
+				B5C7A65A17CAB73F005E0615 /* BMOEDNSymbol.h */,
+				B5C7A65B17CAB73F005E0615 /* BMOEDNSymbol.m */,
+				B5C7A65117C9B35D005E0615 /* BMOEDNKeyword.h */,
+				B5C7A65217C9B35D005E0615 /* BMOEDNKeyword.m */,
+				B5C7A65717C9C1F4005E0615 /* BMOEDNList.h */,
+				B5C7A65817C9C1F4005E0615 /* BMOEDNList.m */,
+				B5B837D817D03B2900AEA457 /* BMOEDNTaggedElement.h */,
+				B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */,
+			);
+			name = Primitives;
+			sourceTree = "<group>";
+		};
 		B5B837D517D0389B00AEA457 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -188,27 +203,20 @@
 		B5C7A62B17C8F282005E0615 /* edn-objc */ = {
 			isa = PBXGroup;
 			children = (
+				B597CD7017D1AB3F00FFF8F4 /* Primitives */,
 				B53AE3D217D17268000CBCC0 /* The Danger Zone */,
 				B5B837D517D0389B00AEA457 /* Protocols */,
 				B5C7A67517CEFAE5005E0615 /* Categories */,
 				B53AE3D917D17FA5000CBCC0 /* Representation Implementations */,
 				B5C7A66017CC599B005E0615 /* edn-objc.h */,
 				B5C7A66617CDBF30005E0615 /* BMOEDNDefines.pch */,
-				B5C7A65A17CAB73F005E0615 /* BMOEDNSymbol.h */,
-				B5C7A65B17CAB73F005E0615 /* BMOEDNSymbol.m */,
-				B5C7A65117C9B35D005E0615 /* BMOEDNKeyword.h */,
-				B5C7A65217C9B35D005E0615 /* BMOEDNKeyword.m */,
 				B5C7A62E17C8F282005E0615 /* BMOEDNSerialization.h */,
 				B5C7A63017C8F282005E0615 /* BMOEDNSerialization.m */,
 				B5C7A62C17C8F282005E0615 /* Supporting Files */,
-				B5C7A65717C9C1F4005E0615 /* BMOEDNList.h */,
-				B5C7A65817C9C1F4005E0615 /* BMOEDNList.m */,
 				B5C7A66317CDBE73005E0615 /* BMOEDNReader.h */,
 				B5C7A66417CDBE73005E0615 /* BMOEDNReader.m */,
 				B5C7A67117CEF1AE005E0615 /* BMOEDNWriter.h */,
 				B5C7A67217CEF1AE005E0615 /* BMOEDNWriter.m */,
-				B5B837D817D03B2900AEA457 /* BMOEDNTaggedElement.h */,
-				B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */,
 			);
 			path = "edn-objc";
 			sourceTree = "<group>";
