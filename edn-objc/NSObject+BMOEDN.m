@@ -10,11 +10,11 @@
 #import "BMOEDNSerialization.h"
 @implementation NSObject (BMOEDN)
 
--(NSData *)ednData {
+-(NSData *)EDNData {
     return [BMOEDNSerialization dataWithEDNObject:self error:NULL];
 }
 
--(NSString *)ednString {
+-(NSString *)EDNString {
     return [BMOEDNSerialization stringWithEDNObject:self error:NULL];
 }
 

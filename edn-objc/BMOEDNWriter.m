@@ -22,7 +22,7 @@
 
 -(instancetype)init;
 
--(void)appendData:(NSData *)data;
+-(void)appendString:(NSString *)string;
 
 -(NSData *)writtenData;
 -(NSString *)writtenString;
@@ -61,7 +61,6 @@
 -(void)appendMap:(NSDictionary *)obj toState:(BMOEDNWriterState *)state;
 -(void)appendString:(NSString *)obj toState:(BMOEDNWriterState *)state;
 -(void)appendSymbol:(BMOEDNSymbol *)obj toState:(BMOEDNWriterState *)state;
--(void)appendLiteral:(id)obj toState:(BMOEDNWriterState *)state;
 -(void)appendNumber:(NSNumber *)obj toState:(BMOEDNWriterState *)state;
 -(void)appendSet:(NSSet *)obj toState:(BMOEDNWriterState *)state;
 
@@ -199,6 +198,12 @@
     [state appendString:@"#{ "];
     [self appendEnumerable:obj toState:state whitespace:@" "];
     [state appendString:@"}"];
+}
+
+-(void)appendList:(BMOEDNList *)obj toState:(BMOEDNWriterState *)state {
+    [state appendString:@"( "];
+    [self appendEnumerable:obj toState:state whitespace:@" "];
+    [state appendString:@")"];
 }
 
 -(void)appendSymbol:(BMOEDNSymbol *)obj toState:(BMOEDNWriterState *)state {

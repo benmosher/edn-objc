@@ -21,11 +21,12 @@
 
 @end
 
-@interface BMOEDNList : NSObject<NSCopying> {
+@interface BMOEDNList : NSObject<NSCopying, NSFastEnumeration> {
     NSUInteger _hash;
     @package
     dispatch_once_t _hashOnceToken;
     BMOEDNConsCell * _head;
+    unsigned long _mutations; // yayyy fast enumeration
 }
 
 @property (strong, nonatomic, readonly) BMOEDNConsCell *head;

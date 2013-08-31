@@ -10,7 +10,7 @@
 
 @interface NSObject (BMOEDN)
 
-- (NSData *)ednData;
-- (NSString *)ednString;
+- (NSData *)EDNData;
+- (NSString *)EDNString;
 
 @end

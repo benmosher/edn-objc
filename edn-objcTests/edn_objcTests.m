@@ -192,17 +192,17 @@
 #pragma mark - Writer tests
 
 - (void)testSerializeNumerals {
-    STAssertEqualObjects([@(1) ednString], @"1", @"");
+    STAssertEqualObjects([@(1) EDNString], @"1", @"");
     // TODO: test decimals, floats, etc. (esp for precision)
 }
 
 - (void)testSerializeString {
-    STAssertEqualObjects([@"hello, world!" ednData], [@"\"hello, world!\"" dataUsingEncoding:NSUTF8StringEncoding], @"");
-    STAssertEqualObjects([@"\\\"" ednString], @"\"\\\\\\\"\"", @"Backslash city.");
+    STAssertEqualObjects([@"hello, world!" EDNData], [@"\"hello, world!\"" dataUsingEncoding:NSUTF8StringEncoding], @"");
+    STAssertEqualObjects([@"\\\"" EDNString], @"\"\\\\\\\"\"", @"Backslash city.");
 }
 
 - (void)testSerializeVector {
-    STAssertEqualObjects([(@[@1, @2, @"three"]) ednString], @"[ 1 2 \"three\" ]", @"");
+    STAssertEqualObjects([(@[@1, @2, @"three"]) EDNString], @"[ 1 2 \"three\" ]", @"");
     // TODO: whitespace options?
 }
 
@@ -210,49 +210,57 @@
     // Since sets come out unordered, simplest way to test is to
     // parse back in and see if it matches.
     id set = [NSSet setWithArray:(@[@1, @2, @3])];
-    STAssertEqualObjects([[set ednString] objectFromEDNString], set, @"");
+    STAssertEqualObjects([[set EDNString] objectFromEDNString], set, @"");
 }
 
 - (void)testSerializeSymbol {
     id foo = @"foo//";
-    STAssertEqualObjects([[BMOEDNSymbol symbolWithNamespace:@"foo" name:@"/"] ednString], foo, @"");
+    STAssertEqualObjects([[BMOEDNSymbol symbolWithNamespace:@"foo" name:@"/"] EDNString], foo, @"");
     id bar = @":my/bar";
-    STAssertEqualObjects([[bar objectFromEDNString] ednString], bar, @"");
+    STAssertEqualObjects([[bar objectFromEDNString] EDNString], bar, @"");
 }
 
 - (void)testSerializeTaggedElements {
     // uuid
     NSUUID *uuid = [NSUUID UUID];
-    STAssertEqualObjects(([uuid ednString]), ([NSString stringWithFormat:@"#uuid \"%@\"",uuid.UUIDString]), @"");
+    STAssertEqualObjects(([uuid EDNString]), ([NSString stringWithFormat:@"#uuid \"%@\"",uuid.UUIDString]), @"");
     
     // date
     NSString *date = @"#inst \"1985-04-12T23:20:50.52Z\"";
     NSDate *forComparison = [NSDate dateWithTimeIntervalSince1970:482196050.52];
-    STAssertEqualObjects(([forComparison ednString]), date, @"");
+    STAssertEqualObjects(([forComparison EDNString]), date, @"");
     
     // arbitrary
     BMOEDNTaggedElement *taggedElement = [BMOEDNTaggedElement elementWithTag:[BMOEDNSymbol symbolWithNamespace:@"my" name:@"foo"] element:@"bar-baz"];
     NSString *taggedElementString = @"#my/foo \"bar-baz\"";
-    STAssertEqualObjects([taggedElement ednString], taggedElementString, @"");
+    STAssertEqualObjects([taggedElement EDNString], taggedElementString, @"");
 }
 
 - (void)testSerializeMap {
     id map = @{[BMOEDNKeyword keywordWithNamespace:@"my" name:@"one"]:@1,
                [BMOEDNKeyword keywordWithNamespace:@"your" name:@"two"]:@2,
                @3:[BMOEDNSymbol symbolWithNamespace:@"surprise" name:@"three"]};
-    STAssertEqualObjects([[map ednString] objectFromEDNString], map, @"Ordering is not guaranteed, so we round-trip it up.");
+    STAssertEqualObjects([[map EDNString] objectFromEDNString], map, @"Ordering is not guaranteed, so we round-trip it up.");
 }
 
 - (void)testSerializeTransmogrification {
     size_t length = 32;
     NSMutableData *data = [NSMutableData dataWithLength:length];
     //SecRandomCopyBytes(kSecRandomDefault, 32, (uint8_t *)[data bytes]);
-    STAssertNil([data ednString], @"No stock transmogrifier for NSData.");
+    STAssertNil([data EDNString], @"No stock transmogrifier for NSData.");
     
     NSString *dataString = [BMOEDNSerialization stringWithEDNObject:data transmogrifiers:@{(id<NSCopying>)[NSData class]:[^id(id data,NSError **err){
         return [BMOEDNTaggedElement elementWithTag:[BMOEDNSymbol symbolWithNamespace:@"edn-objc" name:@"NSData"] element:@"some data"];
     } copy]} error:NULL];
     STAssertEqualObjects(dataString, @"#edn-objc/NSData \"some data\"", @"");
+}
+
+- (void)testListFastEnumeration {
+    BMOEDNList *list = (BMOEDNList *)[@"(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20)" objectFromEDNString];
+    NSUInteger i = 1;
+    for (NSNumber *num in list) {
+        STAssertEquals(i++, [num unsignedIntegerValue], @"");
+    }
 }
 
 @end
