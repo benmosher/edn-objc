@@ -8,11 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "BMOEDNSymbol.h"
+
 @interface BMOEDNTaggedElement : NSObject
 
 @property (strong, nonatomic, readonly) BMOEDNSymbol * tag;
 @property (strong, nonatomic, readonly) id element;
 
 -(instancetype)initWithTag:(BMOEDNSymbol *)tag element:(id)element;
+
++(BMOEDNTaggedElement *)elementWithTag:(BMOEDNSymbol *)tag element:(id)element;
 
 @end

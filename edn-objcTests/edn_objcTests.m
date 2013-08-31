@@ -219,5 +219,21 @@
     id bar = @":my/bar";
     STAssertEqualObjects([[bar objectFromEDNString] ednString], bar, @"");
 }
+- (void)testSerializeTaggedElements {
+    // uuid
+    NSUUID *uuid = [NSUUID UUID];
+    STAssertEqualObjects(([uuid ednString]), ([NSString stringWithFormat:@"#uuid \"%@\"",uuid.UUIDString]), @"");
+    
+    // date
+    NSString *date = @"#inst \"1985-04-12T23:20:50.52Z\"";
+    NSDate *forComparison = [NSDate dateWithTimeIntervalSince1970:482196050.52];
+    STAssertEqualObjects(([forComparison ednString]), date, @"");
+    
+    // arbitrary
+    BMOEDNTaggedElement *taggedElement = [BMOEDNTaggedElement elementWithTag:[BMOEDNSymbol symbolWithNamespace:@"my" name:@"foo"] element:@"bar-baz"];
+    NSString *taggedElementString = @"#my/foo \"bar-baz\"";
+    STAssertEqualObjects([taggedElement ednString], taggedElementString, @"");
+}
+
 
 @end

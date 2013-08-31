@@ -16,8 +16,6 @@ typedef enum  {
     BMOEDNSerializationErrorCodeUnexpectedEndOfData,
 } BMOEDNSerializationErrorCode;
 
-typedef id (^TaggedEntityResolver)(id, NSError **);
-
 #define BMOEDNSerializationErrorDomain (@"BMOEDNSerialization")
 // TODO: use message version
 #define BMOEDNError(errCode) ([NSError errorWithDomain:BMOEDNSerializationErrorDomain code:errCode userInfo:nil])

@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "BMOEDNDefines.pch"
 
 @interface BMOEDNSerialization : NSObject
 
@@ -23,13 +22,13 @@
 
 +(NSData *)dataWithEDNObject:(id)obj error:(NSError **)error;
 +(NSData *)dataWithEDNObject:(id)obj
-                   resolvers:(NSDictionary *)resolvers
+             transmogrifiers:(NSDictionary *)transmogrifiers
                        error:(NSError **)error;
 
 +(NSString *)stringWithEDNObject:(id)obj error:(NSError **)error;
 +(NSString *)stringWithEDNObject:(id)obj
-                   resolvers:(NSDictionary *)resolvers
-                       error:(NSError **)error;
+                 transmogrifiers:(NSDictionary *)transmogrifiers
+                           error:(NSError **)error;
 
 /**
  Checks whether 'obj' can be written out to valid EDN (with stock tagged-object resolvers).

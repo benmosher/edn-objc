@@ -11,9 +11,9 @@
 
 @interface BMOEDNReader : NSObject
 
--(instancetype)initWithResolvers:(NSDictionary *)resolvers;
+@property (strong, readonly, nonatomic) NSDictionary * transmogrifiers;
 
-@property (strong, readonly, nonatomic) NSDictionary * resolvers;
+-(instancetype)initWithTransmogrifiers:(NSDictionary *)transmogrifiers;
 
 // TODO: take an index OR take the data in the initializer
 // and do a -parseNextObject-type deal

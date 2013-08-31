@@ -9,10 +9,14 @@
 #ifndef edn_objc_edn_objc_h
 #define edn_objc_edn_objc_h
 
+#import "BMOEDNDefines.pch"
+
 #import "BMOEDNSerialization.h"
 #import "BMOEDNList.h"
 #import "BMOEDNSymbol.h"
 #import "BMOEDNKeyword.h"
+#import "BMOEDNRepresentation.h"
+#import "BMOEDNTaggedElement.h"
 #import "NSString+BMOEDN.h"
 #import "NSObject+BMOEDN.h"
 

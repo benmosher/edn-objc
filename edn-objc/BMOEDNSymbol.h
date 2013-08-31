@@ -15,6 +15,10 @@
 
 -(instancetype)initWithNamespace:(NSString *)ns
                             name:(NSString *)name;
+
++(BMOEDNSymbol *)symbolWithNamespace:(NSString *)ns
+                                name:(NSString *)name;
+
 /**
  * Do not use this method to compare to any subclasses.
  */

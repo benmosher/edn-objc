@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B53AE3D017D16E2F000CBCC0 /* NSUUID+BMOEDN.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AE3CE17D16E2F000CBCC0 /* NSUUID+BMOEDN.h */; };
+		B53AE3D117D16E2F000CBCC0 /* NSUUID+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = B53AE3CF17D16E2F000CBCC0 /* NSUUID+BMOEDN.m */; };
+		B53AE3D417D1728E000CBCC0 /* BMOEDNRegistry.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AE3D317D1728E000CBCC0 /* BMOEDNRegistry.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B53AE3D817D17E3B000CBCC0 /* BMOEDNRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = B53AE3D517D17648000CBCC0 /* BMOEDNRegistry.m */; };
+		B53AE3DC17D18024000CBCC0 /* NSDate+BMOEDN.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AE3DA17D18024000CBCC0 /* NSDate+BMOEDN.h */; };
+		B53AE3DD17D18024000CBCC0 /* NSDate+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = B53AE3DB17D18024000CBCC0 /* NSDate+BMOEDN.m */; };
 		B5B837D717D038B900AEA457 /* BMOEDNRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B837D617D038B900AEA457 /* BMOEDNRepresentation.h */; };
 		B5B837DA17D03B2900AEA457 /* BMOEDNTaggedElement.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B837D817D03B2900AEA457 /* BMOEDNTaggedElement.h */; };
 		B5B837DB17D03B2900AEA457 /* BMOEDNTaggedElement.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */; };
@@ -60,6 +66,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B53AE3CE17D16E2F000CBCC0 /* NSUUID+BMOEDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUUID+BMOEDN.h"; sourceTree = "<group>"; };
+		B53AE3CF17D16E2F000CBCC0 /* NSUUID+BMOEDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUUID+BMOEDN.m"; sourceTree = "<group>"; };
+		B53AE3D317D1728E000CBCC0 /* BMOEDNRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNRegistry.h; sourceTree = "<group>"; };
+		B53AE3D517D17648000CBCC0 /* BMOEDNRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNRegistry.m; sourceTree = "<group>"; };
+		B53AE3DA17D18024000CBCC0 /* NSDate+BMOEDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+BMOEDN.h"; sourceTree = "<group>"; };
+		B53AE3DB17D18024000CBCC0 /* NSDate+BMOEDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+BMOEDN.m"; sourceTree = "<group>"; };
 		B5B837D617D038B900AEA457 /* BMOEDNRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNRepresentation.h; sourceTree = "<group>"; };
 		B5B837D817D03B2900AEA457 /* BMOEDNTaggedElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNTaggedElement.h; sourceTree = "<group>"; };
 		B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNTaggedElement.m; sourceTree = "<group>"; };
@@ -116,6 +128,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B53AE3D217D17268000CBCC0 /* The Danger Zone */ = {
+			isa = PBXGroup;
+			children = (
+				B53AE3D317D1728E000CBCC0 /* BMOEDNRegistry.h */,
+				B53AE3D517D17648000CBCC0 /* BMOEDNRegistry.m */,
+			);
+			name = "The Danger Zone";
+			sourceTree = "<group>";
+		};
+		B53AE3D917D17FA5000CBCC0 /* Representation Implementations */ = {
+			isa = PBXGroup;
+			children = (
+				B53AE3CE17D16E2F000CBCC0 /* NSUUID+BMOEDN.h */,
+				B53AE3CF17D16E2F000CBCC0 /* NSUUID+BMOEDN.m */,
+				B53AE3DA17D18024000CBCC0 /* NSDate+BMOEDN.h */,
+				B53AE3DB17D18024000CBCC0 /* NSDate+BMOEDN.m */,
+			);
+			name = "Representation Implementations";
+			sourceTree = "<group>";
+		};
 		B5B837D517D0389B00AEA457 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -156,8 +188,10 @@
 		B5C7A62B17C8F282005E0615 /* edn-objc */ = {
 			isa = PBXGroup;
 			children = (
+				B53AE3D217D17268000CBCC0 /* The Danger Zone */,
 				B5B837D517D0389B00AEA457 /* Protocols */,
 				B5C7A67517CEFAE5005E0615 /* Categories */,
+				B53AE3D917D17FA5000CBCC0 /* Representation Implementations */,
 				B5C7A66017CC599B005E0615 /* edn-objc.h */,
 				B5C7A66617CDBF30005E0615 /* BMOEDNDefines.pch */,
 				B5C7A65A17CAB73F005E0615 /* BMOEDNSymbol.h */,
@@ -234,6 +268,9 @@
 				B5C7A67817CEFB26005E0615 /* NSObject+BMOEDN.h in Headers */,
 				B5B837D717D038B900AEA457 /* BMOEDNRepresentation.h in Headers */,
 				B5B837DA17D03B2900AEA457 /* BMOEDNTaggedElement.h in Headers */,
+				B53AE3D017D16E2F000CBCC0 /* NSUUID+BMOEDN.h in Headers */,
+				B53AE3D417D1728E000CBCC0 /* BMOEDNRegistry.h in Headers */,
+				B53AE3DC17D18024000CBCC0 /* NSDate+BMOEDN.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,6 +382,9 @@
 				B5C7A67417CEF1AE005E0615 /* BMOEDNWriter.m in Sources */,
 				B5C7A67917CEFB26005E0615 /* NSObject+BMOEDN.m in Sources */,
 				B5B837DB17D03B2900AEA457 /* BMOEDNTaggedElement.m in Sources */,
+				B53AE3D117D16E2F000CBCC0 /* NSUUID+BMOEDN.m in Sources */,
+				B53AE3D817D17E3B000CBCC0 /* BMOEDNRegistry.m in Sources */,
+				B53AE3DD17D18024000CBCC0 /* NSDate+BMOEDN.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -21,6 +21,10 @@
     return self;
 }
 
++(BMOEDNSymbol *)symbolWithNamespace:(NSString *)ns name:(NSString *)name {
+    return [[BMOEDNSymbol alloc] initWithNamespace:ns name:name];
+}
+
 -(BOOL)isEqual:(id)object {
     if (object == self) return true;
     if (![object isMemberOfClass:[BMOEDNSymbol class]]) return false;

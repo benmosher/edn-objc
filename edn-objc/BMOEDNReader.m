@@ -10,6 +10,9 @@
 #import "BMOEDNSymbol.h"
 #import "BMOEDNKeyword.h"
 #import "BMOEDNList.h"
+#import "BMOEDNTaggedElement.h"
+#import "BMOEDNRepresentation.h"
+#import "BMOEDNRegistry.h"
 
 // TODO: profile, see if struct+functions are faster
 @interface BMOEDNReaderState : NSObject {
@@ -187,9 +190,9 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
 
 @implementation BMOEDNReader
 
--(instancetype)initWithResolvers:(NSDictionary *)resolvers {
+-(instancetype)initWithTransmogrifiers:(NSDictionary *)transmogrifiers {
     if (self = [super init]) {
-        _resolvers = resolvers;
+        _transmogrifiers = transmogrifiers;
     }
     return self;
 }
@@ -288,18 +291,30 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
                 [parserState moveAhead];
             }
             id tag = BMOParseSymbolType(parserState,[BMOEDNSymbol class]);
-            TaggedEntityResolver resolver = self.resolvers[tag];
-            if (resolver == nil) {
-                // TODO: reversible tagged object implementation
-                parserState.error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData, @"Tag for tagged data type not recognized; arbitrary tags not currently supported.");
-                return nil;
-            } else {
-                id innards = [self parseObject:parserState];
-                if (parserState.error) return nil;
+            if (parserState.error) return nil;
+            
+            id innards = [self parseObject:parserState];
+            if (parserState.error) return nil;
+            BMOEDNTaggedElement *taggedElement = [[BMOEDNTaggedElement alloc] initWithTag:tag element:innards];
+            
+            // check for fanciness
+            Class registeredClass;
+            BMOEDNTransmogrifier transmogrifier;
+            
+            // registered classes take precedence
+            if ((registeredClass = BMOEDNRegisteredClassForTag(tag))) {
                 NSError *err = nil;
-                id resolvedObject = resolver(innards,&err);
+                //id resolvedObject = resolver(innards,&err);
+                id registeredObject = [registeredClass objectWithEDNRepresentation:taggedElement error:&err];
                 if (err) parserState.error = err;
-                return resolvedObject;
+                return registeredObject;
+            } else if ((transmogrifier = self.transmogrifiers[tag])) {
+                NSError *err = nil;
+                id transmogrifiedObject = transmogrifier(innards,&err);
+                if (err) parserState.error = err;
+                return transmogrifiedObject;
+            } else {
+                return taggedElement;
             }
             
             break;

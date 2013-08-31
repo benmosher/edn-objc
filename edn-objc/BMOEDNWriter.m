@@ -11,6 +11,7 @@
 #import "BMOEDNKeyword.h"
 #import "BMOEDNSymbol.h"
 #import "BMOEDNList.h"
+#import "BMOEDNRepresentation.h"
 // TODO: struct + functions
 
 @interface BMOEDNWriterState : NSObject {
@@ -54,7 +55,7 @@
 
 @interface BMOEDNWriter ()
 -(void)appendObject:(id)obj toState:(BMOEDNWriterState *)state;
--(void)appendTaggedObject:(id)obj toState:(BMOEDNWriterState *)state;
+-(void)appendTaggedObject:(BMOEDNTaggedElement *)obj toState:(BMOEDNWriterState *)state;
 -(void)appendVector:(NSArray *)obj toState:(BMOEDNWriterState *)state;
 -(void)appendList:(BMOEDNList *)obj toState:(BMOEDNWriterState *)state;
 -(void)appendMap:(NSDictionary *)obj toState:(BMOEDNWriterState *)state;
@@ -105,6 +106,10 @@
         [self appendNumber:obj toState:state];
     else if ([obj isKindOfClass:[BMOEDNSymbol class]])
         [self appendSymbol:obj toState:state];
+    else if ([obj conformsToProtocol:@protocol(BMOEDNRepresentation)])
+        [self appendTaggedObject:[obj EDNRepresentation] toState:state];
+    else if ([obj isKindOfClass:[BMOEDNTaggedElement class]])
+        [self appendTaggedObject:obj toState:state];
     else {
         state.error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData, @"Provided object cannot be EDN-serialized.");
         return;
@@ -168,6 +173,17 @@
 
 -(void)appendSymbol:(BMOEDNSymbol *)obj toState:(BMOEDNWriterState *)state {
     [state appendString:[obj description]];
+}
+
+-(void)appendTaggedObject:(BMOEDNTaggedElement *)obj
+               toState:(BMOEDNWriterState *)state {
+    // TODO: test error if taggedElement.element isKindOfClass:BMOEDNTaggedElement?
+    [state appendString:@"#"];
+    [self appendSymbol:obj.tag toState:state];
+    if (state.error) return;
+    [state appendString:@" "]; // todo: whitespace option
+    [self appendObject:obj.element toState:state];
+    if (state.error) return;
 }
 
 @end
