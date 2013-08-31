@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B539281F17D1D31C00B94545 /* edn-objc-tests.m in Sources */ = {isa = PBXBuildFile; fileRef = B539281E17D1D31C00B94545 /* edn-objc-tests.m */; };
+		B539282117D1D32E00B94545 /* edn-objc-tests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B539282017D1D32E00B94545 /* edn-objc-tests-Info.plist */; };
 		B53AE3D017D16E2F000CBCC0 /* NSUUID+BMOEDN.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AE3CE17D16E2F000CBCC0 /* NSUUID+BMOEDN.h */; };
 		B53AE3D117D16E2F000CBCC0 /* NSUUID+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = B53AE3CF17D16E2F000CBCC0 /* NSUUID+BMOEDN.m */; };
 		B53AE3D417D1728E000CBCC0 /* BMOEDNRegistry.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AE3D317D1728E000CBCC0 /* BMOEDNRegistry.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -22,8 +24,6 @@
 		B5C7A63B17C8F282005E0615 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A63A17C8F282005E0615 /* UIKit.framework */; };
 		B5C7A63C17C8F282005E0615 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A62917C8F282005E0615 /* Foundation.framework */; };
 		B5C7A63F17C8F282005E0615 /* libedn-objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A62617C8F282005E0615 /* libedn-objc.a */; };
-		B5C7A64517C8F282005E0615 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B5C7A64317C8F282005E0615 /* InfoPlist.strings */; };
-		B5C7A64817C8F282005E0615 /* edn_objcTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A64717C8F282005E0615 /* edn_objcTests.m */; };
 		B5C7A65317C9B35D005E0615 /* BMOEDNKeyword.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65217C9B35D005E0615 /* BMOEDNKeyword.m */; };
 		B5C7A65917C9C1F4005E0615 /* BMOEDNList.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65817C9C1F4005E0615 /* BMOEDNList.m */; };
 		B5C7A65C17CAB740005E0615 /* BMOEDNSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65B17CAB73F005E0615 /* BMOEDNSymbol.m */; };
@@ -66,6 +66,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B539281D17D1D31C00B94545 /* edn-objc-tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "edn-objc-tests.h"; path = "edn-objc-tests/edn-objc-tests.h"; sourceTree = SOURCE_ROOT; };
+		B539281E17D1D31C00B94545 /* edn-objc-tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "edn-objc-tests.m"; path = "edn-objc-tests/edn-objc-tests.m"; sourceTree = SOURCE_ROOT; };
+		B539282017D1D32E00B94545 /* edn-objc-tests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "edn-objc-tests-Info.plist"; path = "edn-objc-tests/edn-objc-tests-Info.plist"; sourceTree = SOURCE_ROOT; };
 		B53AE3CE17D16E2F000CBCC0 /* NSUUID+BMOEDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUUID+BMOEDN.h"; sourceTree = "<group>"; };
 		B53AE3CF17D16E2F000CBCC0 /* NSUUID+BMOEDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUUID+BMOEDN.m"; sourceTree = "<group>"; };
 		B53AE3D317D1728E000CBCC0 /* BMOEDNRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNRegistry.h; sourceTree = "<group>"; };
@@ -80,13 +83,9 @@
 		B5C7A62D17C8F282005E0615 /* edn-objc-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "edn-objc-Prefix.pch"; sourceTree = "<group>"; };
 		B5C7A62E17C8F282005E0615 /* BMOEDNSerialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMOEDNSerialization.h; sourceTree = "<group>"; };
 		B5C7A63017C8F282005E0615 /* BMOEDNSerialization.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMOEDNSerialization.m; sourceTree = "<group>"; };
-		B5C7A63717C8F282005E0615 /* edn-objcTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "edn-objcTests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5C7A63717C8F282005E0615 /* edn-objc-tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "edn-objc-tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C7A63817C8F282005E0615 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		B5C7A63A17C8F282005E0615 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		B5C7A64217C8F282005E0615 /* edn-objcTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "edn-objcTests-Info.plist"; sourceTree = "<group>"; };
-		B5C7A64417C8F282005E0615 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		B5C7A64617C8F282005E0615 /* edn_objcTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = edn_objcTests.h; sourceTree = "<group>"; };
-		B5C7A64717C8F282005E0615 /* edn_objcTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = edn_objcTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		B5C7A65117C9B35D005E0615 /* BMOEDNKeyword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNKeyword.h; sourceTree = "<group>"; };
 		B5C7A65217C9B35D005E0615 /* BMOEDNKeyword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNKeyword.m; sourceTree = "<group>"; };
 		B5C7A65717C9C1F4005E0615 /* BMOEDNList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNList.h; sourceTree = "<group>"; };
@@ -168,7 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				B5C7A62B17C8F282005E0615 /* edn-objc */,
-				B5C7A64017C8F282005E0615 /* edn-objcTests */,
+				B5C7A64017C8F282005E0615 /* edn-objc-tests */,
 				B5C7A62817C8F282005E0615 /* Frameworks */,
 				B5C7A62717C8F282005E0615 /* Products */,
 			);
@@ -178,7 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				B5C7A62617C8F282005E0615 /* libedn-objc.a */,
-				B5C7A63717C8F282005E0615 /* edn-objcTests.octest */,
+				B5C7A63717C8F282005E0615 /* edn-objc-tests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -221,23 +220,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		B5C7A64017C8F282005E0615 /* edn-objcTests */ = {
+		B5C7A64017C8F282005E0615 /* edn-objc-tests */ = {
 			isa = PBXGroup;
 			children = (
-				B5C7A64617C8F282005E0615 /* edn_objcTests.h */,
-				B5C7A64717C8F282005E0615 /* edn_objcTests.m */,
-				B5C7A64117C8F282005E0615 /* Supporting Files */,
+				B539281D17D1D31C00B94545 /* edn-objc-tests.h */,
+				B539281E17D1D31C00B94545 /* edn-objc-tests.m */,
+				B539282017D1D32E00B94545 /* edn-objc-tests-Info.plist */,
 			);
+			name = "edn-objc-tests";
 			path = "edn-objcTests";
-			sourceTree = "<group>";
-		};
-		B5C7A64117C8F282005E0615 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				B5C7A64217C8F282005E0615 /* edn-objcTests-Info.plist */,
-				B5C7A64317C8F282005E0615 /* InfoPlist.strings */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		B5C7A67517CEFAE5005E0615 /* Categories */ = {
@@ -295,9 +286,9 @@
 			productReference = B5C7A62617C8F282005E0615 /* libedn-objc.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		B5C7A63617C8F282005E0615 /* edn-objcTests */ = {
+		B5C7A63617C8F282005E0615 /* edn-objc-tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B5C7A64E17C8F282005E0615 /* Build configuration list for PBXNativeTarget "edn-objcTests" */;
+			buildConfigurationList = B5C7A64E17C8F282005E0615 /* Build configuration list for PBXNativeTarget "edn-objc-tests" */;
 			buildPhases = (
 				B5C7A63217C8F282005E0615 /* Sources */,
 				B5C7A63317C8F282005E0615 /* Frameworks */,
@@ -309,9 +300,9 @@
 			dependencies = (
 				B5C7A63E17C8F282005E0615 /* PBXTargetDependency */,
 			);
-			name = "edn-objcTests";
+			name = "edn-objc-tests";
 			productName = "edn-objcTests";
-			productReference = B5C7A63717C8F282005E0615 /* edn-objcTests.octest */;
+			productReference = B5C7A63717C8F282005E0615 /* edn-objc-tests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -336,7 +327,7 @@
 			projectRoot = "";
 			targets = (
 				B5C7A62517C8F282005E0615 /* edn-objc */,
-				B5C7A63617C8F282005E0615 /* edn-objcTests */,
+				B5C7A63617C8F282005E0615 /* edn-objc-tests */,
 			);
 		};
 /* End PBXProject section */
@@ -346,7 +337,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B5C7A64517C8F282005E0615 /* InfoPlist.strings in Resources */,
+				B539282117D1D32E00B94545 /* edn-objc-tests-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,7 +383,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B5C7A64817C8F282005E0615 /* edn_objcTests.m in Sources */,
+				B539281F17D1D31C00B94545 /* edn-objc-tests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,17 +396,6 @@
 			targetProxy = B5C7A63D17C8F282005E0615 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		B5C7A64317C8F282005E0615 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B5C7A64417C8F282005E0615 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		B5C7A64917C8F282005E0615 /* Debug */ = {
@@ -504,7 +484,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "edn-objc/edn-objc-Prefix.pch";
-				INFOPLIST_FILE = "edn-objcTests/edn-objcTests-Info.plist";
+				INFOPLIST_FILE = "edn-objc-tests/edn-objc-tests-Info.plist";
 				OTHER_LDFLAGS = (
 					"-objc",
 					"-all_load",
@@ -523,7 +503,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "edn-objc/edn-objc-Prefix.pch";
-				INFOPLIST_FILE = "edn-objcTests/edn-objcTests-Info.plist";
+				INFOPLIST_FILE = "edn-objc-tests/edn-objc-tests-Info.plist";
 				OTHER_LDFLAGS = (
 					"-objc",
 					"-all_load",
@@ -554,7 +534,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B5C7A64E17C8F282005E0615 /* Build configuration list for PBXNativeTarget "edn-objcTests" */ = {
+		B5C7A64E17C8F282005E0615 /* Build configuration list for PBXNativeTarget "edn-objc-tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B5C7A64F17C8F282005E0615 /* Debug */,

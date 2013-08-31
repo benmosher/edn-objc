@@ -1,16 +1,16 @@
 //
-//  edn_objcTests.m
-//  edn-objcTests
+//  edn-objc-tests.m
+//  edn-objc-tests
 //
 //  Created by Ben Mosher on 8/24/13.
 //  Copyright (c) 2013 Ben Mosher. All rights reserved.
 //
 
-#import "edn_objcTests.h"
+#import "edn-objc-tests.h"
 #import "edn-objc.h"
 
 
-@implementation edn_objcTests
+@implementation EDNObjCTests
 
 - (void)setUp
 {
