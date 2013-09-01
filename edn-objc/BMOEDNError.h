@@ -10,11 +10,11 @@
 #define edn_objc_BMOEDNError_h
 
 typedef enum  {
-    BMOEDNSerializationErrorCodeNone = 0,
-    BMOEDNSerializationErrorCodeNoData,
-    BMOEDNSerializationErrorCodeInvalidData,
-    BMOEDNSerializationErrorCodeUnexpectedEndOfData,
-} BMOEDNSerializationErrorCode;
+    BMOEDNErrorNone = 0,
+    BMOEDNErrorNoData,
+    BMOEDNErrorInvalidData,
+    BMOEDNErrorUnexpectedEndOfData,
+} BMOEDNError;
 
 FOUNDATION_EXPORT NSString *const BMOEDNErrorDomain;
 FOUNDATION_EXPORT NSString *const BMOEDNException;

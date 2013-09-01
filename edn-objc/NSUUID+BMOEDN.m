@@ -33,7 +33,7 @@
     if (![taggedElement.tag isEqual:[self EDNTag]]
         || ![taggedElement.element isKindOfClass:[NSString class]]){
         if (error != NULL)
-            *error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData, @"'uuid'-tagged element must be a single string.");
+            *error = BMOEDNErrorMessage(BMOEDNErrorInvalidData, @"'uuid'-tagged element must be a single string.");
         return nil;
     }
     return [[NSUUID alloc] initWithUUIDString:[taggedElement element]];

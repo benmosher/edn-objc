@@ -108,7 +108,7 @@
     STAssertNil(obj, @"");
     // TODO: error for totally empty string?
     //STAssertNotNil(err, @"");
-    //STAssertEquals(err.code, (NSInteger)BMOEDNSerializationErrorCodeNoData, @"");
+    //STAssertEquals(err.code, (NSInteger)BMOEDNErrorNoData, @"");
     
     BMOEDNList *list = (BMOEDNList *)[@"( 1 #_foo 2 3 4 5 #_bar)" EDNObject];
     STAssertTrue([list isKindOfClass:[BMOEDNList class]], @"");

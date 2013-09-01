@@ -150,7 +150,7 @@
             }
             [self appendTaggedObject:transmogrifiedObject toState:state];
         } else {
-            state.error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData, @"Provided object cannot be EDN-serialized.");
+            state.error = BMOEDNErrorMessage(BMOEDNErrorInvalidData, @"Provided object cannot be EDN-serialized.");
             return;
         }
     }

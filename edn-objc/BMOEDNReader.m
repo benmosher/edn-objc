@@ -159,15 +159,15 @@ NSError * BMOValidateSymbolComponents(NSString *ns, NSString *name) {
     if ([name rangeOfString:@"/"].location != NSNotFound && name.length > 1) {
         // too many /'s
         // TODO: message(s)
-        return BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData,@"Symbol name (of length > 1) must not contain '/'.");
+        return BMOEDNErrorMessage(BMOEDNErrorInvalidData,@"Symbol name (of length > 1) must not contain '/'.");
     }
     if (!name.length) {
         // name of 0 length
-        return BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData,@"Symbol must not end with '/'.");
+        return BMOEDNErrorMessage(BMOEDNErrorInvalidData,@"Symbol must not end with '/'.");
     }
     if (ns && !ns.length) {
         // non-nil namespace of 0 length
-        return BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData,@"Symbol must not start with '/'.");
+        return BMOEDNErrorMessage(BMOEDNErrorInvalidData,@"Symbol must not start with '/'.");
     }
     // TODO: number format checking against name; namespace should be clean
     return nil;
@@ -274,7 +274,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
 -(id)parseObject:(BMOEDNReaderState *)parserState {
     [self skipWhitespace:parserState];
     if (!parserState.valid) {
-        parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
+        parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNErrorUnexpectedEndOfData userInfo:nil];
         return nil;
     }
     
@@ -288,7 +288,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
             parsed = [self parseObject:parserState];
             if (parserState.error) return nil;
             if ([parsed EDNMetadata] != nil) {
-                parserState.error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData, @"Metadata cannot be applied to parsed object with existing metadata.");
+                parserState.error = BMOEDNErrorMessage(BMOEDNErrorInvalidData, @"Metadata cannot be applied to parsed object with existing metadata.");
                 return nil;
             } else {
                 [parsed setEDNMetadata:meta];
@@ -323,7 +323,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
 -(id)parseTaggedObject:(BMOEDNReaderState *)parserState {
     [parserState moveAhead];
     if (!parserState.valid) {
-        parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
+        parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNErrorUnexpectedEndOfData userInfo:nil];
         return nil;
     }
     
@@ -380,7 +380,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
     if (array == nil) return nil;
     NSSet *set = [NSSet setWithArray:array];
     if (set.count != array.count) {
-        parserState.error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData, @"Sets must contain only unique elements.");
+        parserState.error = BMOEDNErrorMessage(BMOEDNErrorInvalidData, @"Sets must contain only unique elements.");
         return nil;
     }
     return set;
@@ -389,7 +389,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
 -(id)parseList:(BMOEDNReaderState *)parserState {
     [parserState moveAhead];
     if (!parserState.valid) {
-        parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
+        parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNErrorUnexpectedEndOfData userInfo:nil];
         return nil;
     }
     
@@ -428,7 +428,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
         return array; // bad things afoot
     }
     if (array.count%2 == 1) {
-        parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNSerializationErrorCodeInvalidData userInfo:nil]; // TODO: message
+        parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNErrorInvalidData userInfo:nil]; // TODO: message
         return nil;
     }
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithCapacity:(array.count/2)];
@@ -438,7 +438,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
         [dictionary setObject:[array objectAtIndex:i+1] forKey:[array objectAtIndex:i]];
     }
     if (dictionary.count != array.count/2) {
-        parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNSerializationErrorCodeInvalidData userInfo:nil]; // TODO: message
+        parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNErrorInvalidData userInfo:nil]; // TODO: message
         return nil;
     }
     return [dictionary copy];
@@ -448,7 +448,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
                                         parserState:(BMOEDNReaderState *)parserState {
     [parserState moveAhead];
     if (!parserState.valid) {
-        parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
+        parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNErrorUnexpectedEndOfData userInfo:nil];
         return nil;
     }
     NSMutableArray *array = [NSMutableArray new];
@@ -467,7 +467,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
     // if terminator is '\0', we're parsing all tokens,
     // so the parsing stops when the state is invalid
     if (!parserState.valid && terminator != '\0') {
-        parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
+        parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNErrorUnexpectedEndOfData userInfo:nil];
         return nil;
     }
     [parserState moveAhead];
@@ -491,7 +491,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
     }
     
     if ([parserState markedLength] == 0) {
-        parserState.error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData, @"Keyword must not be empty.");
+        parserState.error = BMOEDNErrorMessage(BMOEDNErrorInvalidData, @"Keyword must not be empty.");
         return nil;
     }
     
@@ -507,7 +507,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
     }
     
     if ([parserState markedLength] == 0) {
-        parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
+        parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNErrorUnexpectedEndOfData userInfo:nil];
         return nil;
     }
     
@@ -534,7 +534,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
     // failed to parse a valid literal
     // TODO: userinfo
     parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain
-                                            code:BMOEDNSerializationErrorCodeInvalidData
+                                            code:BMOEDNErrorInvalidData
                                         userInfo:nil];
     return nil;
 }
@@ -548,7 +548,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
             if (![quoted characterIsMember:parserState.currentCharacter]) {
                 // TODO: provide erroneous index
                 parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain
-                                                        code:BMOEDNSerializationErrorCodeInvalidData
+                                                        code:BMOEDNErrorInvalidData
                                                     userInfo:nil];
                 return nil;
             } else quoting = NO;

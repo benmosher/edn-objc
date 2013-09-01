@@ -37,20 +37,20 @@ NSDateFormatter *BMOEDNCreateInstDateFormatter(void) {
     
     if (![taggedElement.tag isEqualToSymbol:[self EDNTag]]){
         if (error != NULL) {
-            *error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData,@"'inst'-tagged resolver called for non-'inst' tag.");
+            *error = BMOEDNErrorMessage(BMOEDNErrorInvalidData,@"'inst'-tagged resolver called for non-'inst' tag.");
         }
         return nil;
     }
     if (![taggedElement.element isKindOfClass:[NSString class]]) {
         if (error != NULL) {
-            *error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData,@"'inst'-tagged objects must be an RFC3339-formatted string.");
+            *error = BMOEDNErrorMessage(BMOEDNErrorInvalidData,@"'inst'-tagged objects must be an RFC3339-formatted string.");
         }
         return nil;
     } else {
         NSDateFormatter *df = BMOEDNCreateInstDateFormatter();
         NSDate *date = [df dateFromString:taggedElement.element];
         if (date == nil && error != NULL) {
-            *error = BMOEDNErrorMessage(BMOEDNSerializationErrorCodeInvalidData,@"'inst'-tagged object must be an RFC3339-formatted string.");
+            *error = BMOEDNErrorMessage(BMOEDNErrorInvalidData,@"'inst'-tagged object must be an RFC3339-formatted string.");
         }
         return date;
     }
