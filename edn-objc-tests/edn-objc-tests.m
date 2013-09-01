@@ -374,6 +374,8 @@
     id clojureCode = @"( + 1 2 )\n( map [ x y ] ( 3 4 5 ) )\n[ a root vector is \"weird\" ]\n";
     id clojureData = [BMOEDNSerialization EDNObjectWithData:[clojureCode dataUsingEncoding:NSUTF8StringEncoding] options:BMOEDNReadingMultipleObjects error:NULL];
     STAssertEqualObjects([clojureData EDNString], clojureCode, @"");
+    
+    STAssertNil([(@[[[BMOEDNRoot alloc] initWithEnumerable:@[@1, @2]], @3]) EDNString],@"Root object not at root of graph must be treated as invalid data.");
 }
 
 @end
