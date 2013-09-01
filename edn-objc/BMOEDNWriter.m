@@ -12,6 +12,7 @@
 #import "BMOEDNSymbol.h"
 #import "BMOEDNList.h"
 #import "BMOEDNRepresentation.h"
+#import "NSObject+BMOEDN.h"
 // TODO: struct + functions
 
 @interface BMOEDNWriterState : NSObject {
@@ -102,6 +103,13 @@
 #pragma mark - internal write methods
 
 -(void)appendObject:(id)obj toState:(BMOEDNWriterState *)state {
+    // append meta, if needed.
+    NSDictionary *meta;
+    if ((meta = [obj EDNMetadata]) && [meta count]) {
+        [state appendString:@"^"];
+        [self appendMap:meta toState:state];
+        [state appendString:@" "]; // TODO: whitespace customization
+    }
     
     if ([obj conformsToProtocol:@protocol(BMOEDNRepresentation)])
         [self appendTaggedObject:[obj EDNRepresentation] toState:state];

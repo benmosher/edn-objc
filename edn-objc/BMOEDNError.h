@@ -17,6 +17,7 @@ typedef enum  {
 } BMOEDNSerializationErrorCode;
 
 FOUNDATION_EXPORT NSString *const BMOEDNErrorDomain;
+FOUNDATION_EXPORT NSString *const BMOEDNException;
 
 // TODO: use message version
 #define BMOEDNError(errCode) ([NSError errorWithDomain:BMOEDNErrorDomain code:errCode userInfo:nil])

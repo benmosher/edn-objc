@@ -14,8 +14,6 @@
 #import "BMOEDNReader.h"
 #import "BMOEDNWriter.h"
 
-FOUNDATION_EXTERN NSString *const BMOEDNErrorDomain =  @"BMOEDNSerialization";
-
 @implementation BMOEDNSerialization
 
 +(id)EDNObjectWithData:(NSData *)data error:(NSError **)error {

@@ -312,7 +312,40 @@
     
     STAssertNil([obj EDNMetadata], @"Unparsed object has no meta.");
     
-    STAssertNil([@"^{ :foo \"firstMeta\" } ^{ :bar \"secondMeta\"} nil" EDNObject], @"Double-meta is invalid.");
+    STAssertNil([@"^{ :foo \"firstMeta\" } ^{ :bar \"secondMeta\"} 1" EDNObject], @"Double-meta is invalid.");
+    
+}
+
+
+- (void)testSetMetadata {
+    // ensure metadata on metadata throws an exception
+    id obj2 = [NSDictionary dictionaryWithObjectsAndKeys:@1, @"one", nil];
+    id meta = [NSDictionary dictionaryWithObjectsAndKeys:@2, @"two", nil];
+    id metaMeta = [NSDictionary dictionaryWithObjectsAndKeys:@3, @"three", nil];
+    STAssertNoThrow([obj2 setEDNMetadata:meta], @"");
+    STAssertEquals(([obj2 EDNMetadata]), meta, @"");
+    STAssertThrows([metaMeta setEDNMetadata:obj2], @"");
+    
+    id literalMeta = [NSDictionary new];
+    // null, true, false must not have metadata
+    STAssertThrows([[NSNull null] setEDNMetadata:literalMeta], @"");
+    STAssertThrows([(__bridge NSNumber *)kCFBooleanTrue setEDNMetadata:literalMeta], @"");
+    STAssertThrows([(__bridge NSNumber *)kCFBooleanFalse setEDNMetadata:literalMeta], @"");
+    //STAssertThrows([@"foo" setEDNMetadata:literalMeta], @"String literal may be constant and should not accept metadata (lest undefined behavior emerge)."); // yet unable to determine without hackzzz
+}
+
+- (void)testWriteMetadata {
+    // write meta
+    id meta = [NSDictionary new];
+    NSArray *array = [NSArray arrayWithObjects:@1, @2, @3, nil];
+    [array setEDNMetadata:meta];
+    STAssertEqualObjects([array EDNString], @"[ 1 2 3 ]", @"Empty metadata should not be serialized out.");
+    [array setEDNMetadata:@{ @1: @"one" }];
+    STAssertEqualObjects([array EDNString], @"^{ 1 \"one\" } [ 1 2 3 ]", @"");
+    id list = [@"( one two three )" EDNObject];
+    [list setEDNMetadata:@{ [BMOEDNKeyword keywordWithNamespace:nil name:@"type"] : [BMOEDNSymbol symbolWithNamespace:nil name:@"list"] }];
+    array = [array arrayByAddingObject:list];
+    STAssertEqualObjects([array EDNString], @"[ 1 2 3 ^{ :type list } ( one two three ) ]", @"Array metadata is not preserved (array with added object is a new array).");
 }
 
 @end
