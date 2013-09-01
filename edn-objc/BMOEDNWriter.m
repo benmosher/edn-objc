@@ -14,6 +14,7 @@
 #import "BMOEDNRepresentation.h"
 #import "NSObject+BMOEDN.h"
 // TODO: struct + functions
+#import "BMOEDNRoot.h"
 
 @interface BMOEDNWriterState : NSObject {
     NSUInteger _currentIndex;
@@ -66,6 +67,9 @@
 -(void)appendSet:(NSSet *)obj toState:(BMOEDNWriterState *)state;
 
 #pragma mark Helpers
+
+-(BMOEDNWriterState *) writeRootObject:(id)obj error:(NSError **)error;
+
 -(void)appendEnumerable:(id<NSFastEnumeration>) obj
                 toState:(BMOEDNWriterState *)state
              whitespace:(NSString *)ws;
@@ -82,22 +86,24 @@
 
 #pragma mark - external write methods
 
--(NSData *)writeToData:(id)obj error:(NSError **)error {
+-(BMOEDNWriterState *) writeRootObject:(id)obj error:(NSError **)error {
     BMOEDNWriterState *state = [[BMOEDNWriterState alloc] init];
-    [self appendObject:obj toState:state];
+    if ([obj isKindOfClass:[BMOEDNRoot class]])
+        [self appendEnumerable:obj toState:state whitespace:@"\n"]; // TODO: whitespace option
+    else
+        [self appendObject:obj toState:state];
     if (state.error) {
         if (error != NULL) *error = state.error;
         return nil;
-    } else return [state writtenData];
+    } else return state;
+}
+
+-(NSData *)writeToData:(id)obj error:(NSError **)error {
+    return [[self writeRootObject:obj error:error] writtenData];
 }
 
 -(NSString *)writeToString:(id)obj error:(NSError **)error {
-    BMOEDNWriterState *state = [[BMOEDNWriterState alloc] init];
-    [self appendObject:obj toState:state];
-    if (state.error) {
-        if (error != NULL) *error = state.error;
-        return nil;
-    } else return [state writtenString];
+    return [[self writeRootObject:obj error:error] writtenString];
 }
 
 #pragma mark - internal write methods
