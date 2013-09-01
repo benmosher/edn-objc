@@ -16,14 +16,17 @@
 
 @implementation BMOEDNSerialization
 
-+(id)EDNObjectWithData:(NSData *)data error:(NSError **)error {
-    return [[[BMOEDNReader alloc] init] parse:data error:error];
++(id)EDNObjectWithData:(NSData *)data
+               options:(BMOEDNReadingOptions)options
+                error:(NSError **)error {
+    return [[[BMOEDNReader alloc] initWithOptions:options] parse:data error:error];
 }
 
 +(id)EDNObjectWithData:(NSData *)data
        transmogrifiers:(NSDictionary *)transmogrifiers
+               options:(BMOEDNReadingOptions)options
                  error:(NSError **)error {
-    return [[[BMOEDNReader alloc] initWithTransmogrifiers:transmogrifiers] parse:data error:error];
+    return [[[BMOEDNReader alloc] initWithOptions:options transmogrifiers:transmogrifiers] parse:data error:error];
 }
 
 +(NSData *)dataWithEDNObject:(id)obj error:(NSError **)error {

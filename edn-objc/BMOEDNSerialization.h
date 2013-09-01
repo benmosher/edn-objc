@@ -8,15 +8,28 @@
 
 #import <Foundation/Foundation.h>
 
+// thanks, http://nshipster.com/ns_enum-ns_options/
+typedef NS_OPTIONS(NSUInteger, BMOEDNReadingOptions) {
+    BMOEDNReadingMultipleObjects = (1UL << 0),
+    // TODO: enforce
+    BMOEDNReadingLazyParsing = (1UL << 1),
+};
+
 @interface BMOEDNSerialization : NSObject
 
-+(id)EDNObjectWithData:(NSData *)data error:(NSError **)error;
 /**
- @param resolvers: a dictionary of EDNSymbols to TaggedEntityResolver blocks
-        that turn an EDN object graph into some root object
+ If BMOEDNReadingMultipleObjects is asserted, returned object
+ is id<NSFastEnumeration>. Else, the first valid EDN object in
+ the data is returned, or nil if no valid data.
+ */
++(id)EDNObjectWithData:(NSData *)data options:(BMOEDNReadingOptions)options error:(NSError **)error;
+/**
+ @param transmogrifiers: a dictionary of EDNSymbols to BMOEDNTransmogrifier
+ blocks that turn the provided edn tagged element into some native object.
  */
 +(id)EDNObjectWithData:(NSData *)data
        transmogrifiers:(NSDictionary *)transmogrifiers
+               options:(BMOEDNReadingOptions)options
                  error:(NSError **)error;
 
 

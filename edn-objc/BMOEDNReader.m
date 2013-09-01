@@ -14,6 +14,7 @@
 #import "BMOEDNRepresentation.h"
 #import "BMOEDNRegistry.h"
 #import "NSObject+BMOEDN.h"
+#import "BMOEDNRoot.h"
 
 // TODO: profile, see if struct+functions are faster
 @interface BMOEDNReaderState : NSObject {
@@ -68,7 +69,7 @@
 }
 
 -(BOOL)isValid {
-    return (_currentIndex < _data.length);
+    return (_error == nil && _currentIndex < _data.length);
 }
 
 -(unichar)currentCharacter {
@@ -133,7 +134,10 @@ unichar BMOGetOffsetChar(char* array, NSUInteger length, NSUInteger index, NSInt
 
 static NSCharacterSet *whitespace,*quoted,*numberPrefix,*digits,*symbolChars;
 
-@interface BMOEDNReader ()
+@interface BMOEDNReader () {
+    BMOEDNReadingOptions _options;
+}
+
 -(id)parseObject:(BMOEDNReaderState *)parserState;
 -(id)parseTaggedObject:(BMOEDNReaderState *)parserState;
 -(id)parseVector:(BMOEDNReaderState *)parserState;
@@ -191,8 +195,14 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
 
 @implementation BMOEDNReader
 
--(instancetype)initWithTransmogrifiers:(NSDictionary *)transmogrifiers {
+-(instancetype)initWithOptions:(BMOEDNReadingOptions)options {
+    return [self initWithOptions:options transmogrifiers:nil];
+}
+
+-(instancetype)initWithOptions:(BMOEDNReadingOptions)options
+               transmogrifiers:(NSDictionary *)transmogrifiers {
     if (self = [super init]) {
+        _options = options;
         _transmogrifiers = transmogrifiers;
     }
     return self;
@@ -201,11 +211,29 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
 -(id)parse:(NSData *)data error:(NSError **)error
 {
     BMOEDNReaderState *state = [[BMOEDNReaderState alloc] initWithData:data];
-    id parsed = [self parseObject:state];
-    if (parsed == nil && error != NULL) {
-        *error = state.error;
+    id parsed = nil;
+    if (_options & BMOEDNReadingMultipleObjects) { // gotta parse 'em all
+        // TODO: lazy reading
+        NSMutableArray *buffer = [NSMutableArray array];
+        do {
+            parsed = [self parseObject:state];
+            if (parsed) [buffer addObject:parsed];
+            // continue parsing
+        } while (state.valid && parsed);
+        if (state.error && error != NULL) {
+            *error = state.error;
+            return nil;
+        } else {
+            return [[BMOEDNRoot alloc] initWithEnumerable:buffer];
+        }
+        
+    } else { // single-object parse
+        parsed = [self parseObject:state];
+        if (parsed == nil && error != NULL) {
+            *error = state.error;
+        }
+        return parsed;
     }
-    return parsed;
 }
 
 +(void)initialize {
@@ -436,7 +464,9 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
         }
         [self skipWhitespace:parserState];
     }
-    if (!parserState.valid) {
+    // if terminator is '\0', we're parsing all tokens,
+    // so the parsing stops when the state is invalid
+    if (!parserState.valid && terminator != '\0') {
         parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNSerializationErrorCodeUnexpectedEndOfData userInfo:nil];
         return nil;
     }

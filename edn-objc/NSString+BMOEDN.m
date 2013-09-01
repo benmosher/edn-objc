@@ -11,7 +11,7 @@
 @implementation NSString (BMOEDN)
 
 -(id)EDNObject {
-    return [BMOEDNSerialization EDNObjectWithData:[self dataUsingEncoding:NSUTF8StringEncoding] error:NULL];
+    return [BMOEDNSerialization EDNObjectWithData:[self dataUsingEncoding:NSUTF8StringEncoding] options:0 error:NULL];
 }
 
 @end

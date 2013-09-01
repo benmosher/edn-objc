@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		B539281F17D1D31C00B94545 /* edn-objc-tests.m in Sources */ = {isa = PBXBuildFile; fileRef = B539281E17D1D31C00B94545 /* edn-objc-tests.m */; };
 		B539282717D2E53100B94545 /* BMOEDNError.m in Sources */ = {isa = PBXBuildFile; fileRef = B539282617D2E53100B94545 /* BMOEDNError.m */; };
+		B539282A17D2F24E00B94545 /* BMOEDNRoot.h in Headers */ = {isa = PBXBuildFile; fileRef = B539282817D2F24E00B94545 /* BMOEDNRoot.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B539282B17D2F24E00B94545 /* BMOEDNRoot.m in Sources */ = {isa = PBXBuildFile; fileRef = B539282917D2F24E00B94545 /* BMOEDNRoot.m */; };
 		B53AE3D017D16E2F000CBCC0 /* NSUUID+BMOEDN.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AE3CE17D16E2F000CBCC0 /* NSUUID+BMOEDN.h */; };
 		B53AE3D117D16E2F000CBCC0 /* NSUUID+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = B53AE3CF17D16E2F000CBCC0 /* NSUUID+BMOEDN.m */; };
 		B53AE3D417D1728E000CBCC0 /* BMOEDNRegistry.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AE3D317D1728E000CBCC0 /* BMOEDNRegistry.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -70,6 +72,8 @@
 		B539281E17D1D31C00B94545 /* edn-objc-tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "edn-objc-tests.m"; path = "edn-objc-tests/edn-objc-tests.m"; sourceTree = SOURCE_ROOT; };
 		B539282017D1D32E00B94545 /* edn-objc-tests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "edn-objc-tests-Info.plist"; path = "edn-objc-tests/edn-objc-tests-Info.plist"; sourceTree = SOURCE_ROOT; };
 		B539282617D2E53100B94545 /* BMOEDNError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNError.m; sourceTree = "<group>"; };
+		B539282817D2F24E00B94545 /* BMOEDNRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNRoot.h; sourceTree = "<group>"; };
+		B539282917D2F24E00B94545 /* BMOEDNRoot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNRoot.m; sourceTree = "<group>"; };
 		B53AE3CE17D16E2F000CBCC0 /* NSUUID+BMOEDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUUID+BMOEDN.h"; sourceTree = "<group>"; };
 		B53AE3CF17D16E2F000CBCC0 /* NSUUID+BMOEDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUUID+BMOEDN.m"; sourceTree = "<group>"; };
 		B53AE3D317D1728E000CBCC0 /* BMOEDNRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNRegistry.h; sourceTree = "<group>"; };
@@ -142,6 +146,8 @@
 		B597CD7017D1AB3F00FFF8F4 /* Primitives */ = {
 			isa = PBXGroup;
 			children = (
+				B539282817D2F24E00B94545 /* BMOEDNRoot.h */,
+				B539282917D2F24E00B94545 /* BMOEDNRoot.m */,
 				B5C7A65A17CAB73F005E0615 /* BMOEDNSymbol.h */,
 				B5C7A65B17CAB73F005E0615 /* BMOEDNSymbol.m */,
 				B5C7A65117C9B35D005E0615 /* BMOEDNKeyword.h */,
@@ -264,6 +270,7 @@
 				B53AE3D017D16E2F000CBCC0 /* NSUUID+BMOEDN.h in Headers */,
 				B53AE3D417D1728E000CBCC0 /* BMOEDNRegistry.h in Headers */,
 				B53AE3DC17D18024000CBCC0 /* NSDate+BMOEDN.h in Headers */,
+				B539282A17D2F24E00B94545 /* BMOEDNRoot.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,6 +385,7 @@
 				B53AE3D817D17E3B000CBCC0 /* BMOEDNRegistry.m in Sources */,
 				B53AE3DD17D18024000CBCC0 /* NSDate+BMOEDN.m in Sources */,
 				B539282717D2E53100B94545 /* BMOEDNError.m in Sources */,
+				B539282B17D2F24E00B94545 /* BMOEDNRoot.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -28,22 +28,23 @@
 
 - (void)testParseStrings
 {
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"\"whee\"" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], @"whee", @"");
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"\"I have a \\\"mid-quoted\\\" string in me.\\nAnd two lines.\\r\\nWindows file: \\\"C:\\\\a file.txt\\\"\"" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], @"I have a \"mid-quoted\" string in me.\nAnd two lines.\r\nWindows file: \"C:\\a file.txt\"", @"");
+    STAssertEqualObjects([@"\"whee\"" EDNObject], @"whee", @"");
+    STAssertEqualObjects([@"\"I have a \\\"mid-quoted\\\" string in me.\\nAnd two lines.\\r\\nWindows file: \\\"C:\\\\a file.txt\\\"\"" EDNObject],
+                         @"I have a \"mid-quoted\" string in me.\nAnd two lines.\r\nWindows file: \"C:\\a file.txt\"", @"");
     STAssertEqualObjects([@"\"\\\\\\\"\"" EDNObject], @"\\\"", @"Backslash city.");
 }
 
 - (void)testParseLiterals
 {
-    STAssertEquals([BMOEDNSerialization EDNObjectWithData:[@"true" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], (__bridge NSNumber *)kCFBooleanTrue, @"");
-    STAssertEquals([BMOEDNSerialization EDNObjectWithData:[@"false" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], (__bridge NSNumber *)kCFBooleanFalse, @"");
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"nil" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], [NSNull null], @"");
+    STAssertEquals([@"true" EDNObject], (__bridge NSNumber *)kCFBooleanTrue, @"");
+    STAssertEquals([@"false" EDNObject], (__bridge NSNumber *)kCFBooleanFalse, @"");
+    STAssertEqualObjects([@"nil" EDNObject], [NSNull null], @"");
 }
 
 - (void)testParseNumerals
 {
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"0" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], [NSNumber numberWithInt:0], @"");
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"1.1E1" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], [NSNumber numberWithDouble:11.0], @"");
+    STAssertEqualObjects([@"0" EDNObject], [NSNumber numberWithInt:0], @"");
+    STAssertEqualObjects([@"1.1E1" EDNObject], [NSNumber numberWithDouble:11.0], @"");
     STAssertEqualObjects([@"-2" EDNObject], @(-2), @"");
     STAssertEqualObjects([@"+0" EDNObject], @(0), @"");
     STAssertEqualObjects([@"-0" EDNObject], @(0), @"");
@@ -62,21 +63,21 @@
 
 - (void)testParseVectors
 {
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"[]" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], @[], @"");
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"[ 1 ]" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], @[@1], @"");
+    STAssertEqualObjects([@"[]" EDNObject], @[], @"");
+    STAssertEqualObjects([@"[ 1 ]" EDNObject], @[@1], @"");
     id array = @[@1, @2];
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"[ 1 2 ]" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], array, @"");
+    STAssertEqualObjects([@"[ 1 2 ]" EDNObject], array, @"");
     array = @[@[@1, @2], @[@3], @[]];
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"[ [ 1, 2 ], [ 3 ], [] ]" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], array, @"");
+    STAssertEqualObjects([@"[ [ 1, 2 ], [ 3 ], [] ]" EDNObject], array, @"");
 }
 
 - (void)testParseLists
 {
-    BMOEDNList *list = (BMOEDNList *)[BMOEDNSerialization EDNObjectWithData:[@"()" dataUsingEncoding:NSUTF8StringEncoding] error:NULL];
+    BMOEDNList *list = (BMOEDNList *)[@"()" EDNObject];
     STAssertTrue([list isKindOfClass:[BMOEDNList class]], @"");
     STAssertNil([list head], @"");
     
-    list = (BMOEDNList *)[[BMOEDNSerialization EDNObjectWithData:[@"[( 1 2 3 4 5 ) 1]" dataUsingEncoding:NSUTF8StringEncoding] error:NULL] objectAtIndex:0];
+    list = (BMOEDNList *)[[@"[( 1 2 3 4 5 ) 1]" EDNObject] objectAtIndex:0];
     STAssertTrue([list isKindOfClass:[BMOEDNList class]], @"");
     STAssertNotNil([list head], @"");
     BMOEDNConsCell *current = list.head;
@@ -85,8 +86,7 @@
         STAssertEqualObjects(current.first,@(i++), @"");
     } while ((current = current.rest) != nil);
     
-    id<NSObject> secondList = [BMOEDNSerialization EDNObjectWithData:[@"( 1 2 3 4 5 )" dataUsingEncoding:NSUTF8StringEncoding]
-                                                      error:NULL];
+    id<NSObject> secondList = [@"( 1 2 3 4 5 )" EDNObject];
     STAssertEqualObjects(list, secondList, @"");
     STAssertEquals(list.hash, secondList.hash, @"");
 }
@@ -94,23 +94,23 @@
 - (void)testComments
 {
     id array = @[@1, @2];
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"[ 1 ;; mid-array comment\n 2 ]" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], array, @"");
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"[ 1;3\n2 ]" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], array, @"");
+    STAssertEqualObjects([@"[ 1 ;; mid-array comment\n 2 ]" EDNObject], array, @"");
+    STAssertEqualObjects([@"[ 1;3\n2 ]" EDNObject], array, @"");
 }
 
 - (void)testDiscards
 {
     id array = @[@1, @2];
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"[ 1 #_ foo 2 ]" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], array, @"");
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"[ 1 2 #_foo ]" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], array, @"");
+    STAssertEqualObjects([@"[ 1 #_ foo 2 ]" EDNObject], array, @"");
+    STAssertEqualObjects([@"[ 1 2 #_foo ]" EDNObject], array, @"");
     NSError *err = nil;
-    id obj = [BMOEDNSerialization EDNObjectWithData:[@"  #_fooooo  " dataUsingEncoding:NSUTF8StringEncoding] error:&err];
+    id obj = [BMOEDNSerialization EDNObjectWithData:[@"  #_fooooo  " dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&err];
     STAssertNil(obj, @"");
     // TODO: error for totally empty string?
     //STAssertNotNil(err, @"");
     //STAssertEquals(err.code, (NSInteger)BMOEDNSerializationErrorCodeNoData, @"");
     
-    BMOEDNList *list = (BMOEDNList *)[BMOEDNSerialization EDNObjectWithData:[@"( 1 #_foo 2 3 4 5 #_bar)" dataUsingEncoding:NSUTF8StringEncoding] error:NULL];
+    BMOEDNList *list = (BMOEDNList *)[@"( 1 #_foo 2 3 4 5 #_bar)" EDNObject];
     STAssertTrue([list isKindOfClass:[BMOEDNList class]], @"");
     STAssertNotNil([list head], @"");
     BMOEDNConsCell *current = list.head;
@@ -122,10 +122,10 @@
 
 - (void)testSets
 {
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"#{}" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], [NSSet setWithArray:@[]], @"");
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"#{ 1 }" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], [NSSet setWithArray:@[@1]], @"");
+    STAssertEqualObjects([@"#{}" EDNObject], [NSSet setWithArray:@[]], @"");
+    STAssertEqualObjects([@"#{ 1 }" EDNObject], [NSSet setWithArray:@[@1]], @"");
     id set = [NSSet setWithArray:@[@1, @2]];
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"#{ 1 2 }" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], set, @"");
+    STAssertEqualObjects([@"#{ 1 2 }" EDNObject], set, @"");
     STAssertNil([@"#{ 1 1 2 3 5 }" EDNObject], @"Repeated set members should fail.");
 }
 
@@ -133,10 +133,9 @@
 {
     id map = @{
         @"one":@(1),
-        [BMOEDNSerialization EDNObjectWithData:[@"( 1 2 )" dataUsingEncoding:NSUTF8StringEncoding]
-                                         error:NULL]:@"two",
+        [@"( 1 2 )" EDNObject]:@"two",
         @"three":@"surprise!"};
-    STAssertEqualObjects([BMOEDNSerialization EDNObjectWithData:[@"{\"one\" 1 ( 1 2 ) \"two\" \"three\" \"surprise!\"}" dataUsingEncoding:NSUTF8StringEncoding] error:NULL], map, @"");
+    STAssertEqualObjects([@"{\"one\" 1 ( 1 2 ) \"two\" \"three\" \"surprise!\"}" EDNObject], map, @"");
     
     STAssertEqualObjects([@"{ :one one :two + :three - :four \"four\" }" EDNObject],
                          (@{
@@ -346,6 +345,26 @@
     [list setEDNMetadata:@{ [BMOEDNKeyword keywordWithNamespace:nil name:@"type"] : [BMOEDNSymbol symbolWithNamespace:nil name:@"list"] }];
     array = [array arrayByAddingObject:list];
     STAssertEqualObjects([array EDNString], @"[ 1 2 3 ^{ :type list } ( one two three ) ]", @"Array metadata is not preserved (array with added object is a new array).");
+}
+
+- (void)testReadMultipleRootObjects {
+    NSString * obj1String = @"( 1 2 3 )";
+    NSString * obj2String = @"[ 1 2 3 ]";
+    NSString * objsString = [NSString stringWithFormat:@"%@ %@",obj1String, obj2String];
+    id objs = [BMOEDNSerialization EDNObjectWithData:[objsString dataUsingEncoding:NSUTF8StringEncoding] options:BMOEDNReadingMultipleObjects error:NULL];
+    
+    id expectedObjs = (@[[obj1String EDNObject],[obj2String EDNObject]]);
+    
+    STAssertTrue([objs conformsToProtocol:@protocol(NSFastEnumeration)], @"Multi-objects flag should return an enumerable, regardless of number of elements.");
+    
+    NSUInteger current = 0;
+    for (id obj in objs) {
+        STAssertEqualObjects(obj, expectedObjs[current++], @"");
+    }
+    
+    STAssertEqualObjects([objsString EDNObject], expectedObjs[0], @"Without multi-object flag asserted, should return first object, if valid.");
+    
+               
 }
 
 @end
