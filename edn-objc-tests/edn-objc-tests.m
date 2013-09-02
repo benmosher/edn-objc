@@ -372,10 +372,21 @@
     STAssertEqualObjects([[[BMOEDNRoot alloc] initWithEnumerable:objs] EDNString], @"1\n2\n{ \"three\" 3 }\n", @"");
     
     id clojureCode = @"( + 1 2 )\n( map [ x y ] ( 3 4 5 ) )\n[ a root vector is \"weird\" ]\n";
-    id clojureData = [BMOEDNSerialization EDNObjectWithData:[clojureCode dataUsingEncoding:NSUTF8StringEncoding] options:BMOEDNReadingMultipleObjects error:NULL];
+    id clojureData = [[clojureCode dataUsingEncoding:NSUTF8StringEncoding] EDNObject];
     STAssertEqualObjects([clojureData EDNString], clojureCode, @"");
     
     STAssertNil([(@[[[BMOEDNRoot alloc] initWithEnumerable:@[@1, @2]], @3]) EDNString],@"Root object not at root of graph must be treated as invalid data.");
+}
+
+- (void)testRootObjectEquality {
+    id clojureCode = @"( + 1 2 )\n( map [ x y ] ( 3 4 5 ) )\n[ a root vector is \"weird\" ]\n";
+    id clojureData = [clojureCode dataUsingEncoding:NSUTF8StringEncoding];
+    id rootOne = [clojureData EDNObject]; //1
+    id rootTwo = [clojureData EDNObject]; //1.4142
+    
+    STAssertFalse(rootOne == rootTwo, @"");
+    STAssertEqualObjects(rootOne, rootTwo, @"Two documents derived from the same edn should be equal.");
+    STAssertEquals([rootOne hash], [rootTwo hash], @"Equal objects' hashes should be equal.");
 }
 
 #pragma mark - Stream reading

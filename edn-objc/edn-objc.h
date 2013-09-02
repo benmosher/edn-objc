@@ -42,5 +42,7 @@
 #import "BMOEDNTaggedElement.h"
 #import "NSString+BMOEDN.h"
 #import "NSObject+BMOEDN.h"
+#import "NSData+BMOEDN.h"
+#import "NSInputStream+BMOEDN.h"
 
 #endif

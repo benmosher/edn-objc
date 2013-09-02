@@ -42,7 +42,7 @@
 		B5C7A67417CEF1AE005E0615 /* BMOEDNWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A67217CEF1AE005E0615 /* BMOEDNWriter.m */; };
 		B5C7A67817CEFB26005E0615 /* NSObject+BMOEDN.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A67617CEFB26005E0615 /* NSObject+BMOEDN.h */; };
 		B5C7A67917CEFB26005E0615 /* NSObject+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A67717CEFB26005E0615 /* NSObject+BMOEDN.m */; };
-		CFA008CE17D44C600077B8E2 /* BMOEDNReaderState.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008CC17D44C600077B8E2 /* BMOEDNReaderState.h */; };
+		CFA008CE17D44C600077B8E2 /* BMOEDNReaderState.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008CC17D44C600077B8E2 /* BMOEDNReaderState.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		CFA008CF17D44C600077B8E2 /* BMOEDNReaderState.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008CD17D44C600077B8E2 /* BMOEDNReaderState.m */; };
 		CFA008D217D45E810077B8E2 /* NSInputStream+BMOEDN.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008D017D45E810077B8E2 /* NSInputStream+BMOEDN.h */; };
 		CFA008D317D45E810077B8E2 /* NSInputStream+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008D117D45E810077B8E2 /* NSInputStream+BMOEDN.m */; };
