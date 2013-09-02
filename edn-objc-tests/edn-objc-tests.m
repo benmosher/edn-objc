@@ -399,4 +399,22 @@
     
 }
 
+#pragma mark - NSEnumerator-backed BMOEDNRoot
+
+- (void)testNSEnumeratorBackedRootRealization {
+    id objs = [@"[ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 ]" EDNObject];
+    id root = [[BMOEDNRoot alloc] initWithEnumerable:[objs objectEnumerator]];
+    NSUInteger currentNumber = 1;
+    for (NSNumber *num in root) {
+        STAssertEquals([num unsignedIntegerValue],currentNumber++, @"");
+    }
+    
+    // reset, attempt to re-enumerate
+    currentNumber = 1;
+    for (NSNumber *num in root) {
+        STAssertEquals([num unsignedIntegerValue],currentNumber++, @"");
+    }
+    STAssertEquals(currentNumber, (NSUInteger)25, @"Root should have enumerated through all 24 objects.");
+}
+
 @end
