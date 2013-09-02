@@ -23,19 +23,19 @@ static NSCharacterSet *whitespace,*quoted,*numberPrefix,*digits,*symbolChars;
     BMOEDNReadingOptions _options;
 }
 
--(id)parseObject:(BMOEDNReaderState *)parserState;
--(id)parseTaggedObject:(BMOEDNReaderState *)parserState;
--(id)parseVector:(BMOEDNReaderState *)parserState;
--(id)parseList:(BMOEDNReaderState *)parserState;
--(id)parseMap:(BMOEDNReaderState *)parserState;
--(id)parseString:(BMOEDNReaderState *)parserState;
--(id)parseKeyword:(BMOEDNReaderState *)parserState;
--(id)parseLiteral:(BMOEDNReaderState *)parserState;
--(id)parseSet:(BMOEDNReaderState *)parserState;
+-(id)parseObject:(id<BMOEDNReaderState>)parserState;
+-(id)parseTaggedObject:(id<BMOEDNReaderState>)parserState;
+-(id)parseVector:(id<BMOEDNReaderState>)parserState;
+-(id)parseList:(id<BMOEDNReaderState>)parserState;
+-(id)parseMap:(id<BMOEDNReaderState>)parserState;
+-(id)parseString:(id<BMOEDNReaderState>)parserState;
+-(id)parseKeyword:(id<BMOEDNReaderState>)parserState;
+-(id)parseLiteral:(id<BMOEDNReaderState>)parserState;
+-(id)parseSet:(id<BMOEDNReaderState>)parserState;
 
 -(NSMutableArray *)parseTokenSequenceWithTerminator:(unichar)terminator
-                                        parserState:(BMOEDNReaderState *)parserState;
--(void)skipWhitespace:(BMOEDNReaderState *)parserState;
+                                        parserState:(id<BMOEDNReaderState>)parserState;
+-(void)skipWhitespace:(id<BMOEDNReaderState>)parserState;
 @end
 
 #pragma mark - Helper functions
@@ -59,7 +59,7 @@ NSError * BMOValidateSymbolComponents(NSString *ns, NSString *name) {
 }
 
 
-id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
+id BMOParseSymbolType(id<BMOEDNReaderState> parserState, Class symbolClass) {
     NSString *ns = nil, *name;
     NSMutableString *symbol = parserState.markedString;
     NSRange namespaceFulcrum = [symbol rangeOfString:@"/"];
@@ -93,7 +93,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
     return self;
 }
 
--(id)parseRoot:(BMOEDNReaderState *)state {
+-(id)parseRoot:(id<BMOEDNReaderState>)state {
     id parsed = nil;
     if (_options & BMOEDNReadingMultipleObjects) { // gotta parse 'em all
         // TODO: lazy reading
@@ -117,7 +117,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
 
 -(id)parse:(NSData *)data error:(NSError **)error
 {
-    BMOEDNReaderState *state = [[BMOEDNDataReaderState alloc] initWithData:data];
+    id<BMOEDNReaderState> state = [[BMOEDNDataReaderState alloc] initWithData:data];
     id root = [self parseRoot:state];
     if (error != NULL) *error = state.error;
     return (state.error == nil) ? root : nil;
@@ -125,7 +125,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
 }
 
 -(id)parseStream:(NSInputStream *)data error:(NSError **)error {
-    /*BMOEDNReaderState *state = [[BMOEDNReaderState alloc] initWithStream:data];
+    /*id<BMOEDNReaderState> state = [[BMOEDNReaderState alloc] initWithStream:data];
     id root = [self parseRoot:state];
     if (error != NULL) *error = state.error;
     return (state.error == nil) ? nil : root;*/
@@ -154,7 +154,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
 }
 
 
--(void)skipWhitespace:(BMOEDNReaderState *)parserState {
+-(void)skipWhitespace:(id<BMOEDNReaderState>)parserState {
     
     BOOL comment = NO;
     while ((parserState.valid && [whitespace characterIsMember:parserState.currentCharacter]) || comment) {
@@ -167,7 +167,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
 }
 
 
--(id)parseObject:(BMOEDNReaderState *)parserState {
+-(id)parseObject:(id<BMOEDNReaderState>)parserState {
     [self skipWhitespace:parserState];
     if (!parserState.valid) {
         parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNErrorUnexpectedEndOfData userInfo:nil];
@@ -216,7 +216,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
     return parsed;
 }
 
--(id)parseTaggedObject:(BMOEDNReaderState *)parserState {
+-(id)parseTaggedObject:(id<BMOEDNReaderState>)parserState {
     [parserState moveAhead];
     if (!parserState.valid) {
         parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNErrorUnexpectedEndOfData userInfo:nil];
@@ -271,7 +271,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
     }
 }
 
--(id)parseSet:(BMOEDNReaderState *)parserState {
+-(id)parseSet:(id<BMOEDNReaderState>)parserState {
     NSMutableArray *array = [self parseTokenSequenceWithTerminator:'}' parserState:parserState];
     if (array == nil) return nil;
     NSSet *set = [NSSet setWithArray:array];
@@ -282,7 +282,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
     return set;
 }
 
--(id)parseList:(BMOEDNReaderState *)parserState {
+-(id)parseList:(id<BMOEDNReaderState>)parserState {
     [parserState moveAhead];
     if (!parserState.valid) {
         parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNErrorUnexpectedEndOfData userInfo:nil];
@@ -318,7 +318,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
     return list;
 }
 
--(id)parseMap:(BMOEDNReaderState *)parserState {
+-(id)parseMap:(id<BMOEDNReaderState>)parserState {
     NSMutableArray *array = [self parseTokenSequenceWithTerminator:'}' parserState:parserState];
     if (parserState.error != nil) {
         return array; // bad things afoot
@@ -341,7 +341,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
 }
 
 -(NSMutableArray *)parseTokenSequenceWithTerminator:(unichar)terminator
-                                        parserState:(BMOEDNReaderState *)parserState {
+                                        parserState:(id<BMOEDNReaderState>)parserState {
     [parserState moveAhead];
     if (!parserState.valid) {
         parserState.error = [NSError errorWithDomain:BMOEDNErrorDomain code:BMOEDNErrorUnexpectedEndOfData userInfo:nil];
@@ -370,14 +370,14 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
     return array;
 }
 
--(id)parseVector:(BMOEDNReaderState *)parserState {
+-(id)parseVector:(id<BMOEDNReaderState>)parserState {
     NSMutableArray *array = [self parseTokenSequenceWithTerminator:']' parserState:parserState];
     if (array == nil) return nil;
     else return [NSArray arrayWithArray:array];
 }
 
 // TODO: interning, probably via a map of namespaces
--(id)parseKeyword:(BMOEDNReaderState *)parserState {
+-(id)parseKeyword:(id<BMOEDNReaderState>)parserState {
     [parserState moveAhead];
     [parserState setMark];
     while (parserState.valid
@@ -394,7 +394,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
     return BMOParseSymbolType(parserState, [BMOEDNKeyword class]);
 }
 
--(id)parseLiteral:(BMOEDNReaderState *)parserState {
+-(id)parseLiteral:(id<BMOEDNReaderState>)parserState {
     [parserState setMark];
     while (parserState.valid
            && [symbolChars characterIsMember:parserState.currentCharacter])
@@ -435,7 +435,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
     return nil;
 }
 
--(id)parseString:(BMOEDNReaderState *)parserState {
+-(id)parseString:(id<BMOEDNReaderState>)parserState {
     [parserState moveAhead];
     [parserState setMark];
     BOOL quoting = NO;

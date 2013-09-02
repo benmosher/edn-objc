@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 // TODO: profile, see if struct+functions are faster
-@interface BMOEDNReaderState : NSObject
+@protocol BMOEDNReaderState <NSObject>
 
 @property (nonatomic, readonly, getter = isValid) BOOL valid;
 /**
@@ -43,7 +43,7 @@
 
 @end
 
-@interface BMOEDNDataReaderState : BMOEDNReaderState {
+@interface BMOEDNDataReaderState : NSObject <BMOEDNReaderState> {
     NSUInteger _currentIndex;
     NSUInteger _markIndex;
     char *_chars;

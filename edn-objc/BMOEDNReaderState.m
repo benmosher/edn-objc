@@ -8,18 +8,15 @@
 
 #import "BMOEDNReaderState.h"
 
-@implementation BMOEDNReaderState
-
-// "abstract" class
-
-@end
 
 @implementation BMOEDNDataReaderState
+
+@synthesize error;
 
 -(instancetype)initWithData:(NSData *)data {
     if (self = [super init]) {
         _data = data;
-        _chars = (char *)[data bytes];
+        _chars = (char *)[data bytes];	
         _currentIndex = 0;
     }
     return self;
