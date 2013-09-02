@@ -16,44 +16,7 @@
 // TODO: struct + functions
 #import "BMOEDNRoot.h"
 
-@interface BMOEDNWriterState : NSObject {
-    NSUInteger _currentIndex;
-    NSMutableString *_mutableString;
-}
-@property (strong, nonatomic) NSError *error;
-
--(instancetype)init;
-
--(void)appendString:(NSString *)string;
-
--(NSData *)writtenData;
--(NSString *)writtenString;
-
-@end
-
-@implementation BMOEDNWriterState
-
--(instancetype)init{
-    if (self = [super init]) {
-        _mutableString = [NSMutableString new];
-        _currentIndex = 0;
-    }
-    return self;
-}
-
--(void)appendString:(NSString *)string {
-    [_mutableString appendString:string];
-}
-
--(NSData *)writtenData {
-    return [_mutableString dataUsingEncoding:NSUTF8StringEncoding];
-}
-
--(NSString *)writtenString {
-    return [_mutableString copy];
-}
-
-@end
+#import "BMOEDNWriterState.h"
 
 @interface BMOEDNWriter ()
 -(void)appendObject:(id)obj toState:(BMOEDNWriterState *)state;

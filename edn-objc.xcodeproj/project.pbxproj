@@ -48,6 +48,8 @@
 		CFA008D317D45E810077B8E2 /* NSInputStream+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008D117D45E810077B8E2 /* NSInputStream+BMOEDN.m */; };
 		CFA008D617D45F4B0077B8E2 /* NSData+BMOEDN.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008D417D45F4B0077B8E2 /* NSData+BMOEDN.h */; };
 		CFA008D717D45F4B0077B8E2 /* NSData+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008D517D45F4B0077B8E2 /* NSData+BMOEDN.m */; };
+		CFA008DA17D464AC0077B8E2 /* BMOEDNWriterState.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008D817D464AC0077B8E2 /* BMOEDNWriterState.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		CFA008DB17D464AC0077B8E2 /* BMOEDNWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008D917D464AC0077B8E2 /* BMOEDNWriterState.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,6 +121,8 @@
 		CFA008D117D45E810077B8E2 /* NSInputStream+BMOEDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInputStream+BMOEDN.m"; sourceTree = "<group>"; };
 		CFA008D417D45F4B0077B8E2 /* NSData+BMOEDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+BMOEDN.h"; sourceTree = "<group>"; };
 		CFA008D517D45F4B0077B8E2 /* NSData+BMOEDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+BMOEDN.m"; sourceTree = "<group>"; };
+		CFA008D817D464AC0077B8E2 /* BMOEDNWriterState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNWriterState.h; sourceTree = "<group>"; };
+		CFA008D917D464AC0077B8E2 /* BMOEDNWriterState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNWriterState.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -266,14 +270,32 @@
 		CFA008CB17D44C2F0077B8E2 /* Serialization */ = {
 			isa = PBXGroup;
 			children = (
+				CFA008DC17D464CF0077B8E2 /* Reading */,
+				CFA008DD17D464DC0077B8E2 /* Writing */,
+			);
+			name = Serialization;
+			sourceTree = "<group>";
+		};
+		CFA008DC17D464CF0077B8E2 /* Reading */ = {
+			isa = PBXGroup;
+			children = (
 				CFA008CC17D44C600077B8E2 /* BMOEDNReaderState.h */,
 				CFA008CD17D44C600077B8E2 /* BMOEDNReaderState.m */,
 				B5C7A66317CDBE73005E0615 /* BMOEDNReader.h */,
 				B5C7A66417CDBE73005E0615 /* BMOEDNReader.m */,
+			);
+			name = Reading;
+			sourceTree = "<group>";
+		};
+		CFA008DD17D464DC0077B8E2 /* Writing */ = {
+			isa = PBXGroup;
+			children = (
+				CFA008D817D464AC0077B8E2 /* BMOEDNWriterState.h */,
+				CFA008D917D464AC0077B8E2 /* BMOEDNWriterState.m */,
 				B5C7A67117CEF1AE005E0615 /* BMOEDNWriter.h */,
 				B5C7A67217CEF1AE005E0615 /* BMOEDNWriter.m */,
 			);
-			name = Serialization;
+			name = Writing;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -300,6 +322,7 @@
 				CFA008CE17D44C600077B8E2 /* BMOEDNReaderState.h in Headers */,
 				CFA008D217D45E810077B8E2 /* NSInputStream+BMOEDN.h in Headers */,
 				CFA008D617D45F4B0077B8E2 /* NSData+BMOEDN.h in Headers */,
+				CFA008DA17D464AC0077B8E2 /* BMOEDNWriterState.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,6 +441,7 @@
 				CFA008CF17D44C600077B8E2 /* BMOEDNReaderState.m in Sources */,
 				CFA008D317D45E810077B8E2 /* NSInputStream+BMOEDN.m in Sources */,
 				CFA008D717D45F4B0077B8E2 /* NSData+BMOEDN.m in Sources */,
+				CFA008DB17D464AC0077B8E2 /* BMOEDNWriterState.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
