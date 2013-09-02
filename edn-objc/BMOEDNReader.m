@@ -125,11 +125,10 @@ id BMOParseSymbolType(id<BMOEDNReaderState> parserState, Class symbolClass) {
 }
 
 -(id)parseStream:(NSInputStream *)data error:(NSError **)error {
-    /*id<BMOEDNReaderState> state = [[BMOEDNReaderState alloc] initWithStream:data];
+    id<BMOEDNReaderState> state = [[BMOEDNStreamReaderState alloc] initWithStream:data];
     id root = [self parseRoot:state];
     if (error != NULL) *error = state.error;
-    return (state.error == nil) ? nil : root;*/
-    return nil;
+    return (state.error == nil) ? root : nil;
 }
 
 +(void)initialize {
@@ -408,9 +407,10 @@ id BMOParseSymbolType(id<BMOEDNReaderState> parserState, Class symbolClass) {
     }
     
     NSMutableString *literal = [parserState markedString];
-    if ([digits characterIsMember:parserState.markedCharacter] ||
-        ([numberPrefix characterIsMember:parserState.markedCharacter]
-         && [digits characterIsMember:[parserState characterOffsetFromMark:1]])){
+    if ([digits characterIsMember:[literal characterAtIndex:0]] ||
+        (literal.length > 1
+         && [numberPrefix characterIsMember:[literal characterAtIndex:0]]
+         && [digits characterIsMember:[literal characterAtIndex:1]])){
             
             // TODO: give up if N is non-integer or M is non-float? or leniency option?
             if ([literal hasSuffix:@"M"] || [literal hasSuffix:@"N"]) {

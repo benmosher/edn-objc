@@ -13,10 +13,10 @@
 #import <Foundation/Foundation.h>
 
 @interface BMOEDNRoot : NSObject<NSFastEnumeration> {
-    id<NSFastEnumeration> _elements;
+    id<NSObject,NSFastEnumeration> _elements;
 }
 
--(instancetype)initWithEnumerable:(id<NSFastEnumeration>)elements;
+-(instancetype)initWithEnumerable:(id<NSObject,NSFastEnumeration>)elements;
 
 @end
 

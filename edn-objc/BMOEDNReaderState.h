@@ -17,23 +17,11 @@
  in a valid state, behavior is undefined.
  */
 @property (nonatomic, readonly) unichar currentCharacter;
-@property (nonatomic, readonly) unichar markedCharacter;
-/**
- @return '\0' if out of range
- */
--(unichar)characterOffsetFromMark:(NSInteger)offset;
-/**
- @return '\0' if out of range
- */
--(unichar)characterOffsetFromCurrent:(NSInteger)offset;
 
 @property (strong, nonatomic) NSError * error;
 
 -(void) moveAhead;
-/**
- @throws NSRangeException if mark would be placed outside data
- */
-//-(void) moveMarkByOffset:(NSInteger)offset;
+
 /**
  Set mark to current parser index.
  */
@@ -50,8 +38,18 @@
     __strong NSData * _data;
 }
 
-
 -(instancetype)initWithData:(NSData *)data;
 
 @end
 
+@interface BMOEDNStreamReaderState : NSObject <BMOEDNReaderState> {
+    __strong NSInputStream *_stream;
+    __strong NSMutableData *_markBuffer;
+    uint8_t *_buffer;
+    NSInteger _currentBufferLength;
+    NSInteger _currentBufferIndex;
+}
+
+-(instancetype)initWithStream:(NSInputStream *)stream;
+
+@end

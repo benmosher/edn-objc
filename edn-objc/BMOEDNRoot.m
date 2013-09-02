@@ -10,7 +10,7 @@
 
 @implementation BMOEDNRoot
 
--(instancetype)initWithEnumerable:(id<NSFastEnumeration>)elements {
+-(instancetype)initWithEnumerable:(id<NSObject,NSFastEnumeration>)elements {
     if (self = [super init]) {
         _elements = elements;
     }
@@ -20,5 +20,18 @@
 -(NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(__unsafe_unretained id [])buffer count:(NSUInteger)len {
     return [_elements countByEnumeratingWithState:state objects:buffer count:len];
 }
+
+-(NSUInteger)hash {
+    return [_elements hash];
+}
+
+-(BOOL)isEqual:(id)object {
+    if (object == self) return true;
+    if (object == nil) return false;
+    if (![object isMemberOfClass:[BMOEDNRoot class]]) return false;
+    return [_elements isEqual:((BMOEDNRoot *)object)->_elements];
+}
+
+
 
 @end

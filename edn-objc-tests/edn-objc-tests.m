@@ -378,4 +378,14 @@
     STAssertNil([(@[[[BMOEDNRoot alloc] initWithEnumerable:@[@1, @2]], @3]) EDNString],@"Root object not at root of graph must be treated as invalid data.");
 }
 
+#pragma mark - Stream reading
+
+- (void)testReadFromStream {
+    id clojureCode = @"( + 1 2 )\n( map [ x y ] ( 3 4 5 ) )\n[ a root vector is \"weird\" ]\n";
+    id clojureData = [clojureCode dataUsingEncoding:NSUTF8StringEncoding];
+    id clojureStream = [[NSInputStream alloc] initWithData:clojureData];
+    STAssertEqualObjects([clojureStream EDNObject], [clojureData EDNObject], @"");
+    
+}
+
 @end

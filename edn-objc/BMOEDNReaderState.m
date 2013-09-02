@@ -30,37 +30,6 @@
     return ((unichar)_chars[_currentIndex]);
 };
 
--(unichar)markedCharacter {
-    return ((unichar)_chars[_markIndex]);
-}
-
-BOOL BMOOffsetInRange(NSUInteger loc, NSUInteger len, NSInteger offset) {
-    // fancy comparison to ensure integer sign conversion does not occur unpredictably
-    return (offset == 0 ||
-            (offset > 0  && (len - loc) > (NSUInteger)offset) || // off the end
-            (offset < 0 && loc >= (NSUInteger)(-1 * offset)));   // before the beginning
-}
-
-unichar BMOGetOffsetChar(char* array, NSUInteger length, NSUInteger index, NSInteger offset) {
-    if (!BMOOffsetInRange(index, length, offset))
-        return '\0';
-    // any non-null comparisons should fail OR check for '\0' for out-of-range
-    else return ((unichar)array[index+offset]);
-}
-
-/*-(void)moveMarkByOffset:(NSInteger)offset {
-    if (!BMOOffsetInRange(_markIndex, _data.length, offset))
-        @throw [NSException exceptionWithName:NSRangeException reason:@"Cannot move mark out of range of data." userInfo:nil];
-    _markIndex += offset;
-}*/
-
--(unichar)characterOffsetFromCurrent:(NSInteger)offset {
-    return BMOGetOffsetChar(_chars, _data.length, _currentIndex, offset);
-}
--(unichar)characterOffsetFromMark:(NSInteger)offset {
-    return BMOGetOffsetChar(_chars, _data.length, _markIndex, offset);
-}
-
 -(void)moveAhead {
     _currentIndex++;
 }
@@ -82,6 +51,73 @@ unichar BMOGetOffsetChar(char* array, NSUInteger length, NSUInteger index, NSInt
     return [[NSMutableString alloc] initWithBytes:&_chars[_markIndex]
                                            length:(_currentIndex-_markIndex)
                                          encoding:NSUTF8StringEncoding];
+}
+
+@end
+
+const static NSUInteger BufferLength = 16;
+
+@interface BMOEDNStreamReaderState ()
+
+-(void)checkStreamAndBufferStatus;
+
+@end
+
+@implementation BMOEDNStreamReaderState
+
+@synthesize error;
+
+-(instancetype)initWithStream:(NSInputStream *)stream {
+    if (self = [super init]) {
+        _stream = stream;
+        _buffer = (uint8_t *)malloc(BufferLength*sizeof(uint8_t));
+        _currentBufferIndex = 0;
+        _currentBufferLength = 0;
+    }
+    return self;
+}
+
+-(void)dealloc {
+    free(_buffer);
+}
+
+-(BOOL)isValid {
+    return self.error == nil && ([_stream streamStatus] < NSStreamStatusAtEnd);
+}
+
+-(void)checkStreamAndBufferStatus {
+    if ([_stream streamStatus] == NSStreamStatusNotOpen)
+        [_stream open];
+    while (_currentBufferIndex >= _currentBufferLength) {
+        _currentBufferIndex -= _currentBufferLength;
+        _currentBufferLength = [_stream read:_buffer maxLength:BufferLength];
+        if (_currentBufferLength <= 0) break; // error from NSStream
+    }
+}
+
+-(unichar)currentCharacter {
+    [self checkStreamAndBufferStatus];
+    return (unichar)_buffer[_currentBufferIndex];
+}
+
+-(void)moveAhead {
+    if (_markBuffer) {
+        [self checkStreamAndBufferStatus];
+        [_markBuffer appendBytes:(_buffer+_currentBufferIndex) length:1];
+    }
+    _currentBufferIndex++;
+}
+
+-(void)setMark {
+    _markBuffer = [NSMutableData data];
+}
+
+-(NSUInteger)markedLength {
+    return [_markBuffer length];
+}
+
+-(NSMutableString *)markedString {
+    return [[NSMutableString alloc] initWithData:_markBuffer encoding:NSUTF8StringEncoding];
 }
 
 @end

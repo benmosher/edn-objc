@@ -32,14 +32,14 @@
 +(id)EDNObjectWithStream:(NSInputStream *)data
                  options:(BMOEDNReadingOptions)options
                    error:(NSError **)error; {
-    return [[[BMOEDNReader alloc] initWithOptions:options] parse:data error:error];
+    return [[[BMOEDNReader alloc] initWithOptions:options] parseStream:data error:error];
 }
 
 +(id)EDNObjectWithStream:(NSInputStream *)data
          transmogrifiers:(NSDictionary *)transmogrifiers
                  options:(BMOEDNReadingOptions)options
                    error:(NSError **)error; {
-    return [[[BMOEDNReader alloc] initWithOptions:options transmogrifiers:transmogrifiers] parse:data error:error];
+    return [[[BMOEDNReader alloc] initWithOptions:options transmogrifiers:transmogrifiers] parseStream:data error:error];
 }
 
 +(NSData *)dataWithEDNObject:(id)obj error:(NSError **)error {
