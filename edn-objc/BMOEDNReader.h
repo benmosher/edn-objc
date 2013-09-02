@@ -18,9 +18,6 @@
 -(instancetype)initWithOptions:(BMOEDNReadingOptions)options
                transmogrifiers:(NSDictionary *)transmogrifiers;
 
-// TODO: take an index OR take the data in the initializer
-// and do a -parseNextObject-type deal
-// Today, it will only parse the "first" object in the data
 -(id)parse:(NSData *)data error:(NSError **)error;
-
+-(id)parseStream:(NSInputStream *)data error:(NSError **)error;
 @end

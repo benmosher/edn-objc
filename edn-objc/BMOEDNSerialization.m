@@ -29,6 +29,19 @@
     return [[[BMOEDNReader alloc] initWithOptions:options transmogrifiers:transmogrifiers] parse:data error:error];
 }
 
++(id)EDNObjectWithStream:(NSInputStream *)data
+                 options:(BMOEDNReadingOptions)options
+                   error:(NSError **)error; {
+    return [[[BMOEDNReader alloc] initWithOptions:options] parse:data error:error];
+}
+
++(id)EDNObjectWithStream:(NSInputStream *)data
+         transmogrifiers:(NSDictionary *)transmogrifiers
+                 options:(BMOEDNReadingOptions)options
+                   error:(NSError **)error; {
+    return [[[BMOEDNReader alloc] initWithOptions:options transmogrifiers:transmogrifiers] parse:data error:error];
+}
+
 +(NSData *)dataWithEDNObject:(id)obj error:(NSError **)error {
     BMOEDNWriter *writer = [[BMOEDNWriter alloc] init];
     return [writer writeToData:obj error:error];

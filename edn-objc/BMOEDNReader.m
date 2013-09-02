@@ -7,6 +7,7 @@
 //
 
 #import "BMOEDNReader.h"
+#import "BMOEDNReaderState.h"
 #import "BMOEDNSymbol.h"
 #import "BMOEDNKeyword.h"
 #import "BMOEDNList.h"
@@ -15,122 +16,6 @@
 #import "BMOEDNRegistry.h"
 #import "NSObject+BMOEDN.h"
 #import "BMOEDNRoot.h"
-
-// TODO: profile, see if struct+functions are faster
-@interface BMOEDNReaderState : NSObject {
-    NSUInteger _currentIndex;
-    NSUInteger _markIndex;
-    __strong NSData * _data;
-    char *_chars;
-}
-
--(instancetype)initWithData:(NSData *)data;
-
-@property (nonatomic, readonly, getter = isValid) BOOL valid;
-/**
- Caller should check isValid first; if parser is not
- in a valid state, behavior is undefined.
- */
-@property (nonatomic, readonly) unichar currentCharacter;
-@property (nonatomic, readonly) unichar markedCharacter;
-/**
- @return '\0' if out of range
- */
--(unichar)characterOffsetFromMark:(NSInteger)offset;
-/**
- @return '\0' if out of range
- */
--(unichar)characterOffsetFromCurrent:(NSInteger)offset;
-
-@property (strong, nonatomic) NSError * error;
-
--(void) moveAhead;
-/**
- @throws NSRangeException if mark would be placed outside data
- */
--(void) moveMarkByOffset:(NSInteger)offset;
-/**
- Set mark to current parser index.
- */
--(void) setMark;
--(NSUInteger) markedLength;
--(NSMutableString *) markedString;
-
-@end
-@implementation BMOEDNReaderState
-
--(instancetype)initWithData:(NSData *)data {
-    if (self = [super init]) {
-        _data = data;
-        _chars = (char *)[data bytes];
-        _currentIndex = 0;
-    }
-    return self;
-}
-
--(BOOL)isValid {
-    return (_error == nil && _currentIndex < _data.length);
-}
-
--(unichar)currentCharacter {
-    return ((unichar)_chars[_currentIndex]);
-};
-
--(unichar)markedCharacter {
-    return ((unichar)_chars[_markIndex]);
-}
-
-BOOL BMOOffsetInRange(NSUInteger loc, NSUInteger len, NSInteger offset) {
-    // fancy comparison to ensure integer sign conversion does not occur unpredictably
-    return (offset == 0 ||
-            (offset > 0  && (len - loc) > (NSUInteger)offset) || // off the end
-            (offset < 0 && loc >= (NSUInteger)(-1 * offset)));   // before the beginning
-}
-
-unichar BMOGetOffsetChar(char* array, NSUInteger length, NSUInteger index, NSInteger offset) {
-    if (!BMOOffsetInRange(index, length, offset))
-        return '\0';
-    // any non-null comparisons should fail OR check for '\0' for out-of-range
-    else return ((unichar)array[index+offset]);
-}
-
--(void)moveMarkByOffset:(NSInteger)offset {
-    if (!BMOOffsetInRange(_markIndex, _data.length, offset))
-        @throw [NSException exceptionWithName:NSRangeException reason:@"Cannot move mark out of range of data." userInfo:nil];
-    _markIndex += offset;
-}
-
--(unichar)characterOffsetFromCurrent:(NSInteger)offset {
-    return BMOGetOffsetChar(_chars, _data.length, _currentIndex, offset);
-}
--(unichar)characterOffsetFromMark:(NSInteger)offset {
-    return BMOGetOffsetChar(_chars, _data.length, _markIndex, offset);
-}
-
--(void)moveAhead {
-    _currentIndex++;
-}
-
--(void)setMark {
-    _markIndex = _currentIndex;
-}
-
--(NSUInteger)markedLength {
-    return (_currentIndex > _markIndex)
-    ? _currentIndex - _markIndex
-    : 0;
-}
-
--(NSMutableString *)markedString {
-    if (_currentIndex == _markIndex){
-        return [@"" mutableCopy];
-    }
-    return [[NSMutableString alloc] initWithBytes:&_chars[_markIndex]
-                                           length:(_currentIndex-_markIndex)
-                                         encoding:NSUTF8StringEncoding];
-}
-
-@end
 
 static NSCharacterSet *whitespace,*quoted,*numberPrefix,*digits,*symbolChars;
 
@@ -208,9 +93,7 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
     return self;
 }
 
--(id)parse:(NSData *)data error:(NSError **)error
-{
-    BMOEDNReaderState *state = [[BMOEDNReaderState alloc] initWithData:data];
+-(id)parseRoot:(BMOEDNReaderState *)state {
     id parsed = nil;
     if (_options & BMOEDNReadingMultipleObjects) { // gotta parse 'em all
         // TODO: lazy reading
@@ -219,21 +102,34 @@ id BMOParseSymbolType(BMOEDNReaderState *parserState, Class symbolClass) {
             parsed = [self parseObject:state];
             if (parsed) [buffer addObject:parsed];
             // continue parsing
+            [self skipWhitespace:state];
         } while (state.valid && parsed);
-        if (state.error && error != NULL) {
-            *error = state.error;
+        if (state.error) {
             return nil;
         } else {
             return [[BMOEDNRoot alloc] initWithEnumerable:buffer];
         }
         
     } else { // single-object parse
-        parsed = [self parseObject:state];
-        if (parsed == nil && error != NULL) {
-            *error = state.error;
-        }
-        return parsed;
+        return [self parseObject:state];
     }
+}
+
+-(id)parse:(NSData *)data error:(NSError **)error
+{
+    BMOEDNReaderState *state = [[BMOEDNDataReaderState alloc] initWithData:data];
+    id root = [self parseRoot:state];
+    if (error != NULL) *error = state.error;
+    return (state.error == nil) ? root : nil;
+
+}
+
+-(id)parseStream:(NSInputStream *)data error:(NSError **)error {
+    /*BMOEDNReaderState *state = [[BMOEDNReaderState alloc] initWithStream:data];
+    id root = [self parseRoot:state];
+    if (error != NULL) *error = state.error;
+    return (state.error == nil) ? nil : root;*/
+    return nil;
 }
 
 +(void)initialize {

@@ -17,12 +17,16 @@ typedef NS_OPTIONS(NSUInteger, BMOEDNReadingOptions) {
 
 @interface BMOEDNSerialization : NSObject
 
+#pragma mark - NSData reading methods
+
 /**
  If BMOEDNReadingMultipleObjects is asserted, returned object
  is id<NSFastEnumeration>. Else, the first valid EDN object in
  the data is returned, or nil if no valid data.
  */
-+(id)EDNObjectWithData:(NSData *)data options:(BMOEDNReadingOptions)options error:(NSError **)error;
++(id)EDNObjectWithData:(NSData *)data
+               options:(BMOEDNReadingOptions)options
+                 error:(NSError **)error;
 /**
  @param transmogrifiers: a dictionary of EDNSymbols to BMOEDNTransmogrifier
  blocks that turn the provided edn tagged element into some native object.
@@ -32,6 +36,29 @@ typedef NS_OPTIONS(NSUInteger, BMOEDNReadingOptions) {
                options:(BMOEDNReadingOptions)options
                  error:(NSError **)error;
 
+#pragma mark - NSInputStream reading methods
+
+/**
+ If BMOEDNReadingMultipleObjects is asserted, returned object
+ is id<NSFastEnumeration>. Else, the first valid EDN object in
+ the data is returned, or nil if no valid data.
+ 
+ If lazy reading is not specified, this method may block until a full
+ valid object is returned, the stream is closed, or an error is encountered.
+ */
++(id)EDNObjectWithStream:(NSInputStream *)data
+                 options:(BMOEDNReadingOptions)options
+                   error:(NSError **)error;
+/**
+ @param transmogrifiers: a dictionary of EDNSymbols to BMOEDNTransmogrifier
+ blocks that turn the provided edn tagged element into some native object.
+ */
++(id)EDNObjectWithStream:(NSInputStream *)data
+         transmogrifiers:(NSDictionary *)transmogrifiers
+                 options:(BMOEDNReadingOptions)options
+                   error:(NSError **)error;
+
+#pragma mark - NSData writing methods
 
 +(NSData *)dataWithEDNObject:(id)obj error:(NSError **)error;
 +(NSData *)dataWithEDNObject:(id)obj
