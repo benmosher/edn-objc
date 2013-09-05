@@ -11,7 +11,7 @@
 // thanks, http://nshipster.com/ns_enum-ns_options/
 typedef NS_OPTIONS(NSUInteger, BMOEDNReadingOptions) {
     BMOEDNReadingMultipleObjects = (1UL << 0),
-    // TODO: enforce
+    // lazy parsing implies multiple objects
     BMOEDNReadingLazyParsing = (1UL << 1),
 };
 

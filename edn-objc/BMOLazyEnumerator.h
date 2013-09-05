@@ -1,8 +1,8 @@
 //
-//  BMOEDNLazyRootEnumerator.h
+//  BMOLazyEnumerator.h
 //  edn-objc
 //
-//  Created by Ben (home) on 9/2/13.
+//  Created by Ben Mosher on 9/2/13.
 //  Copyright (c) 2013 Ben Mosher. All rights reserved.
 //
 
@@ -15,14 +15,14 @@
  
  TODO: futures. 
  */
-typedef id (^BMOEDNLazy)(NSUInteger idx, id last);
+typedef id (^BMOLazy)(NSUInteger idx, id last);
 
-@interface BMOEDNLazyEnumerator : NSEnumerator {
-    __strong BMOEDNLazy _block;
+@interface BMOLazyEnumerator : NSEnumerator {
+    __strong BMOLazy _block;
     NSUInteger _currentIndex;
     id _lastObject;
 }
 
--(instancetype)initWithBlock:(BMOEDNLazy)nextItemBlock;
+-(instancetype)initWithBlock:(BMOLazy)nextItemBlock;
 
 @end

@@ -8,7 +8,7 @@
 
 #import "edn-objc-tests.h"
 #import "edn-objc.h"
-#import "BMOEDNLazyEnumerator.h"
+#import "BMOLazyEnumerator.h"
 
 @implementation EDNObjCTests
 
@@ -395,8 +395,17 @@
     id clojureCode = @"( + 1 2 )\n( map [ x y ] ( 3 4 5 ) )\n[ a root vector is \"weird\" ]\n";
     id clojureData = [clojureCode dataUsingEncoding:NSUTF8StringEncoding];
     id clojureStream = [[NSInputStream alloc] initWithData:clojureData];
-    STAssertEqualObjects([clojureStream EDNObject], [clojureData EDNObject], @"");
-    
+    id ednObjectStream = [clojureStream EDNObject];
+    NSMutableArray * collector = [NSMutableArray new];
+    for (id obj in [clojureData EDNObject]) {
+        if (obj == nil) STFail(@"Object should not be nil.");
+        [collector addObject:obj];
+    }
+    NSEnumerator *enumerator = [collector objectEnumerator];
+    for (id obj in ednObjectStream) {
+        STAssertEqualObjects(obj, [enumerator nextObject], @"");
+    }
+        
 }
 
 #pragma mark - NSEnumerator-backed BMOEDNRoot
@@ -420,13 +429,30 @@
 #pragma mark - Lazy enumerator 
 
 - (void)testLazyEnumerator {
-    NSEnumerator * enumerator = [[BMOEDNLazyEnumerator alloc] initWithBlock:^id(NSUInteger idx, id last) {
+    NSEnumerator * enumerator = [[BMOLazyEnumerator alloc] initWithBlock:^id(NSUInteger idx, id last) {
         return idx < 1000 ? @(idx) : nil;
     }];
     for (int i = 0; i < 1000; i++) {
         STAssertEqualObjects([NSNumber numberWithInt:i], [enumerator nextObject], @"");
     }
     STAssertNil([enumerator nextObject], @"");
+}
+
+- (void)testLazyErrors {
+    NSError *err = nil;
+    NSData *data = [@"[ 1 2 :::::}}}}}" dataUsingEncoding:NSUTF8StringEncoding];
+    [BMOEDNSerialization EDNObjectWithData:data options:0 error:&err];
+    STAssertTrue(err!=nil, @"Should produce an error.");
+    err = nil;
+    id root = [BMOEDNSerialization EDNObjectWithData:data options:BMOEDNReadingLazyParsing|BMOEDNReadingMultipleObjects error:&err];
+    STAssertNil(err, @"Error is not immediate w/ lazy parsing.");
+    NSUInteger count = 0;
+    for (id obj in root) {
+        STAssertTrue([obj isMemberOfClass:[NSError class]], @"Invalid data should lazily return an error.");
+        STAssertTrue(count++ <= 1, @"Should only return one error.");
+        
+        if (count > 10) break;
+    }
 }
 
 @end

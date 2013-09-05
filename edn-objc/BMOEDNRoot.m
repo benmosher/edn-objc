@@ -88,6 +88,6 @@
     return [_elements isEqual:((BMOEDNRoot *)object)->_elements];
 }
 
-
+//-(NSEnumerator *)objectEnumerator {}
 
 @end

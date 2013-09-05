@@ -16,6 +16,7 @@
 #import "BMOEDNRegistry.h"
 #import "NSObject+BMOEDN.h"
 #import "BMOEDNRoot.h"
+#import "BMOLazyEnumerator.h"
 
 static NSCharacterSet *whitespace,*quoted,*numberPrefix,*digits,*symbolChars;
 
@@ -94,23 +95,20 @@ id BMOParseSymbolType(id<BMOEDNReaderState> parserState, Class symbolClass) {
 }
 
 -(id)parseRoot:(id<BMOEDNReaderState>)state {
-    id parsed = nil;
     if (_options & BMOEDNReadingMultipleObjects) { // gotta parse 'em all
-        // TODO: lazy reading
-        NSMutableArray *buffer = [NSMutableArray array];
-        do {
-            parsed = [self parseObject:state];
-            if (parsed) [buffer addObject:parsed];
+        BMOLazy parser = ^(NSUInteger idx, id last) {
+            if (state.error) return (id)nil;
+            id parsed = state.valid ? [self parseObject:state] : (id)nil;
             // continue parsing
-            [self skipWhitespace:state];
-        } while (state.valid && parsed);
-        if (state.error) {
-            return nil;
-        } else {
-            return [[BMOEDNRoot alloc] initWithEnumerable:buffer];
+            if (parsed) [self skipWhitespace:state];
+            return state.error ? state.error : parsed;
+        };
+        id enumerable  = [[BMOLazyEnumerator alloc] initWithBlock:parser];
+        if (!(_options & BMOEDNReadingLazyParsing)) {
+            enumerable = [enumerable allObjects];
         }
-        
-    } else { // single-object parse
+        return [[BMOEDNRoot alloc] initWithEnumerable:enumerable];
+    } else { // single-object parse; laziness is ignored.
         return [self parseObject:state];
     }
 }

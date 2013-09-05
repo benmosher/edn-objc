@@ -2,7 +2,7 @@
 //  BMOEDNWriterState.m
 //  edn-objc
 //
-//  Created by Ben (home) on 9/2/13.
+//  Created by Ben Mosher on 9/2/13.
 //  Copyright (c) 2013 Ben Mosher. All rights reserved.
 //
 

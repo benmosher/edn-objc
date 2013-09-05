@@ -2,7 +2,7 @@
 //  NSInputStream+BMOEDN.m
 //  edn-objc
 //
-//  Created by Ben (home) on 9/2/13.
+//  Created by Ben Mosher on 9/2/13.
 //  Copyright (c) 2013 Ben Mosher. All rights reserved.
 //
 
@@ -12,7 +12,7 @@
 @implementation NSInputStream (BMOEDN)
 
 -(id)EDNObject {
-    return [BMOEDNSerialization EDNObjectWithStream:self options:BMOEDNReadingMultipleObjects|BMOEDNReadingLazyParsing error:NULL];
+    return [BMOEDNSerialization EDNObjectWithStream:self options:BMOEDNReadingLazyParsing|BMOEDNReadingMultipleObjects error:NULL];
 }
 
 @end
