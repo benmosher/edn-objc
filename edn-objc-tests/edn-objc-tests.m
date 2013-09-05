@@ -8,7 +8,7 @@
 
 #import "edn-objc-tests.h"
 #import "edn-objc.h"
-
+#import "BMOEDNLazyEnumerator.h"
 
 @implementation EDNObjCTests
 
@@ -415,6 +415,18 @@
         STAssertEquals([num unsignedIntegerValue],currentNumber++, @"");
     }
     STAssertEquals(currentNumber, (NSUInteger)25, @"Root should have enumerated through all 24 objects.");
+}
+
+#pragma mark - Lazy enumerator 
+
+- (void)testLazyEnumerator {
+    NSEnumerator * enumerator = [[BMOEDNLazyEnumerator alloc] initWithBlock:^id(NSUInteger idx, id last) {
+        return idx < 1000 ? @(idx) : nil;
+    }];
+    for (int i = 0; i < 1000; i++) {
+        STAssertEqualObjects([NSNumber numberWithInt:i], [enumerator nextObject], @"");
+    }
+    STAssertNil([enumerator nextObject], @"");
 }
 
 @end

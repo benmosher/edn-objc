@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Ben Mosher. All rights reserved.
 //
 
-#import "BMOEDNLazyRootEnumerator.h"
+#import "BMOEDNLazyEnumerator.h"
 
 @implementation BMOEDNLazyEnumerator
 

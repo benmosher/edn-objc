@@ -50,8 +50,8 @@
 		CFA008D717D45F4B0077B8E2 /* NSData+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008D517D45F4B0077B8E2 /* NSData+BMOEDN.m */; };
 		CFA008DA17D464AC0077B8E2 /* BMOEDNWriterState.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008D817D464AC0077B8E2 /* BMOEDNWriterState.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		CFA008DB17D464AC0077B8E2 /* BMOEDNWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008D917D464AC0077B8E2 /* BMOEDNWriterState.m */; };
-		CFA008E017D4D43C0077B8E2 /* BMOEDNLazyRootEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008DE17D4D43C0077B8E2 /* BMOEDNLazyRootEnumerator.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		CFA008E117D4D43C0077B8E2 /* BMOEDNLazyRootEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008DF17D4D43C0077B8E2 /* BMOEDNLazyRootEnumerator.m */; };
+		CFA008E017D4D43C0077B8E2 /* BMOEDNLazyEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008DE17D4D43C0077B8E2 /* BMOEDNLazyEnumerator.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		CFA008E117D4D43C0077B8E2 /* BMOEDNLazyEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008DF17D4D43C0077B8E2 /* BMOEDNLazyEnumerator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,8 +125,8 @@
 		CFA008D517D45F4B0077B8E2 /* NSData+BMOEDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+BMOEDN.m"; sourceTree = "<group>"; };
 		CFA008D817D464AC0077B8E2 /* BMOEDNWriterState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNWriterState.h; sourceTree = "<group>"; };
 		CFA008D917D464AC0077B8E2 /* BMOEDNWriterState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNWriterState.m; sourceTree = "<group>"; };
-		CFA008DE17D4D43C0077B8E2 /* BMOEDNLazyRootEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNLazyRootEnumerator.h; sourceTree = "<group>"; };
-		CFA008DF17D4D43C0077B8E2 /* BMOEDNLazyRootEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNLazyRootEnumerator.m; sourceTree = "<group>"; };
+		CFA008DE17D4D43C0077B8E2 /* BMOEDNLazyEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNLazyEnumerator.h; sourceTree = "<group>"; };
+		CFA008DF17D4D43C0077B8E2 /* BMOEDNLazyEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNLazyEnumerator.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -287,8 +287,8 @@
 				CFA008CD17D44C600077B8E2 /* BMOEDNReaderState.m */,
 				B5C7A66317CDBE73005E0615 /* BMOEDNReader.h */,
 				B5C7A66417CDBE73005E0615 /* BMOEDNReader.m */,
-				CFA008DE17D4D43C0077B8E2 /* BMOEDNLazyRootEnumerator.h */,
-				CFA008DF17D4D43C0077B8E2 /* BMOEDNLazyRootEnumerator.m */,
+				CFA008DE17D4D43C0077B8E2 /* BMOEDNLazyEnumerator.h */,
+				CFA008DF17D4D43C0077B8E2 /* BMOEDNLazyEnumerator.m */,
 			);
 			name = Reading;
 			sourceTree = "<group>";
@@ -329,7 +329,7 @@
 				CFA008D217D45E810077B8E2 /* NSInputStream+BMOEDN.h in Headers */,
 				CFA008D617D45F4B0077B8E2 /* NSData+BMOEDN.h in Headers */,
 				CFA008DA17D464AC0077B8E2 /* BMOEDNWriterState.h in Headers */,
-				CFA008E017D4D43C0077B8E2 /* BMOEDNLazyRootEnumerator.h in Headers */,
+				CFA008E017D4D43C0077B8E2 /* BMOEDNLazyEnumerator.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,7 +449,7 @@
 				CFA008D317D45E810077B8E2 /* NSInputStream+BMOEDN.m in Sources */,
 				CFA008D717D45F4B0077B8E2 /* NSData+BMOEDN.m in Sources */,
 				CFA008DB17D464AC0077B8E2 /* BMOEDNWriterState.m in Sources */,
-				CFA008E117D4D43C0077B8E2 /* BMOEDNLazyRootEnumerator.m in Sources */,
+				CFA008E117D4D43C0077B8E2 /* BMOEDNLazyEnumerator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
