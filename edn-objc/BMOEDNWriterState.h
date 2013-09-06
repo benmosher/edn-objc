@@ -9,14 +9,20 @@
 #import <Foundation/Foundation.h>
 
 @interface BMOEDNWriterState : NSObject {
-    NSUInteger _currentIndex;
-    NSMutableString *_mutableString;
+    NSOutputStream *_stream;
+    
+    // for memory streams
+    dispatch_once_t _exported;
+    NSData *_data;
+    
 }
 @property (strong, nonatomic) NSError *error;
+@property (nonatomic) BOOL exportable;
 
--(instancetype)init;
+-(instancetype)initWithStream:(NSOutputStream *)stream;
 
 -(void)appendString:(NSString *)string;
+-(void)write:(const uint8_t *)buffer maxLength:(NSUInteger)len;
 
 -(NSData *)writtenData;
 -(NSString *)writtenString;

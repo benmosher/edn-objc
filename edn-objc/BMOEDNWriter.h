@@ -17,4 +17,6 @@
 // TODO: write into (or append to) an existing NSData?
 -(NSData *)writeToData:(id)obj error:(NSError **)error;
 -(NSString *)writeToString:(id)obj error:(NSError **)error;
+-(void)write:(id)obj toStream:(NSOutputStream *)stream error:(NSError **)error;
+
 @end

@@ -70,5 +70,14 @@ typedef NS_OPTIONS(NSUInteger, BMOEDNReadingOptions) {
                  transmogrifiers:(NSDictionary *)transmogrifiers
                            error:(NSError **)error;
 
+#pragma mark - NSStream writing methods
 
++(void)writeEDNObject:(id)obj
+             toStream:(NSOutputStream *)stream
+                error:(NSError **)error;
+
++(void)writeEDNObject:(id)obj
+             toStream:(NSOutputStream *)stream
+      transmogrifiers:(NSDictionary *)transmogrifiers
+                error:(NSError **)error;
 @end

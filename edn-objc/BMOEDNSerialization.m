@@ -66,4 +66,16 @@
     return [writer writeToString:obj error:error];
 }
 
++(void)writeEDNObject:(id)obj toStream:(NSOutputStream *)stream
+                error:(NSError **)error {
+    BMOEDNWriter *writer = [[BMOEDNWriter alloc] init];
+    [writer write:obj toStream:stream error:error];
+}
+
++(void)writeEDNObject:(id)obj toStream:(NSOutputStream *)stream
+      transmogrifiers:(NSDictionary *)transmogrifiers
+                error:(NSError **)error {
+    BMOEDNWriter *writer = [[BMOEDNWriter alloc] initWithTransmogrifiers:transmogrifiers];
+    [writer write:obj toStream:stream error:error];
+}
 @end

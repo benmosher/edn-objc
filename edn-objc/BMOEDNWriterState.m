@@ -10,24 +10,51 @@
 
 @implementation BMOEDNWriterState
 
--(instancetype)init{
+-(instancetype)init {
+    _exportable = YES;
+    return [self initWithStream:[NSOutputStream outputStreamToMemory]];
+}
+
+- (instancetype)initWithStream:(NSOutputStream *)stream {
     if (self = [super init]) {
-        _mutableString = [NSMutableString new];
-        _currentIndex = 0;
+        _stream = stream;
+        [_stream open];
     }
     return self;
 }
 
 -(void)appendString:(NSString *)string {
-    [_mutableString appendString:string];
+    NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
+    [self write:[data bytes] maxLength:[data length]];
+}
+
+-(void)write:(const uint8_t *)buffer maxLength:(NSUInteger)len {
+    NSUInteger written = 0;
+    do {
+        written += [_stream write:buffer maxLength:(len-written)];
+        if (_stream.streamError) {
+            self.error = _stream.streamError;
+            break;
+        }
+    } while (written < len);
 }
 
 -(NSData *)writtenData {
-    return [_mutableString dataUsingEncoding:NSUTF8StringEncoding];
+    dispatch_once(&_exported, ^{
+        if (_exportable) {
+            [_stream close];
+            _data = [_stream propertyForKey:NSStreamDataWrittenToMemoryStreamKey];
+        }
+    });
+    return _data;
 }
 
+
+
 -(NSString *)writtenString {
-    return [_mutableString copy];
+    return [self writtenData]
+        ? [[NSString alloc] initWithData:_data encoding:NSUTF8StringEncoding]
+        : nil;
 }
 
 @end

@@ -19,6 +19,7 @@
 #import "BMOEDNWriterState.h"
 
 @interface BMOEDNWriter ()
+
 -(void)appendObject:(id)obj toState:(BMOEDNWriterState *)state;
 -(void)appendTaggedObject:(BMOEDNTaggedElement *)obj toState:(BMOEDNWriterState *)state;
 -(void)appendVector:(NSArray *)obj toState:(BMOEDNWriterState *)state;
@@ -31,7 +32,9 @@
 
 #pragma mark Helpers
 
--(BMOEDNWriterState *) writeRootObject:(id)obj error:(NSError **)error;
+-(BMOEDNWriterState *) writeRootObject:(id)obj
+                                 state:(BMOEDNWriterState *)state
+                                 error:(NSError **)error;
 
 -(void)appendEnumerable:(id<NSFastEnumeration>) obj
                 toState:(BMOEDNWriterState *)state
@@ -49,8 +52,7 @@
 
 #pragma mark - external write methods
 
--(BMOEDNWriterState *) writeRootObject:(id)obj error:(NSError **)error {
-    BMOEDNWriterState *state = [[BMOEDNWriterState alloc] init];
+-(BMOEDNWriterState *) writeRootObject:(id)obj state:(BMOEDNWriterState *)state error:(NSError **)error {
     if ([obj isKindOfClass:[BMOEDNRoot class]])
         [self appendEnumerable:obj toState:state whitespace:@"\n"]; // TODO: whitespace option
     else
@@ -61,12 +63,27 @@
     } else return state;
 }
 
--(NSData *)writeToData:(id)obj error:(NSError **)error {
-    return [[self writeRootObject:obj error:error] writtenData];
+-(NSData *)writeToData:(id)obj
+                 error:(NSError **)error {
+    return [[self writeRootObject:obj
+                            state:[[BMOEDNWriterState alloc] init]
+                            error:error] writtenData];
 }
 
--(NSString *)writeToString:(id)obj error:(NSError **)error {
-    return [[self writeRootObject:obj error:error] writtenString];
+-(NSString *)writeToString:(id)obj
+                     error:(NSError **)error {
+    return [[self writeRootObject:obj
+                            state:[[BMOEDNWriterState alloc] init]
+                            error:error] writtenString];
+}
+
+-(void)write:(id)obj toStream:(NSOutputStream *)stream
+       error:(NSError **)error {
+    BMOEDNWriterState *state = [[BMOEDNWriterState alloc] initWithStream:stream];
+    [self writeRootObject:obj
+                    state:state
+                    error:error];
+    [state appendString:@"\n"];
 }
 
 #pragma mark - internal write methods

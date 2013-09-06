@@ -455,4 +455,23 @@
     }
 }
 
+- (void)testWritingToStream {
+    NSMutableString *testString = [[NSMutableString alloc] init];
+    NSOutputStream *stream = [NSOutputStream outputStreamToMemory];
+    NSError *err = nil;
+    NSMutableArray *collector = [NSMutableArray array];
+    for (int i = 0; i < 10; i++) {
+        id obj = @{[NSString stringWithFormat:@"%d",i]:@(i)};
+        [BMOEDNSerialization writeEDNObject:obj toStream:stream error:&err];
+        [testString appendFormat:@"{ \"%1$d\" %1$d }\n",i];
+        [collector addObject:obj];
+    }
+    STAssertNil(err, @"");
+    NSData *data = [stream propertyForKey:NSStreamDataWrittenToMemoryStreamKey];
+    NSString *stringified = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    BMOEDNRoot *root = [[BMOEDNRoot alloc] initWithEnumerable:collector];
+    STAssertEqualObjects(stringified, [root EDNString], @"Sanity check for comparison.");
+    STAssertEqualObjects(stringified, testString, @"Multi-object stream test.");
+}
+
 @end
