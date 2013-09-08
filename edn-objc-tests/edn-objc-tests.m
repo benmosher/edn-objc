@@ -529,4 +529,19 @@
     STAssertEqualObjects(stringified, testString, @"Multi-object stream test.");
 }
 
+
+#pragma mark - Characters
+
+- (void)testCharacters {
+    NSString *charVector = @"[ \\newline \\n \\! \\* \"fooey\" \\&]";
+    id edn = [charVector ednObject];
+    STAssertTrue(edn != nil, @"Should parse into something.");
+    STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'\n'], edn[0], @"");
+    STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'n'], edn[1], @"");
+    STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'!'], edn[2], @"");
+    STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'*'], edn[3], @"");
+    STAssertEqualObjects(@"fooey", edn[4], @"");
+    STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'&'], edn[5], @"");
+}
+
 @end

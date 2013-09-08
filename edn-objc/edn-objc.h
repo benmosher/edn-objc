@@ -44,5 +44,6 @@
 #import "NSObject+BMOEDN.h"
 #import "NSData+BMOEDN.h"
 #import "NSInputStream+BMOEDN.h"
+#import "BMOEDNCharacter.h"
 
 #endif

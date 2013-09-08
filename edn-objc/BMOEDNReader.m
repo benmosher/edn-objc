@@ -17,8 +17,10 @@
 #import "NSObject+BMOEDN.h"
 #import "BMOEDNRoot.h"
 #import "BMOLazyEnumerator.h"
+#import "BMOEDNCharacter.h"
+#import "BMOEDNError.h"
 
-static NSCharacterSet *whitespace,*quoted,*numberPrefix,*digits,*symbolChars;
+static NSCharacterSet *whitespace,*quoted,*numberPrefix,*digits,*symbolChars,*delimiters;
 
 @interface BMOEDNReader () {
     BMOEDNReadingOptions _options;
@@ -33,6 +35,7 @@ static NSCharacterSet *whitespace,*quoted,*numberPrefix,*digits,*symbolChars;
 -(id)parseKeyword:(id<BMOEDNReaderState>)parserState;
 -(id)parseLiteral:(id<BMOEDNReaderState>)parserState;
 -(id)parseSet:(id<BMOEDNReaderState>)parserState;
+-(id)parseCharacter:(id<BMOEDNReaderState>)parserState;
 
 -(NSMutableArray *)parseTokenSequenceWithTerminator:(unichar)terminator
                                         parserState:(id<BMOEDNReaderState>)parserState;
@@ -148,6 +151,9 @@ id BMOParseSymbolType(id<BMOEDNReaderState> parserState, Class symbolClass) {
         symbolChars = [NSCharacterSet characterSetWithCharactersInString:
                        @"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.*+!-_?$%&=:#/"];
     }
+    if (delimiters == nil) {
+        delimiters = [NSCharacterSet characterSetWithCharactersInString:@"{}()[]"];
+    }
 }
 
 
@@ -205,6 +211,9 @@ id BMOParseSymbolType(id<BMOEDNReaderState> parserState, Class symbolClass) {
             break;
         case ':':
             parsed = [self parseKeyword:parserState];
+            break;
+        case '\\':
+            parsed = [self parseCharacter:parserState];
             break;
         default:
             parsed = [self parseLiteral:parserState];
@@ -431,6 +440,37 @@ id BMOParseSymbolType(id<BMOEDNReaderState> parserState, Class symbolClass) {
                                             code:BMOEDNErrorInvalidData
                                         userInfo:nil];
     return nil;
+}
+
+-(id)parseCharacter:(id<BMOEDNReaderState>)parserState {
+    static NSDictionary *magicCharacters = nil;
+    if (magicCharacters == nil) magicCharacters = @{
+        @"space":[BMOEDNCharacter characterWithUnichar:' '],
+        @"newline":[BMOEDNCharacter characterWithUnichar:'\n'],
+        @"tab":[BMOEDNCharacter characterWithUnichar:'\t'],
+        @"return":[BMOEDNCharacter characterWithUnichar:'\r']
+    };
+    [parserState moveAhead];
+    [parserState setMark];
+    while (parserState.valid &&
+           (![delimiters characterIsMember:parserState.currentCharacter]) &&
+           (![whitespace characterIsMember:parserState.currentCharacter])) {
+        [parserState moveAhead];
+    }
+    
+    NSString *characterDescription = [parserState markedString];
+    if ([characterDescription length] == 0) {
+        parserState.error = BMOEDNErrorMessage(BMOEDNErrorInvalidData, @"No character found.");
+        return nil;
+    }
+    if (characterDescription.length > 1) {
+        BMOEDNCharacter *magicCharacter = [magicCharacters objectForKey:characterDescription];
+        if (magicCharacter == nil) {
+            parserState.error = BMOEDNErrorMessage(BMOEDNErrorInvalidData, ([NSString stringWithFormat:@"Invalid long-form character: %@.",characterDescription]));
+            return nil;
+        } else return magicCharacter;
+    }
+    return [BMOEDNCharacter characterWithUnichar:[characterDescription characterAtIndex:0]];
 }
 
 -(id)parseString:(id<BMOEDNReaderState>)parserState {

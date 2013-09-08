@@ -19,6 +19,8 @@
 		B53AE3DD17D18024000CBCC0 /* NSDate+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = B53AE3DB17D18024000CBCC0 /* NSDate+BMOEDN.m */; };
 		B5A7BA7617DC1DF300EE55A1 /* BMOEDNCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = B5A7BA7417DC1DF300EE55A1 /* BMOEDNCoder.h */; };
 		B5A7BA7717DC1DF300EE55A1 /* BMOEDNCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A7BA7517DC1DF300EE55A1 /* BMOEDNCoder.m */; };
+		B5A7BA7A17DC280B00EE55A1 /* BMOEDNCharacter.h in Headers */ = {isa = PBXBuildFile; fileRef = B5A7BA7817DC280B00EE55A1 /* BMOEDNCharacter.h */; };
+		B5A7BA7B17DC280B00EE55A1 /* BMOEDNCharacter.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A7BA7917DC280B00EE55A1 /* BMOEDNCharacter.m */; };
 		B5B837D717D038B900AEA457 /* BMOEDNRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B837D617D038B900AEA457 /* BMOEDNRepresentation.h */; };
 		B5B837DA17D03B2900AEA457 /* BMOEDNTaggedElement.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B837D817D03B2900AEA457 /* BMOEDNTaggedElement.h */; };
 		B5B837DB17D03B2900AEA457 /* BMOEDNTaggedElement.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */; };
@@ -94,6 +96,8 @@
 		B53AE3DB17D18024000CBCC0 /* NSDate+BMOEDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+BMOEDN.m"; sourceTree = "<group>"; };
 		B5A7BA7417DC1DF300EE55A1 /* BMOEDNCoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNCoder.h; sourceTree = "<group>"; };
 		B5A7BA7517DC1DF300EE55A1 /* BMOEDNCoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNCoder.m; sourceTree = "<group>"; };
+		B5A7BA7817DC280B00EE55A1 /* BMOEDNCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNCharacter.h; sourceTree = "<group>"; };
+		B5A7BA7917DC280B00EE55A1 /* BMOEDNCharacter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNCharacter.m; sourceTree = "<group>"; };
 		B5B837D617D038B900AEA457 /* BMOEDNRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BMOEDNRepresentation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		B5B837D817D03B2900AEA457 /* BMOEDNTaggedElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNTaggedElement.h; sourceTree = "<group>"; };
 		B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNTaggedElement.m; sourceTree = "<group>"; };
@@ -180,6 +184,8 @@
 				B5C7A65817C9C1F4005E0615 /* BMOEDNList.m */,
 				B5B837D817D03B2900AEA457 /* BMOEDNTaggedElement.h */,
 				B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */,
+				B5A7BA7817DC280B00EE55A1 /* BMOEDNCharacter.h */,
+				B5A7BA7917DC280B00EE55A1 /* BMOEDNCharacter.m */,
 			);
 			name = Primitives;
 			sourceTree = "<group>";
@@ -345,6 +351,7 @@
 				CFA008DA17D464AC0077B8E2 /* BMOEDNWriterState.h in Headers */,
 				CFA008E017D4D43C0077B8E2 /* BMOLazyEnumerator.h in Headers */,
 				B5A7BA7617DC1DF300EE55A1 /* BMOEDNCoder.h in Headers */,
+				B5A7BA7A17DC280B00EE55A1 /* BMOEDNCharacter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -466,6 +473,7 @@
 				CFA008DB17D464AC0077B8E2 /* BMOEDNWriterState.m in Sources */,
 				CFA008E117D4D43C0077B8E2 /* BMOLazyEnumerator.m in Sources */,
 				B5A7BA7717DC1DF300EE55A1 /* BMOEDNCoder.m in Sources */,
+				B5A7BA7B17DC280B00EE55A1 /* BMOEDNCharacter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
