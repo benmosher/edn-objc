@@ -458,8 +458,27 @@
     
     // out of range exception
     STAssertThrows((blah = root[[objs count]]), @"");
+}
 
-    
+- (void)testRootEnumerator {
+    id objs = [@"[ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 ]" EDNObject];
+    id root = [[BMOEDNRoot alloc] initWithEnumerator:[objs objectEnumerator]];
+    NSMutableSet *collector1 = [NSMutableSet new];
+    NSMutableSet *collector2 = [NSMutableSet new];
+    NSEnumerator *enumerator = [root objectEnumerator];
+    dispatch_queue_t queue = dispatch_queue_create("RootEnumeratorTestQueue", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_group_t dispatchGroup = dispatch_group_create();
+    for (int i = 0; i < [objs count]/2; i++) {
+        dispatch_group_async(dispatchGroup, queue, ^{
+            [collector1 addObject:[enumerator nextObject]];
+        });
+        dispatch_group_async(dispatchGroup, queue, ^{
+            [collector2 addObject:[enumerator nextObject]];
+        });
+    }
+    STAssertEquals(0L,dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER),@"Error during group wait?");
+    STAssertEquals([objs count], [collector1 count] + [collector2 count], @"Collectors should have split the objects.");
+    STAssertEqualObjects([NSSet setWithArray:objs], [collector1 setByAddingObjectsFromSet:collector2], @"Collectors should contain the same set as the array did.");
 }
 
 #pragma mark - Lazy enumerator 

@@ -7,25 +7,46 @@
 //
 
 #import "BMOEDNRoot.h"
+#import <libkern/OSAtomic.h>
+
+@interface BMOEDNRoot ()
+
+// to support the enumerator view
+-(id)objectAtIndex:(NSUInteger)idx throwRangeException:(BOOL)throw;
+
+@end
 
 @interface BMOEDNRootEnumerator : NSEnumerator {
-    BMOEDNRoot *_root;
+    __strong BMOEDNRoot *_root;
+    volatile int64_t _currentIndex;
 }
 
-@property (assign, atomic) NSUInteger currentIndex;
-
--(instancetype)initWithBMOEDNRoot:(BMOEDNRoot *)root;
+-(instancetype)initWithRoot:(BMOEDNRoot *)root;
 
 @end
 
 @implementation BMOEDNRootEnumerator
 
--(instancetype)initWithBMOEDNRoot:(BMOEDNRoot *)root {
+-(instancetype)initWithRoot:(BMOEDNRoot *)root {
     if (self = [super init]) {
         _root = root;
-        _currentIndex = 0;
+        _currentIndex = (int64_t)-1;
     }
     return self;
+}
+
+-(id)nextObject {
+    return [_root objectAtIndex:(NSUInteger)OSAtomicIncrement64(&_currentIndex) throwRangeException:NO];
+}
+
+-(NSArray *)allObjects {
+    NSUInteger currentIndex = (NSUInteger)_currentIndex; // copy, for safety
+    id nextObject;
+    NSMutableArray *collector = [NSMutableArray new];
+    while ((nextObject = [_root objectAtIndex:++currentIndex throwRangeException:NO])) {
+        [collector addObject:nextObject];
+    }
+    return [collector copy];
 }
 
 @end
@@ -49,7 +70,7 @@
 }
 
 
--(id)objectAtIndex:(NSUInteger)idx {
+-(id)objectAtIndex:(NSUInteger)idx throwRangeException:(BOOL)throw {
     // check for realization existence before locking it up
     if (_enumerator == nil || [_realized count] > idx) return [_realized objectAtIndex:idx];
     
@@ -70,8 +91,12 @@
             if (current <= idx) outOfRange = [NSException exceptionWithName:NSRangeException reason:@"Index beyond edge of range." userInfo:nil];
         }
     });
-    if (outOfRange != nil) @throw outOfRange;
+    if (throw && outOfRange != nil) @throw outOfRange;
     return object;
+}
+
+-(id)objectAtIndex:(NSUInteger)idx {
+    return [self objectAtIndex:idx throwRangeException:YES];
 }
 
 -(id)objectAtIndexedSubscript:(NSUInteger)idx {
@@ -137,6 +162,8 @@
     return [_enumerator isEqual:((BMOEDNRoot *)object)->_enumerator];
 }
 */
-//-(NSEnumerator *)objectEnumerator {}
+-(NSEnumerator *)objectEnumerator {
+    return [[BMOEDNRootEnumerator alloc] initWithRoot:self];
+}
 
 @end

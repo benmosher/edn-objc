@@ -34,8 +34,16 @@
 
 /**
  Use this guy (vs. fast enumeration) for one-by-one laziness.
+ Also: he is thread safe for multiple consumers; i.e. you can
+ pass one instance of this enumerator to multiple consumers and
+ each deserialized EDN object will be delivered to one (and only
+ one) consumer, if all consumers call only -nextObject.
+ 
+ Calls to -allObjects will snapshot the remainder and fully
+ realize the root. As such, they will block the caller until
+ the underlying enumerator is exhausted.
  */
-//-(NSEnumerator *) objectEnumerator;
+-(NSEnumerator *) objectEnumerator;
 
 @end
 
