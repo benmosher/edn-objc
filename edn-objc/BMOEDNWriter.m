@@ -13,6 +13,7 @@
 #import "BMOEDNList.h"
 #import "BMOEDNRepresentation.h"
 #import "NSObject+BMOEDN.h"
+#import "BMOEDNCharacter.h"
 // TODO: struct + functions
 #import "BMOEDNRoot.h"
 
@@ -29,6 +30,7 @@
 -(void)appendSymbol:(BMOEDNSymbol *)obj toState:(BMOEDNWriterState *)state;
 -(void)appendNumber:(NSNumber *)obj toState:(BMOEDNWriterState *)state;
 -(void)appendSet:(NSSet *)obj toState:(BMOEDNWriterState *)state;
+-(void)appendCharacter:(BMOEDNCharacter *)obj toState:(BMOEDNWriterState *)state;
 
 #pragma mark Helpers
 
@@ -117,6 +119,8 @@
         [self appendSymbol:obj toState:state];
     else if ([obj isEqual:[NSNull null]])
         [state appendString:@"nil"];
+    else if ([obj isKindOfClass:[BMOEDNCharacter class]])
+        [self appendCharacter:obj toState:state];
     else {
         // have to iterate over all registered transmogrifiers
         // with isKindOfClass predicate
@@ -227,6 +231,26 @@
         [state appendString:@" "];
     }];
     [state appendString:@"}"];
+}
+
+-(void)appendCharacter:(BMOEDNCharacter *)obj toState:(BMOEDNWriterState *)state {
+    switch (obj.unicharValue) {
+        case ' ':
+            [state appendString:@"\\space"];
+            break;
+        case '\t':
+            [state appendString:@"\\tab"];
+            break;
+        case '\r':
+            [state appendString:@"\\return"];
+            break;
+        case '\n':
+            [state appendString:@"\\newline"];
+            break;
+        default:
+            [state appendString:[NSString stringWithFormat:@"\\%C",obj.unicharValue]];
+            break;
+    }
 }
 
 @end
