@@ -32,24 +32,61 @@
 
 @implementation BMOEDNRoot
 
--(instancetype)initWithEnumerable:(id<NSObject,NSFastEnumeration>)elements {
+-(instancetype)initWithEnumerator:(NSEnumerator *)enumerator {
     if (self = [super init]) {
-        _elements = elements;
-        if ([elements isKindOfClass:[NSEnumerator class]]) {
-            _realized = [NSMutableArray new];
-            _realizationQueue = dispatch_queue_create("BMOEDNRootRealizationQueue", DISPATCH_QUEUE_SERIAL);
-        }
+        _enumerator = enumerator;
+        _realized = [NSMutableArray new];
+        _realizationQueue = dispatch_queue_create("BMOEDNRootRealizationQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
 
--(NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(__unsafe_unretained id [])buffer count:(NSUInteger)len {
-    if ([_elements isKindOfClass:[NSEnumerator class]]) { // do all this goofiness for realization
-        if (state->state == 0) {
-            state->state = 1;
-            state->mutationsPtr = &mutationMarker;
-            state->extra[0] = 0; // current index of enumeration (to check for realization)
+-(instancetype)initWithArray:(NSArray *)array {
+    if (self = [super init]) {
+        _realized = [array copy];
+    }
+    return self;
+}
+
+
+-(id)objectAtIndex:(NSUInteger)idx {
+    // check for realization existence before locking it up
+    if (_enumerator == nil || [_realized count] > idx) return [_realized objectAtIndex:idx];
+    
+    __block id object = nil;
+    __block NSException *outOfRange = nil;
+    // all enumerations occur in the serial queue (for safety)
+    dispatch_sync(_realizationQueue, ^{
+        if (_realized.count > idx) object = [_realized objectAtIndex:idx];
+        // load from enumerator, if needed
+        else {
+            NSUInteger current = _realized.count;
+            while (current <= idx &&
+                   (object = [(NSEnumerator *)_enumerator nextObject])) {
+                [(NSMutableArray *)_realized addObject:object];
+                current++;
+            }
+            if (object == nil) _enumerator = nil;
+            if (current <= idx) outOfRange = [NSException exceptionWithName:NSRangeException reason:@"Index beyond edge of range." userInfo:nil];
         }
+    });
+    if (outOfRange != nil) @throw outOfRange;
+    return object;
+}
+
+-(id)objectAtIndexedSubscript:(NSUInteger)idx {
+    return [self objectAtIndex:idx];
+}
+
+-(NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(__unsafe_unretained id [])buffer count:(NSUInteger)len {
+    if (state->state == 0) {
+        state->state = 1;
+        state->mutationsPtr = &mutationMarker;
+        state->extra[0] = 0; // current index of enumeration (to check for realization)
+        state->extra[1] = 0; // will point to internal state
+    }
+    if (_enumerator) { // do all this goofiness for realization
+
         __block NSUInteger read = 0;
         // all enumerations occur in the serial queue for safety
         dispatch_sync(_realizationQueue, ^{
@@ -61,33 +98,45 @@
             }
             
             // load from enumerator, if needed
-            id nextObject;
-            while (read < len && (nextObject = [(NSEnumerator *)_elements nextObject])) {
+            id nextObject = nil;
+            while (read < len && (nextObject = [(NSEnumerator *)_enumerator nextObject])) {
                 buffer[read++] = nextObject;
-                [_realized addObject:nextObject];
+                [(NSMutableArray *)_realized addObject:nextObject];
                 state->extra[0]++;
             }
+            if (nextObject == nil) _enumerator = nil;
             return;
         });
         state->itemsPtr = buffer;
         return read;
-        
-    } else // ignore all this realization foolishness
-        return [_elements countByEnumeratingWithState:state objects:buffer count:len];
+    } else if (state->extra[0] < _realized.count || state->extra[1]) {
+        NSFastEnumerationState *innerState = NULL;
+        if (state->extra[1]) {
+            innerState = (NSFastEnumerationState *)state->extra[1];
+        } else {
+            innerState = calloc(1, sizeof(NSFastEnumerationState));
+            state->extra[1] = (unsigned long)innerState;
+        }
+        NSUInteger count = [_realized countByEnumeratingWithState:innerState objects:buffer count:len];
+        state->extra[0] += count;
+        state->itemsPtr = innerState->itemsPtr;
+        if (!count) free(innerState);
+        return count;
+    } else return 0;
     
 }
-
+/* need to reconsider these implementations.
 -(NSUInteger)hash {
-    return [_elements hash];
+    return [_enumerator hash];
 }
 
 -(BOOL)isEqual:(id)object {
     if (object == self) return true;
     if (object == nil) return false;
     if (![object isMemberOfClass:[BMOEDNRoot class]]) return false;
-    return [_elements isEqual:((BMOEDNRoot *)object)->_elements];
+    return [_enumerator isEqual:((BMOEDNRoot *)object)->_enumerator];
 }
-
+*/
 //-(NSEnumerator *)objectEnumerator {}
 
 @end

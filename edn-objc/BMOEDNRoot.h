@@ -14,16 +14,23 @@
 #import <dispatch/dispatch.h>
 /**
  If the underlying element collection is not an NSArray, it will be
- copied into a buffer as it is enumerator. 
+ copied into a buffer as it is enumerated. 
  */
 @interface BMOEDNRoot : NSObject<NSFastEnumeration> {
-    id<NSObject,NSFastEnumeration> _elements;
-    NSMutableArray *_realized; // TODO: use this sucker
+    NSEnumerator * _enumerator;
+    NSArray *_realized;
     dispatch_queue_t _realizationQueue;
     unsigned long mutationMarker;
 }
 
--(instancetype)initWithEnumerable:(id<NSObject,NSFastEnumeration>)elements;
+-(instancetype)initWithEnumerator:(NSEnumerator *)enumerator;
+-(instancetype)initWithArray:(NSArray *)array;
+
+/**
+ Array-style index and subscripting support.
+ */
+-(id)objectAtIndex:(NSUInteger)idx;
+-(id)objectAtIndexedSubscript:(NSUInteger)idx;
 
 /**
  Use this guy (vs. fast enumeration) for one-by-one laziness.

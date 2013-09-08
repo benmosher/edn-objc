@@ -103,11 +103,11 @@ id BMOParseSymbolType(id<BMOEDNReaderState> parserState, Class symbolClass) {
             if (parsed) [self skipWhitespace:state];
             return state.error ? state.error : parsed;
         };
-        id enumerable  = [[BMOLazyEnumerator alloc] initWithBlock:parser];
-        if (!(_options & BMOEDNReadingLazyParsing)) {
-            enumerable = [enumerable allObjects];
-        }
-        return [[BMOEDNRoot alloc] initWithEnumerable:enumerable];
+        
+        id enumerator  = [[BMOLazyEnumerator alloc] initWithBlock:parser];
+        return (_options & BMOEDNReadingLazyParsing)
+            ? [[BMOEDNRoot alloc] initWithEnumerator:enumerator]
+            : [[BMOEDNRoot alloc] initWithArray:[enumerator allObjects]];
     } else { // single-object parse; laziness is ignored.
         return [self parseObject:state];
     }

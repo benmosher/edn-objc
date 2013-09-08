@@ -369,15 +369,15 @@
 
 - (void)testWriteMultipleRootObjects {
     id objs = (@[@1, @2, @{ @"three" : @3 }]);
-    STAssertEqualObjects([[[BMOEDNRoot alloc] initWithEnumerable:objs] EDNString], @"1\n2\n{ \"three\" 3 }\n", @"");
+    STAssertEqualObjects([[[BMOEDNRoot alloc] initWithArray:objs] EDNString], @"1\n2\n{ \"three\" 3 }\n", @"");
     
     id clojureCode = @"( + 1 2 )\n( map [ x y ] ( 3 4 5 ) )\n[ a root vector is \"weird\" ]\n";
     id clojureData = [[clojureCode dataUsingEncoding:NSUTF8StringEncoding] EDNObject];
     STAssertEqualObjects([clojureData EDNString], clojureCode, @"");
     
-    STAssertNil([(@[[[BMOEDNRoot alloc] initWithEnumerable:@[@1, @2]], @3]) EDNString],@"Root object not at root of graph must be treated as invalid data.");
+    STAssertNil([(@[[[BMOEDNRoot alloc] initWithArray:@[@1, @2]], @3]) EDNString],@"Root object not at root of graph must be treated as invalid data.");
 }
-
+/*
 - (void)testRootObjectEquality {
     id clojureCode = @"( + 1 2 )\n( map [ x y ] ( 3 4 5 ) )\n[ a root vector is \"weird\" ]\n";
     id clojureData = [clojureCode dataUsingEncoding:NSUTF8StringEncoding];
@@ -388,6 +388,7 @@
     STAssertEqualObjects(rootOne, rootTwo, @"Two documents derived from the same edn should be equal.");
     STAssertEquals([rootOne hash], [rootTwo hash], @"Equal objects' hashes should be equal.");
 }
+*/
 
 #pragma mark - Stream reading
 
@@ -408,11 +409,11 @@
         
 }
 
-#pragma mark - NSEnumerator-backed BMOEDNRoot
+#pragma mark - BMOEDNRoot
 
 - (void)testNSEnumeratorBackedRootRealization {
     id objs = [@"[ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 ]" EDNObject];
-    id root = [[BMOEDNRoot alloc] initWithEnumerable:[objs objectEnumerator]];
+    id root = [[BMOEDNRoot alloc] initWithEnumerator:[objs objectEnumerator]];
     NSUInteger currentNumber = 1;
     for (NSNumber *num in root) {
         STAssertEquals([num unsignedIntegerValue],currentNumber++, @"");
@@ -424,6 +425,41 @@
         STAssertEquals([num unsignedIntegerValue],currentNumber++, @"");
     }
     STAssertEquals(currentNumber, (NSUInteger)25, @"Root should have enumerated through all 24 objects.");
+}
+
+- (void)testRootIndexing {
+    id objs = [@"[ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 ]" EDNObject];
+    id root = [[BMOEDNRoot alloc] initWithEnumerator:[objs objectEnumerator]];
+    // sequentially
+    for (NSUInteger i = 0; i < 10; i++) {
+        STAssertEquals(i+1, [root[i] unsignedIntegerValue], @"");
+    }
+    
+    // with realization from the end
+    for (NSUInteger i = 20; i >= 10; i--) {
+        STAssertEquals(i+1, [root[i] unsignedIntegerValue], @"");
+    }
+    
+    // out of range exception
+    id blah;
+    STAssertThrows((blah = root[[objs count]]), @"");
+    
+    // same tests again, with an NSArray-backed root    
+    root = [[BMOEDNRoot alloc] initWithArray:objs];
+    // sequentially
+    for (NSUInteger i = 0; i < 10; i++) {
+        STAssertEquals(i+1, [root[i] unsignedIntegerValue], @"");
+    }
+    
+    // with realization from the end
+    for (NSUInteger i = 20; i >= 10; i--) {
+        STAssertEquals(i+1, [root[i] unsignedIntegerValue], @"");
+    }
+    
+    // out of range exception
+    STAssertThrows((blah = root[[objs count]]), @"");
+
+    
 }
 
 #pragma mark - Lazy enumerator 
@@ -469,7 +505,7 @@
     STAssertNil(err, @"");
     NSData *data = [stream propertyForKey:NSStreamDataWrittenToMemoryStreamKey];
     NSString *stringified = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    BMOEDNRoot *root = [[BMOEDNRoot alloc] initWithEnumerable:collector];
+    BMOEDNRoot *root = [[BMOEDNRoot alloc] initWithArray:collector];
     STAssertEqualObjects(stringified, [root EDNString], @"Sanity check for comparison.");
     STAssertEqualObjects(stringified, testString, @"Multi-object stream test.");
 }
