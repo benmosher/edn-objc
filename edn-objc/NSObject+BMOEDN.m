@@ -13,19 +13,19 @@
 
 @implementation NSObject (BMOEDN)
 
--(NSData *)EDNData {
-    return [BMOEDNSerialization dataWithEDNObject:self error:NULL];
+-(NSData *)ednData {
+    return [BMOEDNSerialization dataWithEdnObject:self error:NULL];
 }
 
--(NSString *)EDNString {
-    return [BMOEDNSerialization stringWithEDNObject:self error:NULL];
+-(NSString *)ednString {
+    return [BMOEDNSerialization stringWithEdnObject:self error:NULL];
 }
 
--(NSDictionary *)EDNMetadata {
-    return objc_getAssociatedObject(self, @selector(EDNMetadata));
+-(NSDictionary *)ednMetadata {
+    return objc_getAssociatedObject(self, @selector(ednMetadata));
 }
 
--(void)setEDNMetadata:(NSDictionary *)EDNMetadata {
+-(void)setEdnMetadata:(NSDictionary *)ednMetadata {
     
     if ([self isEqual:[NSNull null]]
         //|| [self isKindOfClass:[NSConstantString class]]
@@ -33,14 +33,14 @@
         @throw [NSException exceptionWithName:BMOEDNException reason:@"Metadata cannot be applied to static objects, such as [NSNull null], NSString literals, or edn booleans." userInfo:nil];
     }
     
-    if ([EDNMetadata EDNMetadata] != nil) {
+    if ([ednMetadata ednMetadata] != nil) {
         @throw [NSException exceptionWithName:BMOEDNException reason:@"A metadata map must not, in turn, have associated metadata, nor _be_ associated as metadata." userInfo:nil];
     }
     
     // treat an empty assignment as a release.
-    if (![EDNMetadata count]) EDNMetadata = nil;
+    if (![ednMetadata count]) ednMetadata = nil;
     // associate the meta with the object
-    objc_setAssociatedObject(self, @selector(EDNMetadata), EDNMetadata, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(ednMetadata), ednMetadata, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 @end

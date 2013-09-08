@@ -180,11 +180,11 @@ id BMOParseSymbolType(id<BMOEDNReaderState> parserState, Class symbolClass) {
             if (parserState.error) return nil;
             parsed = [self parseObject:parserState];
             if (parserState.error) return nil;
-            if ([parsed EDNMetadata] != nil) {
+            if ([parsed ednMetadata] != nil) {
                 parserState.error = BMOEDNErrorMessage(BMOEDNErrorInvalidData, @"Metadata cannot be applied to parsed object with existing metadata.");
                 return nil;
             } else {
-                [parsed setEDNMetadata:meta];
+                [parsed setEdnMetadata:meta];
             }
             break;
         }
@@ -252,7 +252,7 @@ id BMOParseSymbolType(id<BMOEDNReaderState> parserState, Class symbolClass) {
             if ((registeredClass = BMOEDNRegisteredClassForTag(tag))) {
                 NSError *err = nil;
                 //id resolvedObject = resolver(innards,&err);
-                id registeredObject = [registeredClass objectWithEDNRepresentation:taggedElement error:&err];
+                id registeredObject = [registeredClass objectWithEdnRepresentation:taggedElement error:&err];
                 if (err) parserState.error = err;
                 return registeredObject;
             } else if ((transmogrifier = self.transmogrifiers[tag])) {

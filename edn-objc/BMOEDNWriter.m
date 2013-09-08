@@ -91,14 +91,14 @@
 -(void)appendObject:(id)obj toState:(BMOEDNWriterState *)state {
     // append meta, if needed.
     NSDictionary *meta;
-    if ((meta = [obj EDNMetadata]) && [meta count]) {
+    if ((meta = [obj ednMetadata]) && [meta count]) {
         [state appendString:@"^"];
         [self appendMap:meta toState:state];
         [state appendString:@" "]; // TODO: whitespace customization
     }
     
     if ([obj conformsToProtocol:@protocol(BMOEDNRepresentation)])
-        [self appendTaggedObject:[obj EDNRepresentation] toState:state];
+        [self appendTaggedObject:[obj ednRepresentation] toState:state];
     else if ([obj isKindOfClass:[BMOEDNTaggedElement class]])
         [self appendTaggedObject:obj toState:state];
     else if ([obj isKindOfClass:[NSString class]])

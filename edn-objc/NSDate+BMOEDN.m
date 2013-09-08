@@ -14,7 +14,7 @@
     BMOEDNRegisterClass([NSDate class]);
 }
 
-+(BMOEDNSymbol *)EDNTag {
++(BMOEDNSymbol *)ednTag {
     static BMOEDNSymbol *tag;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -32,10 +32,10 @@ NSDateFormatter *BMOEDNCreateInstDateFormatter(void) {
     return df;
 }
 
-+(instancetype)objectWithEDNRepresentation:(BMOEDNTaggedElement *)taggedElement
++(instancetype)objectWithEdnRepresentation:(BMOEDNTaggedElement *)taggedElement
                                      error:(NSError **)error{
     
-    if (![taggedElement.tag isEqualToSymbol:[self EDNTag]]){
+    if (![taggedElement.tag isEqualToSymbol:[self ednTag]]){
         if (error != NULL) {
             *error = BMOEDNErrorMessage(BMOEDNErrorInvalidData,@"'inst'-tagged resolver called for non-'inst' tag.");
         }
@@ -56,9 +56,9 @@ NSDateFormatter *BMOEDNCreateInstDateFormatter(void) {
     }
 }
 
--(BMOEDNTaggedElement *)EDNRepresentation {
+-(BMOEDNTaggedElement *)ednRepresentation {
     NSDateFormatter *df = BMOEDNCreateInstDateFormatter();
-    return [BMOEDNTaggedElement elementWithTag:[NSDate EDNTag] element:[df stringFromDate:self]];
+    return [BMOEDNTaggedElement elementWithTag:[NSDate ednTag] element:[df stringFromDate:self]];
 }
 
 

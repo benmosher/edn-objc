@@ -21,7 +21,7 @@ typedef id (^BMOEDNTransmogrifier)(id, NSError **);
 /**
  Register a class that conforms to BMOEDNRepresentation. 
  Should be safe to call during +load. Will use
- the +EDNTag symbol as the tag.
+ the +ednTag symbol as the tag.
  If the provided class does not conform to BMOEDNRepresentation,
  the invocation is a no-op.
  Class registrations take priority over transmogrifiers.

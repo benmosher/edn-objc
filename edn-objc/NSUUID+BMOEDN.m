@@ -14,7 +14,7 @@
     BMOEDNRegisterClass([NSUUID class]);
 }
 
-+(BMOEDNSymbol *)EDNTag {
++(BMOEDNSymbol *)ednTag {
     static dispatch_once_t onceToken;
     static BMOEDNSymbol * tag;
     dispatch_once(&onceToken, ^{
@@ -23,14 +23,14 @@
     return tag;
 }
 
--(BMOEDNTaggedElement *)EDNRepresentation {
-    return [BMOEDNTaggedElement elementWithTag:[NSUUID EDNTag] element:self.UUIDString];
+-(BMOEDNTaggedElement *)ednRepresentation {
+    return [BMOEDNTaggedElement elementWithTag:[NSUUID ednTag] element:self.UUIDString];
 }
 
 // TODO: to except or not to except
-+(instancetype)objectWithEDNRepresentation:(BMOEDNTaggedElement *)taggedElement
++(instancetype)objectWithEdnRepresentation:(BMOEDNTaggedElement *)taggedElement
                                      error:(NSError **)error {
-    if (![taggedElement.tag isEqual:[self EDNTag]]
+    if (![taggedElement.tag isEqual:[self ednTag]]
         || ![taggedElement.element isKindOfClass:[NSString class]]){
         if (error != NULL)
             *error = BMOEDNErrorMessage(BMOEDNErrorInvalidData, @"'uuid'-tagged element must be a single string.");

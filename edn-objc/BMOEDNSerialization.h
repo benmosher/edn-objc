@@ -24,14 +24,14 @@ typedef NS_OPTIONS(NSUInteger, BMOEDNReadingOptions) {
  is id<NSFastEnumeration>. Else, the first valid EDN object in
  the data is returned, or nil if no valid data.
  */
-+(id)EDNObjectWithData:(NSData *)data
++(id)ednObjectWithData:(NSData *)data
                options:(BMOEDNReadingOptions)options
                  error:(NSError **)error;
 /**
- @param transmogrifiers: a dictionary of EDNSymbols to BMOEDNTransmogrifier
+ @param transmogrifiers: a dictionary of ednSymbols to BMOEDNTransmogrifier
  blocks that turn the provided edn tagged element into some native object.
  */
-+(id)EDNObjectWithData:(NSData *)data
++(id)ednObjectWithData:(NSData *)data
        transmogrifiers:(NSDictionary *)transmogrifiers
                options:(BMOEDNReadingOptions)options
                  error:(NSError **)error;
@@ -46,37 +46,37 @@ typedef NS_OPTIONS(NSUInteger, BMOEDNReadingOptions) {
  If lazy reading is not specified, this method may block until a full
  valid object is returned, the stream is closed, or an error is encountered.
  */
-+(id)EDNObjectWithStream:(NSInputStream *)data
++(id)ednObjectWithStream:(NSInputStream *)data
                  options:(BMOEDNReadingOptions)options
                    error:(NSError **)error;
 /**
- @param transmogrifiers: a dictionary of EDNSymbols to BMOEDNTransmogrifier
+ @param transmogrifiers: a dictionary of ednSymbols to BMOEDNTransmogrifier
  blocks that turn the provided edn tagged element into some native object.
  */
-+(id)EDNObjectWithStream:(NSInputStream *)data
++(id)ednObjectWithStream:(NSInputStream *)data
          transmogrifiers:(NSDictionary *)transmogrifiers
                  options:(BMOEDNReadingOptions)options
                    error:(NSError **)error;
 
 #pragma mark - NSData writing methods
 
-+(NSData *)dataWithEDNObject:(id)obj error:(NSError **)error;
-+(NSData *)dataWithEDNObject:(id)obj
++(NSData *)dataWithEdnObject:(id)obj error:(NSError **)error;
++(NSData *)dataWithEdnObject:(id)obj
              transmogrifiers:(NSDictionary *)transmogrifiers
                        error:(NSError **)error;
 
-+(NSString *)stringWithEDNObject:(id)obj error:(NSError **)error;
-+(NSString *)stringWithEDNObject:(id)obj
++(NSString *)stringWithEdnObject:(id)obj error:(NSError **)error;
++(NSString *)stringWithEdnObject:(id)obj
                  transmogrifiers:(NSDictionary *)transmogrifiers
                            error:(NSError **)error;
 
 #pragma mark - NSStream writing methods
 
-+(void)writeEDNObject:(id)obj
++(void)writeEdnObject:(id)obj
              toStream:(NSOutputStream *)stream
                 error:(NSError **)error;
 
-+(void)writeEDNObject:(id)obj
++(void)writeEdnObject:(id)obj
              toStream:(NSOutputStream *)stream
       transmogrifiers:(NSDictionary *)transmogrifiers
                 error:(NSError **)error;

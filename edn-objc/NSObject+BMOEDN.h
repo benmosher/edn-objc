@@ -10,9 +10,9 @@
 
 @interface NSObject (BMOEDN)
 
-- (NSData *)EDNData;
-- (NSString *)EDNString;
+- (NSData *)ednData;
+- (NSString *)ednString;
 
-@property (copy, nonatomic) NSDictionary * EDNMetadata;
+@property (copy, nonatomic) NSDictionary * ednMetadata;
 
 @end

@@ -16,63 +16,63 @@
 
 @implementation BMOEDNSerialization
 
-+(id)EDNObjectWithData:(NSData *)data
++(id)ednObjectWithData:(NSData *)data
                options:(BMOEDNReadingOptions)options
                 error:(NSError **)error {
     return [[[BMOEDNReader alloc] initWithOptions:options] parse:data error:error];
 }
 
-+(id)EDNObjectWithData:(NSData *)data
++(id)ednObjectWithData:(NSData *)data
        transmogrifiers:(NSDictionary *)transmogrifiers
                options:(BMOEDNReadingOptions)options
                  error:(NSError **)error {
     return [[[BMOEDNReader alloc] initWithOptions:options transmogrifiers:transmogrifiers] parse:data error:error];
 }
 
-+(id)EDNObjectWithStream:(NSInputStream *)data
++(id)ednObjectWithStream:(NSInputStream *)data
                  options:(BMOEDNReadingOptions)options
                    error:(NSError **)error; {
     return [[[BMOEDNReader alloc] initWithOptions:options] parseStream:data error:error];
 }
 
-+(id)EDNObjectWithStream:(NSInputStream *)data
++(id)ednObjectWithStream:(NSInputStream *)data
          transmogrifiers:(NSDictionary *)transmogrifiers
                  options:(BMOEDNReadingOptions)options
                    error:(NSError **)error; {
     return [[[BMOEDNReader alloc] initWithOptions:options transmogrifiers:transmogrifiers] parseStream:data error:error];
 }
 
-+(NSData *)dataWithEDNObject:(id)obj error:(NSError **)error {
++(NSData *)dataWithEdnObject:(id)obj error:(NSError **)error {
     BMOEDNWriter *writer = [[BMOEDNWriter alloc] init];
     return [writer writeToData:obj error:error];
 }
 
-+(NSData *)dataWithEDNObject:(id)obj
++(NSData *)dataWithEdnObject:(id)obj
              transmogrifiers:(NSDictionary *)transmogrifiers
                        error:(NSError **)error {
     BMOEDNWriter *writer = [[BMOEDNWriter alloc] initWithTransmogrifiers:transmogrifiers];
     return [writer writeToData:obj error:error];
 }
 
-+(NSString *)stringWithEDNObject:(id)obj error:(NSError **)error {
++(NSString *)stringWithEdnObject:(id)obj error:(NSError **)error {
     BMOEDNWriter *writer = [[BMOEDNWriter alloc] init];
     return [writer writeToString:obj error:error];
 }
 
-+(NSString *)stringWithEDNObject:(id)obj
++(NSString *)stringWithEdnObject:(id)obj
                  transmogrifiers:(NSDictionary *)transmogrifiers
                            error:(NSError **)error {
     BMOEDNWriter *writer = [[BMOEDNWriter alloc] initWithTransmogrifiers:transmogrifiers];
     return [writer writeToString:obj error:error];
 }
 
-+(void)writeEDNObject:(id)obj toStream:(NSOutputStream *)stream
++(void)writeEdnObject:(id)obj toStream:(NSOutputStream *)stream
                 error:(NSError **)error {
     BMOEDNWriter *writer = [[BMOEDNWriter alloc] init];
     [writer write:obj toStream:stream error:error];
 }
 
-+(void)writeEDNObject:(id)obj toStream:(NSOutputStream *)stream
++(void)writeEdnObject:(id)obj toStream:(NSOutputStream *)stream
       transmogrifiers:(NSDictionary *)transmogrifiers
                 error:(NSError **)error {
     BMOEDNWriter *writer = [[BMOEDNWriter alloc] initWithTransmogrifiers:transmogrifiers];

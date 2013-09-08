@@ -20,14 +20,14 @@
  of the current object state.
  Behavior is undefined (and may include exceptions)
  if the returned tag does not match the implementation
- of +EDNTag.
+ of +ednTag.
  */
--(BMOEDNTaggedElement *)EDNRepresentation;
+-(BMOEDNTaggedElement *)ednRepresentation;
 
 /**
  dispatch_once is your friend, here. Example implementation:
  
- +(BMOEDNSymbol *)EDNTag {
+ +(BMOEDNSymbol *)ednTag {
      static dispatch_once_t onceToken;
      static BMOEDNSymbol * tag;
      dispatch_once(&onceToken, ^{
@@ -36,13 +36,13 @@
      return tag;
  }
  */
-+(BMOEDNSymbol *)EDNTag;
++(BMOEDNSymbol *)ednTag;
 
 /**
  Should return nil if tag is not a match or element contents
  are otherwise insufficient to create an instance.
  */
-+(instancetype) objectWithEDNRepresentation:(BMOEDNTaggedElement *)taggedElement
++(instancetype) objectWithEdnRepresentation:(BMOEDNTaggedElement *)taggedElement
                                       error:(NSError **)error;
 
 @end

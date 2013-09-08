@@ -11,8 +11,8 @@
 
 @implementation NSInputStream (BMOEDN)
 
--(id)EDNObject {
-    return [BMOEDNSerialization EDNObjectWithStream:self options:BMOEDNReadingLazyParsing|BMOEDNReadingMultipleObjects error:NULL];
+-(id)ednObject {
+    return [BMOEDNSerialization ednObjectWithStream:self options:BMOEDNReadingLazyParsing|BMOEDNReadingMultipleObjects error:NULL];
 }
 
 @end

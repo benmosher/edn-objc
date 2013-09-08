@@ -28,7 +28,7 @@ void BMOEDNRegisterClass(Class clazz) {
     });
     
     // grab and add the tag
-    id tag = [clazz EDNTag];
+    id tag = [clazz ednTag];
     CFDictionaryAddValue(TagClassMap, (__bridge const void *)(tag), (__bridge const void *)(clazz));
 }
 

@@ -14,6 +14,6 @@
  Returns full document, un-lazily, or nil if data is not valid EDN.
  Uses stock transmogrifiers + registered classes/categories.
  */
--(id)EDNObject;
+-(id)ednObject;
 
 @end

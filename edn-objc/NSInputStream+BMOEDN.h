@@ -13,6 +13,6 @@
 /**
  Returns a lazy EDN object for all objects, with stock transmogrifiers.
  */
--(id)EDNObject;
+-(id)ednObject;
 
 @end

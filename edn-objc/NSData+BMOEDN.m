@@ -11,8 +11,8 @@
 
 @implementation NSData (BMOEDN)
 
--(id)EDNObject {
-    return [BMOEDNSerialization EDNObjectWithData:self options:BMOEDNReadingMultipleObjects error:NULL];
+-(id)ednObject {
+    return [BMOEDNSerialization ednObjectWithData:self options:BMOEDNReadingMultipleObjects error:NULL];
 }
 
 @end
