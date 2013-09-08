@@ -533,7 +533,7 @@
 #pragma mark - Characters
 
 - (void)testCharacters {
-    NSString *charVector = @"[ \\newline \\n \\! \\* \"fooey\" \\&]";
+    NSString *charVector = @"[ \\newline \\n \\! \\* \"fooey\" \\& \\space \\tab \\return]";
     id edn = [charVector ednObject];
     STAssertTrue(edn != nil, @"Should parse into something.");
     STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'\n'], edn[0], @"");
@@ -542,6 +542,11 @@
     STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'*'], edn[3], @"");
     STAssertEqualObjects(@"fooey", edn[4], @"");
     STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'&'], edn[5], @"");
+    STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:' '], edn[6], @"");
+    STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'\t'], edn[7], @"");
+    STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'\r'], edn[8], @"");
+    
+    STAssertNil([@"\\ " ednObject], @"");
 }
 
 @end
