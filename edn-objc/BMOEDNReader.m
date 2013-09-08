@@ -320,7 +320,7 @@ id BMOParseSymbolType(id<BMOEDNReaderState> parserState, Class symbolClass) {
         [self skipWhitespace:parserState];
     }
     [parserState moveAhead];
-    list->_hashOnceToken = 0; // reset hash token, just in case iOS called it while constructing
+    list->_hashed = NO; // reset hash token, just in case iOS called it while constructing
     return list;
 }
 

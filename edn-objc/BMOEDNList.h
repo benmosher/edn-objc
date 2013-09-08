@@ -24,8 +24,8 @@
 @interface BMOEDNList : NSObject<NSCopying, NSFastEnumeration> {
     NSUInteger _hash;
     @package
+    BOOL _hashed;
     BMOEDNConsCell * _head;
-    dispatch_once_t _hashOnceToken;
     unsigned long _count; // for fast comparison and fast enumeration
 }
 

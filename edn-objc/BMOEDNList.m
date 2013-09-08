@@ -33,9 +33,10 @@
 @implementation BMOEDNList
 
 -(NSUInteger)hash {
-    dispatch_once(&_hashOnceToken, ^{
+    if (!_hashed) {
         _hash = [self.head hash];
-    });
+        _hashed = YES;
+    }
     return _hash;
 }
 
