@@ -17,6 +17,7 @@
 
 - (instancetype)initWithStream:(NSOutputStream *)stream {
     if (self = [super init]) {
+        _exported = 0;
         _stream = stream;
         [_stream open];
     }
