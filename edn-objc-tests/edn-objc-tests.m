@@ -460,6 +460,7 @@
     STAssertThrows((blah = root[[objs count]]), @"");
 }
 
+///* TODO: fix 
 - (void)testRootEnumerator {
     id objs = [@"[ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 ]" ednObject];
     id root = [[BMOEDNRoot alloc] initWithEnumerator:[objs objectEnumerator]];
@@ -470,10 +471,20 @@
     dispatch_group_t dispatchGroup = dispatch_group_create();
     for (int i = 0; i < [objs count]/2; i++) {
         dispatch_group_async(dispatchGroup, queue, ^{
-            [collector1 addObject:[enumerator nextObject]];
+            id obj = [enumerator nextObject];
+            if (obj) {
+                @synchronized(collector1) {
+                    [collector1 addObject:obj];
+                }
+            }
         });
         dispatch_group_async(dispatchGroup, queue, ^{
-            [collector2 addObject:[enumerator nextObject]];
+            id obj = [enumerator nextObject];
+            if (obj) {
+                @synchronized(collector2) {
+                    [collector2 addObject:obj];
+                }
+            }
         });
     }
     STAssertEquals(0L,dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER),@"Error during group wait?");
@@ -561,6 +572,20 @@
                             [BMOEDNCharacter characterWithUnichar:'\r']];
     NSString *edn = [charVector ednString];
     STAssertEqualObjects(edn, @"[ \\newline \\n \\! \\* \"fooey\" \\& \\space \\tab \\return ]", @"");
+}
+
+#pragma mark - UTF-8 (beyond ASCII)
+
+- (void)testUTFStreamRead {
+    NSString *utfString = @"πƒ©wheeyaulrd¥¨¬∂¥¨®å…œ©¬";
+    NSString *ednString = [NSString stringWithFormat:@"\"%@\"",utfString];
+    NSInputStream *stream = [NSInputStream inputStreamWithData:[ednString dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    NSError *err = nil;
+    id read = [BMOEDNSerialization ednObjectWithStream:stream options:0 error:&err];
+    STAssertNil(err, @"Error should be nil.");
+    
+    STAssertEqualObjects(utfString, read, @"String should be read back out as it went in.");
 }
 
 @end

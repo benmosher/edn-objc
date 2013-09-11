@@ -28,6 +28,7 @@
 -(void) setMark;
 -(NSUInteger) markedLength;
 -(NSMutableString *) markedString;
+-(void) clearMark;
 
 @end
 
@@ -44,10 +45,17 @@
 
 @interface BMOEDNStreamReaderState : NSObject <BMOEDNReaderState> {
     __strong NSInputStream *_stream;
+    
     __strong NSMutableData *_markBuffer;
+    NSUInteger _markBufferLength; // in characters, not bytes
+    
     uint8_t *_buffer;
     NSInteger _currentBufferLength;
     NSInteger _currentBufferIndex;
+    
+    unichar _currentCharacter;
+    uint8_t *_characterBuffer;
+    uint8_t _characterBufferLength;
 }
 
 -(instancetype)initWithStream:(NSInputStream *)stream;

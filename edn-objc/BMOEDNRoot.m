@@ -18,7 +18,7 @@
 
 @interface BMOEDNRootEnumerator : NSEnumerator {
     __strong BMOEDNRoot *_root;
-    volatile int64_t _currentIndex;
+    volatile int32_t _currentIndex;
 }
 
 -(instancetype)initWithRoot:(BMOEDNRoot *)root;
@@ -30,13 +30,13 @@
 -(instancetype)initWithRoot:(BMOEDNRoot *)root {
     if (self = [super init]) {
         _root = root;
-        _currentIndex = (int64_t)-1;
+        _currentIndex = (int32_t)-1;
     }
     return self;
 }
 
 -(id)nextObject {
-    return [_root objectAtIndex:(NSUInteger)OSAtomicIncrement64(&_currentIndex) throwRangeException:NO];
+    return [_root objectAtIndex:(NSUInteger)OSAtomicIncrement32(&_currentIndex) throwRangeException:NO];
 }
 
 -(NSArray *)allObjects {
@@ -163,7 +163,10 @@
 }
 */
 -(NSEnumerator *)objectEnumerator {
-    return [[BMOEDNRootEnumerator alloc] initWithRoot:self];
+    return (_enumerator)
+        ? [[BMOEDNRootEnumerator alloc] initWithRoot:self]
+        : [_realized objectEnumerator];
+
 }
 
 @end

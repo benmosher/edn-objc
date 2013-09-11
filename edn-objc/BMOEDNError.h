@@ -21,6 +21,5 @@ FOUNDATION_EXPORT NSString *const BMOEDNException;
 
 // TODO: use message version
 #define BMOEDNError(errCode) ([NSError errorWithDomain:BMOEDNErrorDomain code:errCode userInfo:nil])
-#define BMOEDNErrorMessage(errCode,message) BMOEDNError((errCode))
-
+#define BMOEDNErrorMessage(errCode,message) ([NSError errorWithDomain:BMOEDNErrorDomain code:(errCode) userInfo:@{NSLocalizedFailureReasonErrorKey:(message)}])
 #endif
