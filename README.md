@@ -25,45 +25,45 @@ The `NSObject` category also defines a `metadata` property, allowing the associa
 
 ##Object Mapping
 
-`edn`: `Cocoa`
+`edn` ⇄ `Cocoa`
 
 #####'Pure' Cocoa mappings
 
-`string`: `NSString` (surprise!)
+`string` ⇄ `NSString` (surprise!)
 
-`vector`: `NSArray`
+`vector` ⇄ `NSArray`
 
-`map`: `NSDictionary`
+`map` ⇄ `NSDictionary`
 
-`integer`, `floating point`: `NSDecimalNumber`
+`integer`, `floating point` ⇄ `NSDecimalNumber`
 
-`set`: `NSSet`
+`set` ⇄ `NSSet`
 
-`nil`: `NSNull`
+`nil` ⇄ `NSNull`
 
-`booleans`: `CFBoolean`[^1] (bridged with `NSNumber`)
+`booleans` ⇄ `CFBoolean`[^1] (bridged with `NSNumber`)
 
 [^1]: Specifically: `kCFBooleanTrue` and `kCFBooleanFalse`.
 
-`#inst`: `NSDate`
+`#inst` ⇄ `NSDate`
 
-`#uuid`: `NSUUID`
+`#uuid` ⇄ `NSUUID`
 
-bonus! `metadata`: `NSDictionary`
+bonus! `metadata` ⇄ `NSDictionary`
 
 #####Custom object mappings
 
-root (top-level): `BMOEDNRoot`
+root (top-level) ⇄ `BMOEDNRoot`
 
-`list`: `BMOEDNList`
+`list` ⇄ `BMOEDNList`
 
-`character`: `BMOEDNCharacter`
+`character` ⇄ `BMOEDNCharacter`
 
-`symbol`: `BMOEDNSymbol`
+`symbol` ⇄ `BMOEDNSymbol`
 
-`keyword`: `BMOEDNKeyword`
+`keyword` ⇄ `BMOEDNKeyword`
 
-arbitrary tags: `BMOEDNTaggedElement`
+arbitrary tags ⇄ `BMOEDNTaggedElement`
 
 
 ###License
