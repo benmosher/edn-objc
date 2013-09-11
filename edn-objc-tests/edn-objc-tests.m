@@ -617,4 +617,16 @@
     STAssertEqualObjects((@[[BMOEDNCharacter characterWithUnichar:0x03C0]]), read, @"Character array should be read back out as it went in.");
 }
 
+- (void)testUTFWrite {
+    NSString *utfString = @"πƒ©wheeyaulrd¥¨¬∂¥¨®å…œ©¬";
+    NSString *ednString = [NSString stringWithFormat:@"\"%@\"",utfString];
+    STAssertEqualObjects(ednString, [[NSString alloc] initWithData:[utfString ednData] encoding:NSUTF8StringEncoding], @"String should be read back out as it went in.");
+    
+    // edn UTF-8 character
+    ednString = @"[ \\π ]";
+    
+    STAssertEqualObjects([ednString dataUsingEncoding:NSUTF8StringEncoding], [(@[[BMOEDNCharacter characterWithUnichar:0x03C0]]) ednData], @"Character array should be read back out as it went in.");
+    
+}
+
 @end
