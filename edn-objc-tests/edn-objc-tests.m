@@ -586,6 +586,35 @@
     STAssertNil(err, @"Error should be nil.");
     
     STAssertEqualObjects(utfString, read, @"String should be read back out as it went in.");
+    
+    // edn UTF-8 character
+    NSInputStream *charStream = [NSInputStream inputStreamWithData:[@"[ \\π ]" dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    read = [BMOEDNSerialization ednObjectWithStream:charStream options:0 error:&err];
+    STAssertNil(err, @"Error should be nil.");
+    
+    STAssertEqualObjects((@[[BMOEDNCharacter characterWithUnichar:0x03C0]]), read, @"Character array should be read back out as it went in.");
+    
+}
+
+- (void)testUTFDataRead {
+    NSString *utfString = @"πƒ©wheeyaulrd¥¨¬∂¥¨®å…œ©¬";
+    NSString *ednString = [NSString stringWithFormat:@"\"%@\"",utfString];
+    NSData *data = [ednString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSError *err = nil;
+    id read = [BMOEDNSerialization ednObjectWithData:data options:0 error:&err];
+    STAssertNil(err, @"Error should be nil.");
+    
+    STAssertEqualObjects(utfString, read, @"String should be read back out as it went in.");
+    
+    // edn UTF-8 character
+    NSData *charData = [@"[ \\π ]" dataUsingEncoding:NSUTF8StringEncoding];
+    
+    read = [BMOEDNSerialization ednObjectWithData:charData options:0 error:&err];
+    STAssertNil(err, @"Error should be nil.");
+    
+    STAssertEqualObjects((@[[BMOEDNCharacter characterWithUnichar:0x03C0]]), read, @"Character array should be read back out as it went in.");
 }
 
 @end
