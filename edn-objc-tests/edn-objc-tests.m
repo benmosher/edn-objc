@@ -629,4 +629,10 @@
     
 }
 
+- (void)testUTF8Symbol {
+    NSString *anonymous = @"(ƒ [x y] (ƒ (+ x y)))";
+    // TODO: round out
+    STAssertTrue([anonymous ednObject] != nil, @"");
+}
+
 @end
