@@ -149,7 +149,7 @@ id BMOParseSymbolType(id<BMOEDNReaderState> parserState, Class symbolClass) {
     }
     if (symbolChars == nil) {
         NSMutableCharacterSet *alpha = [NSMutableCharacterSet alphanumericCharacterSet];
-        [alpha addCharactersInString:@".*+!-_?$%&=:#/"];
+        [alpha addCharactersInString:@".*+!-_?$%&=:#/<>"];
         symbolChars = [alpha copy];
     }
     if (delimiters == nil) {

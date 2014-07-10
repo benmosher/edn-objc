@@ -176,6 +176,11 @@
     // '/' is a special case...
     STAssertEqualObjects([@"/" ednObject], [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"/"], @"");
     STAssertEqualObjects([@"foo//" ednObject], [[BMOEDNSymbol alloc] initWithNamespace:@"foo" name:@"/"], @"");
+    
+    STAssertEqualObjects([@"namespaced/<" ednObject], [[BMOEDNSymbol alloc] initWithNamespace:@"namespaced" name:@"<"], @"");
+    STAssertEqualObjects([@"namespaced/>" ednObject], [[BMOEDNSymbol alloc] initWithNamespace:@"namespaced" name:@">"], @"");
+    STAssertEqualObjects([@"html/<body>" ednObject], [[BMOEDNSymbol alloc] initWithNamespace:@"html" name:@"<body>"], @"");
+    STAssertNil([@"html/</body>" ednObject], @"");
 }
 
 - (void)testDeserializeUuidTag
