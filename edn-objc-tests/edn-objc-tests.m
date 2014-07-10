@@ -51,6 +51,14 @@
     STAssertEqualObjects([@"0" ednObject], @(0), @"");
     STAssertEqualObjects([@"10000N" ednObject], @(10000), @"");
     STAssertEqualObjects([@"1000.1M" ednObject], [NSDecimalNumber decimalNumberWithMantissa:10001 exponent:-1 isNegative:NO], @"");
+    STAssertEqualObjects([@"1/2" ednObject], [BMOEDNRatio ratioWithNumerator:1 denominator:2], @"");
+}
+
+- (void) testRatio {
+    BMOEDNRatio *r = [BMOEDNRatio ratioWithNumerator:1 denominator:2];
+    STAssertEquals(r.numerator, 1, @"bad numerator");
+    STAssertEquals(r.denominator, 2, @"bad denominator");
+    STAssertEqualObjects(r, @(0.5), @"bad value");
 }
 
 - (void)testCMathWorksHowIExpect
@@ -201,6 +209,7 @@
 
 - (void)testSerializeNumerals {
     STAssertEqualObjects([@(1) ednString], @"1", @"");
+    STAssertEqualObjects([[BMOEDNRatio ratioWithNumerator:22 denominator:7] ednString], @"22/7", @"");
     // TODO: test decimals, floats, etc. (esp for precision)
 }
 

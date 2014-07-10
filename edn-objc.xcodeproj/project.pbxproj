@@ -24,6 +24,8 @@
 		B5B837D717D038B900AEA457 /* BMOEDNRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B837D617D038B900AEA457 /* BMOEDNRepresentation.h */; };
 		B5B837DA17D03B2900AEA457 /* BMOEDNTaggedElement.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B837D817D03B2900AEA457 /* BMOEDNTaggedElement.h */; };
 		B5B837DB17D03B2900AEA457 /* BMOEDNTaggedElement.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */; };
+		B5BCDA3C196EAD6A0007B42A /* BMOEDNRatio.h in Headers */ = {isa = PBXBuildFile; fileRef = B5BCDA3A196EAD6A0007B42A /* BMOEDNRatio.h */; };
+		B5BCDA3D196EAD6A0007B42A /* BMOEDNRatio.m in Sources */ = {isa = PBXBuildFile; fileRef = B5BCDA3B196EAD6A0007B42A /* BMOEDNRatio.m */; };
 		B5C7A62A17C8F282005E0615 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A62917C8F282005E0615 /* Foundation.framework */; };
 		B5C7A63117C8F282005E0615 /* BMOEDNSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A63017C8F282005E0615 /* BMOEDNSerialization.m */; };
 		B5C7A63917C8F282005E0615 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A63817C8F282005E0615 /* SenTestingKit.framework */; };
@@ -101,6 +103,8 @@
 		B5B837D617D038B900AEA457 /* BMOEDNRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BMOEDNRepresentation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		B5B837D817D03B2900AEA457 /* BMOEDNTaggedElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNTaggedElement.h; sourceTree = "<group>"; };
 		B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNTaggedElement.m; sourceTree = "<group>"; };
+		B5BCDA3A196EAD6A0007B42A /* BMOEDNRatio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNRatio.h; sourceTree = "<group>"; };
+		B5BCDA3B196EAD6A0007B42A /* BMOEDNRatio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNRatio.m; sourceTree = "<group>"; };
 		B5C7A62617C8F282005E0615 /* libedn-objc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libedn-objc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C7A62917C8F282005E0615 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B5C7A62D17C8F282005E0615 /* edn-objc-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "edn-objc-Prefix.pch"; sourceTree = "<group>"; };
@@ -186,6 +190,8 @@
 				B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */,
 				B5A7BA7817DC280B00EE55A1 /* BMOEDNCharacter.h */,
 				B5A7BA7917DC280B00EE55A1 /* BMOEDNCharacter.m */,
+				B5BCDA3A196EAD6A0007B42A /* BMOEDNRatio.h */,
+				B5BCDA3B196EAD6A0007B42A /* BMOEDNRatio.m */,
 			);
 			name = Primitives;
 			sourceTree = "<group>";
@@ -348,6 +354,7 @@
 				CFA008CE17D44C600077B8E2 /* BMOEDNReaderState.h in Headers */,
 				CFA008D217D45E810077B8E2 /* NSInputStream+BMOEDN.h in Headers */,
 				CFA008D617D45F4B0077B8E2 /* NSData+BMOEDN.h in Headers */,
+				B5BCDA3C196EAD6A0007B42A /* BMOEDNRatio.h in Headers */,
 				CFA008DA17D464AC0077B8E2 /* BMOEDNWriterState.h in Headers */,
 				CFA008E017D4D43C0077B8E2 /* BMOLazyEnumerator.h in Headers */,
 				B5A7BA7617DC1DF300EE55A1 /* BMOEDNCoder.h in Headers */,
@@ -471,6 +478,7 @@
 				CFA008D317D45E810077B8E2 /* NSInputStream+BMOEDN.m in Sources */,
 				CFA008D717D45F4B0077B8E2 /* NSData+BMOEDN.m in Sources */,
 				CFA008DB17D464AC0077B8E2 /* BMOEDNWriterState.m in Sources */,
+				B5BCDA3D196EAD6A0007B42A /* BMOEDNRatio.m in Sources */,
 				CFA008E117D4D43C0077B8E2 /* BMOLazyEnumerator.m in Sources */,
 				B5A7BA7717DC1DF300EE55A1 /* BMOEDNCoder.m in Sources */,
 				B5A7BA7B17DC280B00EE55A1 /* BMOEDNCharacter.m in Sources */,
