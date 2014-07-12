@@ -35,4 +35,8 @@
     return (n/d);
 }
 
+-(NSString *)stringValue {
+    return [NSString stringWithFormat:@"%d/%d", _numerator, _denominator];
+}
+
 @end
