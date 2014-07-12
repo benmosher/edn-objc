@@ -267,18 +267,6 @@
     STAssertEqualObjects([[map ednString] ednObject], map, @"Ordering is not guaranteed, so we round-trip it up.");
 }
 
-- (void)testSerializeTransmogrification {
-    size_t length = 32;
-    NSMutableData *data = [NSMutableData dataWithLength:length];
-    //SecRandomCopyBytes(kSecRandomDefault, 32, (uint8_t *)[data bytes]);
-    STAssertNil([data ednString], @"No stock transmogrifier for NSData.");
-    
-    NSString *dataString = [BMOEDNSerialization stringWithEdnObject:data transmogrifiers:@{(id<NSCopying>)[NSData class]:[^id(id data,NSError **err){
-        return [BMOEDNTaggedElement elementWithTag:[BMOEDNSymbol symbolWithNamespace:@"edn-objc" name:@"NSData"] element:@"some data"];
-    } copy]} error:NULL];
-    STAssertEqualObjects(dataString, @"#edn-objc/NSData \"some data\"", @"");
-}
-
 - (void)testListFastEnumeration {
     BMOEDNList *list = (BMOEDNList *)[@"(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20)" ednObject];
     NSUInteger i = 1;

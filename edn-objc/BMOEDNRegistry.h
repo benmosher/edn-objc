@@ -16,7 +16,7 @@
  to bind without a category (or re-bind to a class or tag with
  an existing or stock category).
  */
-typedef id (^BMOEDNTransmogrifier)(id, NSError **);
+typedef id (^BMOEDNTransmogrifier)(id, NSError **) DEPRECATED_MSG_ATTRIBUTE("planning to remove by v1.0");
 
 /**
  Register a class that conforms to BMOEDNRepresentation. 
