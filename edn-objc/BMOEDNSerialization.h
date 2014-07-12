@@ -35,7 +35,7 @@ typedef NS_OPTIONS(NSUInteger, BMOEDNReadingOptions) {
 +(id)ednObjectWithData:(NSData *)data
        transmogrifiers:(NSDictionary *)transmogrifiers
                options:(BMOEDNReadingOptions)options
-                 error:(NSError **)error;
+                 error:(NSError **)error DEPRECATED_ATTRIBUTE;
 
 #pragma mark - NSInputStream reading methods
 
@@ -57,19 +57,19 @@ typedef NS_OPTIONS(NSUInteger, BMOEDNReadingOptions) {
 +(id)ednObjectWithStream:(NSInputStream *)data
          transmogrifiers:(NSDictionary *)transmogrifiers
                  options:(BMOEDNReadingOptions)options
-                   error:(NSError **)error;
+                   error:(NSError **)error DEPRECATED_ATTRIBUTE;
 
 #pragma mark - NSData writing methods
 
 +(NSData *)dataWithEdnObject:(id)obj error:(NSError **)error;
 +(NSData *)dataWithEdnObject:(id)obj
              transmogrifiers:(NSDictionary *)transmogrifiers
-                       error:(NSError **)error;
+                       error:(NSError **)error DEPRECATED_ATTRIBUTE;
 
 +(NSString *)stringWithEdnObject:(id)obj error:(NSError **)error;
 +(NSString *)stringWithEdnObject:(id)obj
                  transmogrifiers:(NSDictionary *)transmogrifiers
-                           error:(NSError **)error;
+                           error:(NSError **)error DEPRECATED_ATTRIBUTE;
 
 #pragma mark - NSStream writing methods
 
@@ -80,5 +80,5 @@ typedef NS_OPTIONS(NSUInteger, BMOEDNReadingOptions) {
 +(void)writeEdnObject:(id)obj
              toStream:(NSOutputStream *)stream
       transmogrifiers:(NSDictionary *)transmogrifiers
-                error:(NSError **)error;
+                error:(NSError **)error DEPRECATED_ATTRIBUTE;
 @end
