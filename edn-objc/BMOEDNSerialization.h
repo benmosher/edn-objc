@@ -13,6 +13,7 @@ typedef NS_OPTIONS(NSUInteger, BMOEDNReadingOptions) {
     BMOEDNReadingMultipleObjects = (1UL << 0),
     // lazy parsing implies multiple objects
     BMOEDNReadingLazyParsing = (1UL << 1),
+    BMOEDNReadingStrict = (1UL << 2)
 };
 
 @interface BMOEDNSerialization : NSObject

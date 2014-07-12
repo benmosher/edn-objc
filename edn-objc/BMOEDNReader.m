@@ -19,6 +19,7 @@
 #import "BMOLazyEnumerator.h"
 #import "BMOEDNCharacter.h"
 #import "BMOEDNError.h"
+#import "BMOEDNRatio.h"
 
 static NSCharacterSet *whitespace,*quoted,*numberPrefix,*digits,*symbolChars,*delimiters;
 
@@ -403,9 +404,11 @@ id BMOParseSymbolType(id<BMOEDNReaderState> parserState, Class symbolClass) {
 
 -(id)parseLiteral:(id<BMOEDNReaderState>)parserState {
     [parserState setMark];
+    BOOL hasRatioSeparator = NO;
     while (parserState.valid
            && [symbolChars characterIsMember:parserState.currentCharacter])
     {
+        hasRatioSeparator |= (parserState.currentCharacter == '/');
         [parserState moveAhead];
     }
     
@@ -419,7 +422,20 @@ id BMOParseSymbolType(id<BMOEDNReaderState> parserState, Class symbolClass) {
         (literal.length > 1
          && [numberPrefix characterIsMember:[literal characterAtIndex:0]]
          && [digits characterIsMember:[literal characterAtIndex:1]])){
-            
+            if (hasRatioSeparator) {
+                if (_options & BMOEDNReadingStrict) {
+                    parserState.error = BMOEDNErrorMessage(BMOEDNErrorInvalidData, @"Ratio parsing not supported in strict mode.");
+                    return nil;
+                }
+                
+                NSArray *components = [literal componentsSeparatedByString:@"/"];
+                if (components.count == 2) {
+                    int numerator = [[NSDecimalNumber decimalNumberWithString:components[0]] intValue];
+                    int denominator = [[NSDecimalNumber decimalNumberWithString:components[1]] intValue];
+                    return [BMOEDNRatio ratioWithNumerator:numerator denominator:denominator];
+                }
+                
+            }
             // TODO: give up if N is non-integer or M is non-float? or leniency option?
             if ([literal hasSuffix:@"M"] || [literal hasSuffix:@"N"]) {
                 [literal deleteCharactersInRange:NSMakeRange(literal.length-1, 1)];

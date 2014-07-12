@@ -61,6 +61,13 @@
     STAssertEqualObjects(r, @(0.5), @"bad value");
 }
 
+- (void) testRatioStrictMode {
+    NSError *err = nil;
+    STAssertNil([BMOEDNSerialization ednObjectWithData:[@"1/2" dataUsingEncoding:NSUTF8StringEncoding] options:BMOEDNReadingStrict error:&err], @"should not parse in strict mode");
+    STAssertNotNil(err, @"");
+    STAssertEquals(err.code, BMOEDNErrorInvalidData, @"should have return invalid data error");
+}
+
 - (void)testCMathWorksHowIExpect
 {
     // word on the street is that NSIntegers are converted to NSUInteger
