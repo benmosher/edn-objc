@@ -35,6 +35,10 @@
 -(void)encodeSet:(NSSet *)obj;
 -(void)encodeCharacter:(BMOEDNCharacter *)obj;
 
+-(void)encodeEnumerable:(id<NSFastEnumeration>)obj
+             whitespace:(const char *)ws
+                 length:(NSUInteger)length;
+
 @end
 
 @implementation BMOEDNArchiver
@@ -74,6 +78,14 @@
 }
 
 #pragma mark - guts
+
+-(void)encodeRootObject:(id)rootObject {
+    if ([rootObject isKindOfClass:[BMOEDNRoot class]]) {
+        [self encodeEnumerable:rootObject whitespace:"\n" length:1]; // TODO: whitespace option
+    } else {
+        [self encodeObject:rootObject];
+    }
+}
 
 -(void)encodeString:(NSString *)obj {
     // TODO: profile and optimize... correctness is still job one ATM
