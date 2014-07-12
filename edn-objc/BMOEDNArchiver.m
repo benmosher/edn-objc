@@ -23,7 +23,7 @@
 // todo: double-check this is the cool way to allocate a strong reference this these days
 @property (nonatomic, strong) NSMutableData *data;
 
--(void)encodeTag:(const void *)tagName length:(NSUInteger)length;
+-(void)encodeTag:(NSString *)tagName;
 
 -(void)encodeTaggedObject:(BMOEDNTaggedElement *)obj;
 -(void)encodeVector:(NSArray *)obj;
