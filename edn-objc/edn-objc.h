@@ -34,6 +34,8 @@
 #import "BMOEDNError.h"
 
 #import "BMOEDNSerialization.h"
+#import "BMOEDNArchiver.h"
+
 #import "BMOEDNRoot.h"
 #import "BMOEDNList.h"
 #import "BMOEDNSymbol.h"
