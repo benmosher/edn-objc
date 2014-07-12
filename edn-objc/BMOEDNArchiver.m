@@ -167,18 +167,16 @@
             [_data appendBytes:"\\tab" length:4];
             break;
         case '\r':
-            [_data appendBytes:@"\\return" length:7];
+            [_data appendBytes:"\\return" length:7];
             break;
         case '\n':
-            [_data appendBytes:@"\\newline" length:8];
+            [_data appendBytes:"\\newline" length:8];
             break;
         default:
         {
-            char *bytes;
-            int length = asprintf(&bytes, "\\%C", obj.unicharValue);
-            [_data appendBytes:bytes length:length];
-            free(bytes);
-            break;
+            // TODO: certainly not this.
+            [_data appendData:[[NSString stringWithFormat:@"\\%C",obj.unicharValue] dataUsingEncoding:NSUTF8StringEncoding]];
+             break;
         }
     }
 }
