@@ -1,15 +1,17 @@
 edn-objc
 ========
 
-A work-in-progress implementation of [edn-format](https://github.com/edn-format) for Objective-C/Foundation platforms (e.g. iOS and OSX).
+A work-in-progress implementation of [edn-format](https://github.com/edn-format/edn) for Objective-C/Foundation platforms (e.g. iOS and OSX).
 
-Current design goals are completeness and spec adherence. Any valid edn data deserialized into Cocoa/BMOEDN objects should be serialized back to the same edn UTF-8 data (barring whitespace, both in strings and amidst the edn data). This includes the 'root'; the top-level primitives that are not within any root container.
+Current design goals are completeness and spec adherence. Any valid edn data deserialized into Cocoa/BMOEDN objects should be serialized back to the same edn UTF-8 data (barring whitespace, both in strings and amidst the edn data). This includes the 'root'; the top-level objects that are not within any root container.
 
 Tagged elements (such as the built-in `uuid` and `inst`) may be converted to concrete Cocoa objects (again, `NSUUID` and `NSDate`) via implementation of the `BMOEDNRepresentation` protocol, and registering with `BMOEDNRegistry` during `+load`. See the `NSUUID+BMOEDN` and `NSDate+BMOEDN` implementations for detail.
 
-'Unknown' tagged elements will be converted to/from `BMOEDNTaggedElement` during de/serialization. A dictionary of `BMOEDNTransmogrifier` blocks may be provided to further customize tagged element conversion, without protocol implementation (or to use >1 tag + format per class). 
+'Unknown' tagged elements will be converted to/from `BMOEDNTaggedElement` during de/serialization. 
 
-Numbers are read exclusively into `NSDecimalNumber` and seem to afford around 128 bits of mantissa. So far, no support for arbitrary precision integers.
+Objects that implement keyed `NSCoding` will be written out as a map tagged with `#edn-objc/[the class name]`, but are currently read in as `BMOEDNTaggedElement`.
+
+Numbers are read exclusively into `NSDecimalNumber` and seem to afford around 128 bits of mantissa. So far, no support for arbitrary precision integers. Ratios are also supported by default, but disabled in 'strict' mode.
 
 Lazy deserialization from `NSInputStream` is supported, and lazy parsing can be consumed by multiple threads using the root object's `-objectEnumerator`. Lazy parsing is limited to top-level objects at this time; a given object will be fully parsed into memory immediately.
 
@@ -41,9 +43,11 @@ The `NSObject` category also defines a `metadata` property, allowing the associa
 
 `nil` ⇌ `NSNull`
 
-`booleans` ⇌ `CFBoolean`[^1] (bridged with `NSNumber`)
+* `nil` is also written out for nil/NULL pointers, but currently read in as `NSNull`. 
 
-[^1]: Specifically: `kCFBooleanTrue` and `kCFBooleanFalse`.
+`booleans` ⇌ `CFBoolean` (bridged with `NSNumber`)
+
+* Specifically: `kCFBooleanTrue` and `kCFBooleanFalse`.
 
 `#inst` ⇌ `NSDate`
 
@@ -64,6 +68,8 @@ root (top-level)  `BMOEDNRoot`
 `keyword` ⇌ `BMOEDNKeyword`
 
 arbitrary tags ⇌ `BMOEDNTaggedElement`
+
+`ratio` ⇌ `BMOEDNRatio`
 
 
 ###License
