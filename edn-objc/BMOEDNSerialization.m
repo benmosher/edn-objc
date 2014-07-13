@@ -13,6 +13,7 @@
 #import "BMOEDNKeyword.h"
 #import "BMOEDNReader.h"
 #import "BMOEDNWriter.h"
+#import "BMOEDNArchiver.h"
 
 @implementation BMOEDNSerialization
 
@@ -43,8 +44,12 @@
 }
 
 +(NSData *)dataWithEdnObject:(id)obj error:(NSError **)error {
-    BMOEDNWriter *writer = [[BMOEDNWriter alloc] init];
-    return [writer writeToData:obj error:error];
+    @try {
+        return [BMOEDNArchiver archivedDataWithRootObject:obj];
+    } @catch (NSException *e) {
+        BMOEDNErrorMessageAssign(error, BMOEDNErrorInvalidData, e.description);
+        return nil;
+    }
 }
 
 +(NSData *)dataWithEdnObject:(id)obj
@@ -55,8 +60,12 @@
 }
 
 +(NSString *)stringWithEdnObject:(id)obj error:(NSError **)error {
-    BMOEDNWriter *writer = [[BMOEDNWriter alloc] init];
-    return [writer writeToString:obj error:error];
+    @try {
+        return [[NSString alloc] initWithData:[BMOEDNArchiver archivedDataWithRootObject:obj] encoding:NSUTF8StringEncoding];
+    } @catch (NSException *e) {
+        BMOEDNErrorMessageAssign(error, BMOEDNErrorInvalidData, e.description);
+        return nil;
+    }
 }
 
 +(NSString *)stringWithEdnObject:(id)obj

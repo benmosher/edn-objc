@@ -214,7 +214,6 @@
         [self encodeMap:meta];
         [_data appendBytes:" " length:1]; // TODO: whitespace customization
     }
-    // TODO: transmogrifier support?
     if ([obj conformsToProtocol:@protocol(BMOEDNRepresentation)])
         [self encodeTaggedObject:[obj ednRepresentation]];
     else if ([obj isKindOfClass:[BMOEDNTaggedElement class]])
