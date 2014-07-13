@@ -12,6 +12,7 @@
 @interface BMOEDNKeyword : BMOEDNSymbol
 
 +(BMOEDNKeyword *) keywordWithNamespace:(NSString *)ns name:(NSString *)name;
++(BMOEDNKeyword *) keywordWithName:(NSString *)name;
 
 -(BOOL)isEqualToKeyword:(BMOEDNKeyword *)object;
 

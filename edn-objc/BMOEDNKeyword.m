@@ -14,6 +14,10 @@
     return [[BMOEDNKeyword alloc] initWithNamespace:ns name:name];
 }
 
++(BMOEDNKeyword *)keywordWithNameU:(NSString *)name {
+    return [[BMOEDNKeyword alloc] initWithNamespace:nil name:name];
+}
+
 -(BOOL)isEqual:(id)object {
     if (object == self) return YES;
     if (![object isMemberOfClass:[BMOEDNKeyword class]]) return NO;
