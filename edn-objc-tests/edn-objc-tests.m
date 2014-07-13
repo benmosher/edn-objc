@@ -174,6 +174,7 @@
 - (void)testKeywords
 {
     STAssertEqualObjects([@":keyword" ednObject], [[BMOEDNKeyword alloc] initWithNamespace:nil name:@"keyword"], @"");
+    STAssertEqualObjects([@":keyword" ednObject], [BMOEDNKeyword keywordWithName:@"keyword"], @"");
     STAssertEqualObjects([@":namespaced/keyword" ednObject], [[BMOEDNKeyword alloc] initWithNamespace:@"namespaced" name:@"keyword"], @"");
     id keyword;
     STAssertThrows(keyword = [[BMOEDNKeyword alloc] initWithNamespace:@"something" name:nil], @"");
