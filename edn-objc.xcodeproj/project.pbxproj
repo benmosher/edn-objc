@@ -19,6 +19,8 @@
 		B53AE3DD17D18024000CBCC0 /* NSDate+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = B53AE3DB17D18024000CBCC0 /* NSDate+BMOEDN.m */; };
 		B59D8EA31970DBC300881D63 /* BMOEDNArchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = B59D8EA11970DBC300881D63 /* BMOEDNArchiver.h */; };
 		B59D8EA41970DBC300881D63 /* BMOEDNArchiver.m in Sources */ = {isa = PBXBuildFile; fileRef = B59D8EA21970DBC300881D63 /* BMOEDNArchiver.m */; };
+		B59D8EA71972EEC000881D63 /* NSCodingFoo.m in Sources */ = {isa = PBXBuildFile; fileRef = B59D8EA61972EEC000881D63 /* NSCodingFoo.m */; };
+		B59D8EAB1972EF2800881D63 /* NSCodingBar.m in Sources */ = {isa = PBXBuildFile; fileRef = B59D8EAA1972EF2800881D63 /* NSCodingBar.m */; };
 		B5A7BA7A17DC280B00EE55A1 /* BMOEDNCharacter.h in Headers */ = {isa = PBXBuildFile; fileRef = B5A7BA7817DC280B00EE55A1 /* BMOEDNCharacter.h */; };
 		B5A7BA7B17DC280B00EE55A1 /* BMOEDNCharacter.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A7BA7917DC280B00EE55A1 /* BMOEDNCharacter.m */; };
 		B5B837D717D038B900AEA457 /* BMOEDNRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B837D617D038B900AEA457 /* BMOEDNRepresentation.h */; };
@@ -98,6 +100,10 @@
 		B53AE3DB17D18024000CBCC0 /* NSDate+BMOEDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+BMOEDN.m"; sourceTree = "<group>"; };
 		B59D8EA11970DBC300881D63 /* BMOEDNArchiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNArchiver.h; sourceTree = "<group>"; };
 		B59D8EA21970DBC300881D63 /* BMOEDNArchiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNArchiver.m; sourceTree = "<group>"; };
+		B59D8EA51972EEC000881D63 /* NSCodingFoo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSCodingFoo.h; path = "edn-objc-tests/NSCodingFoo.h"; sourceTree = SOURCE_ROOT; };
+		B59D8EA61972EEC000881D63 /* NSCodingFoo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSCodingFoo.m; path = "edn-objc-tests/NSCodingFoo.m"; sourceTree = SOURCE_ROOT; };
+		B59D8EA91972EF2800881D63 /* NSCodingBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSCodingBar.h; path = "edn-objc-tests/NSCodingBar.h"; sourceTree = SOURCE_ROOT; };
+		B59D8EAA1972EF2800881D63 /* NSCodingBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSCodingBar.m; path = "edn-objc-tests/NSCodingBar.m"; sourceTree = SOURCE_ROOT; };
 		B5A7BA7817DC280B00EE55A1 /* BMOEDNCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNCharacter.h; sourceTree = "<group>"; };
 		B5A7BA7917DC280B00EE55A1 /* BMOEDNCharacter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNCharacter.m; sourceTree = "<group>"; };
 		B5B837D617D038B900AEA457 /* BMOEDNRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BMOEDNRepresentation.h; sourceTree = "<group>"; };
@@ -196,6 +202,17 @@
 			name = Primitives;
 			sourceTree = "<group>";
 		};
+		B59D8EA81972EECA00881D63 /* NSCoding test classes */ = {
+			isa = PBXGroup;
+			children = (
+				B59D8EA51972EEC000881D63 /* NSCodingFoo.h */,
+				B59D8EA61972EEC000881D63 /* NSCodingFoo.m */,
+				B59D8EA91972EF2800881D63 /* NSCodingBar.h */,
+				B59D8EAA1972EF2800881D63 /* NSCodingBar.m */,
+			);
+			name = "NSCoding test classes";
+			sourceTree = "<group>";
+		};
 		B5B837D517D0389B00AEA457 /* Representation */ = {
 			isa = PBXGroup;
 			children = (
@@ -264,6 +281,7 @@
 		B5C7A64017C8F282005E0615 /* edn-objc-tests */ = {
 			isa = PBXGroup;
 			children = (
+				B59D8EA81972EECA00881D63 /* NSCoding test classes */,
 				B539281D17D1D31C00B94545 /* edn-objc-tests.h */,
 				B539281E17D1D31C00B94545 /* edn-objc-tests.m */,
 				B539282017D1D32E00B94545 /* edn-objc-tests-Info.plist */,
@@ -482,6 +500,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B539281F17D1D31C00B94545 /* edn-objc-tests.m in Sources */,
+				B59D8EAB1972EF2800881D63 /* NSCodingBar.m in Sources */,
+				B59D8EA71972EEC000881D63 /* NSCodingFoo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

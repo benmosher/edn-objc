@@ -10,6 +10,10 @@
 #import "edn-objc.h"
 #import "BMOLazyEnumerator.h"
 
+// test files
+#import "NSCodingFoo.h"
+#import "NSCodingBar.h"
+
 @implementation ednObjCTests
 
 - (void)setUp
@@ -650,4 +654,17 @@
     STAssertEqualObjects([anonData ednString], expected, @"");
 }
 
+- (void)testWriteArbitraryNSCoding {
+    NSCodingFoo *foo = [NSCodingFoo new];
+    foo.a = 42;
+    foo.b = @"life, the universe, everything";
+    
+    NSCodingBar *bar = [NSCodingBar new];
+    bar.array = @[@3, @2, @1];
+    
+    foo.bar = bar;
+    
+    NSString *expected = @"#edn-objc/NSCodingFoo { :a 42 :b \"life, the universe, everything\" :bar #edn-objc/NSCodingBar { :array [ 3 2 1 ] :dict nil } }";
+    STAssertEqualObjects([foo ednString], expected, @"");
+}
 @end
