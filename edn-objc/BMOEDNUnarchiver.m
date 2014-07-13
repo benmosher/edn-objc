@@ -26,12 +26,13 @@
     return self;
 }
 
+-(NSData *)decodeDataObject {
+    Class rootClass = NSClassFromString(_data.tag.name);
+    return [[rootClass alloc] initWithBase64EncodedString:_data.element options:0];
+}
+
 -(id)decodeRootObject {
     Class rootClass = NSClassFromString(_data.tag.name);
-    if ([rootClass isKindOfClass:[NSData class]]){
-        return [[rootClass alloc] initWithBase64EncodedString:_data.element options:0];
-    }
-    // TODO: check that tagged element is a map
     return [[rootClass alloc] initWithCoder:self];
 }
 

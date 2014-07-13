@@ -655,6 +655,12 @@
     STAssertEqualObjects([anonData ednString], expected, @"");
 }
 
+- (void)testReadNSData {
+    NSData *anonData = [[NSData alloc] initWithBase64EncodedString:@"KMaSIFt4IHldICjGkiAoKyB4IHkpKSk=" options:0];
+    id roundTripped = [[anonData ednString] ednObject];
+    STAssertEqualObjects(anonData, roundTripped, @"");
+}
+
 - (void)testWriteArbitraryNSCoding {
     NSCodingFoo *foo = [NSCodingFoo new];
     foo.a = 42;
@@ -668,4 +674,19 @@
     NSString *expected = @"#edn-objc/NSCodingFoo { :a 42 :b \"life, the universe, everything\" :bar #edn-objc/NSCodingBar { :array [ 3 2 1 ] :dict nil } }";
     STAssertEqualObjects([foo ednString], expected, @"");
 }
+
+- (void)testReadArbitraryNSCoding {
+    NSCodingFoo *foo = [NSCodingFoo new];
+    foo.a = 42;
+    foo.b = @"life, the universe, everything";
+    
+    NSCodingBar *bar = [NSCodingBar new];
+    bar.array = @[@3, @2, @1];
+    
+    foo.bar = bar;
+    
+    id roundTripped = [[foo ednString] ednObject];
+    STAssertEqualObjects(foo, roundTripped, @"");
+}
+
 @end

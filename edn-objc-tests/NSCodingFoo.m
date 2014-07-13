@@ -17,8 +17,20 @@
 }
 
 -(id)initWithCoder:(NSCoder *)aDecoder {
-    // NOOP ATM
-    return nil;
+    if (self = [super init]) {
+        _a = [aDecoder decodeIntegerForKey:@"a"];
+        _b = [aDecoder decodeObjectForKey:@"b"];
+        _bar = [aDecoder decodeObjectForKey:@"bar"];
+    }
+    return self;
+}
+
+-(BOOL)isEqual:(id)object {
+    if (![object isMemberOfClass:[NSCodingFoo class]]) return false;
+    return
+        [object a] == _a &&
+        [_b isEqualToString:[object b]] &&
+        [_bar isEqual:[object bar]];
 }
 
 @end

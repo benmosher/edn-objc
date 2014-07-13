@@ -9,7 +9,7 @@ Tagged elements (such as the built-in `uuid` and `inst`) may be converted to con
 
 'Unknown' tagged elements will be converted to/from `BMOEDNTaggedElement` during de/serialization. 
 
-Objects that implement keyed `NSCoding` will be written out as a map tagged with `#edn-objc/[the class name]`, but are currently read in as `BMOEDNTaggedElement`.
+Objects that implement keyed `NSCoding` will be written out as a map tagged with `#edn-objc/[the class name]`. Objects serialized this way may also be reconstituted at read time. Secure decoding is not yet supported.
 
 Numbers are read exclusively into `NSDecimalNumber` and seem to afford around 128 bits of mantissa. So far, no support for arbitrary precision integers. Ratios are also supported by default, but disabled in 'strict' mode.
 

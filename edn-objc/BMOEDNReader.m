@@ -21,6 +21,8 @@
 #import "BMOEDNError.h"
 #import "BMOEDNRatio.h"
 
+#import "BMOEDNUnarchiver.h"
+
 static NSCharacterSet *whitespace,*quoted,*numberPrefix,*digits,*symbolChars,*delimiters;
 
 @interface BMOEDNReader () {
@@ -248,12 +250,17 @@ id BMOParseSymbolType(id<BMOEDNReaderState> parserState, Class symbolClass) {
                    && [symbolChars characterIsMember:parserState.currentCharacter]) {
                 [parserState moveAhead];
             }
-            id tag = BMOParseSymbolType(parserState,[BMOEDNSymbol class]);
+            BMOEDNSymbol *tag = BMOParseSymbolType(parserState,[BMOEDNSymbol class]);
             if (parserState.error) return nil;
             
             id innards = [self parseObject:parserState];
             if (parserState.error) return nil;
             BMOEDNTaggedElement *taggedElement = [[BMOEDNTaggedElement alloc] initWithTag:tag element:innards];
+            
+            if ([tag.ns isEqualToString:@"edn-objc"]) {
+                BMOEDNUnarchiver *unarchie = [[BMOEDNUnarchiver alloc] initForReadingWithTaggedElement:taggedElement];
+                return [unarchie decodeRootObject];
+            }
             
             // check for fanciness
             Class registeredClass;

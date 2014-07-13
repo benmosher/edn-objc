@@ -16,8 +16,18 @@
 }
 
 -(id)initWithCoder:(NSCoder *)aDecoder {
-    // NOOP ATM
-    return nil;
+    if (self = [super init]){
+        _array = [aDecoder decodeObjectForKey:@"array"];
+        _dict = [aDecoder decodeObjectForKey:@"dict"];
+    }
+    return self;
+}
+
+-(BOOL)isEqual:(id)object {
+    if (![object isMemberOfClass:[NSCodingBar class]]) return false;
+    return
+        (_array == [object array] || [_array isEqual:[object array]]) &&
+        (_dict == [object dict] || [_dict isEqual:[object dict]]);
 }
 
 @end
