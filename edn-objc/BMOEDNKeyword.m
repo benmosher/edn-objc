@@ -14,7 +14,7 @@
     return [[BMOEDNKeyword alloc] initWithNamespace:ns name:name];
 }
 
-+(BMOEDNKeyword *)keywordWithNameU:(NSString *)name {
++(BMOEDNKeyword *)keywordWithName:(NSString *)name {
     return [[BMOEDNKeyword alloc] initWithNamespace:nil name:name];
 }
 
