@@ -61,7 +61,7 @@
 #pragma mark - helpers
 
 -(void)encodeTag:(NSString *)tagName {
-    [_data appendBytes:"#bmoedn.archiver/" length:17];
+    [_data appendBytes:"#edn-objc/" length:10];
     [_data appendData:[tagName dataUsingEncoding:NSUTF8StringEncoding]];
     [_data appendBytes:" " length:1];
 }
@@ -200,7 +200,7 @@
 }
 
 -(void)encodeDataObject:(NSData *)data {
-    [self encodeTag:@"NSData"];
+    [self encodeTag:NSStringFromClass([data classForCoder])];
     [_data appendBytes:"\"" length:1];
     [_data appendData:[data base64EncodedDataWithOptions:0]];
     [_data appendBytes:"\"" length:1];
@@ -214,7 +214,9 @@
         [self encodeMap:meta];
         [_data appendBytes:" " length:1]; // TODO: whitespace customization
     }
-    if ([obj conformsToProtocol:@protocol(BMOEDNRepresentation)])
+    if ([obj isKindOfClass:[NSData class]])
+        [self encodeDataObject:obj];
+    else if ([obj conformsToProtocol:@protocol(BMOEDNRepresentation)])
         [self encodeTaggedObject:[obj ednRepresentation]];
     else if ([obj isKindOfClass:[BMOEDNTaggedElement class]])
         [self encodeTaggedObject:obj];

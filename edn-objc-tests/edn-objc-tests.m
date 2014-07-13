@@ -644,4 +644,10 @@
     STAssertTrue([anonymous ednObject] != nil, @"");
 }
 
+- (void)testWriteNSData {
+    NSData *anonData = [[NSData alloc] initWithBase64EncodedString:@"KMaSIFt4IHldICjGkiAoKyB4IHkpKSk=" options:0];
+    NSString *expected = [NSString stringWithFormat:@"#edn-objc/NSData \"%@\"", [anonData base64EncodedStringWithOptions:0]];
+    STAssertEqualObjects([anonData ednString], expected, @"");
+}
+
 @end

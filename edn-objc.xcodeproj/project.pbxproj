@@ -100,7 +100,7 @@
 		B59D8EA21970DBC300881D63 /* BMOEDNArchiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNArchiver.m; sourceTree = "<group>"; };
 		B5A7BA7817DC280B00EE55A1 /* BMOEDNCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNCharacter.h; sourceTree = "<group>"; };
 		B5A7BA7917DC280B00EE55A1 /* BMOEDNCharacter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNCharacter.m; sourceTree = "<group>"; };
-		B5B837D617D038B900AEA457 /* BMOEDNRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BMOEDNRepresentation.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		B5B837D617D038B900AEA457 /* BMOEDNRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BMOEDNRepresentation.h; sourceTree = "<group>"; };
 		B5B837D817D03B2900AEA457 /* BMOEDNTaggedElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNTaggedElement.h; sourceTree = "<group>"; };
 		B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNTaggedElement.m; sourceTree = "<group>"; };
 		B5BCDA3A196EAD6A0007B42A /* BMOEDNRatio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNRatio.h; sourceTree = "<group>"; };
