@@ -214,7 +214,9 @@
         [self encodeMap:meta];
         [_data appendBytes:" " length:1]; // TODO: whitespace customization
     }
-    if ([obj isKindOfClass:[NSData class]])
+    if (obj == nil || [obj isEqual:[NSNull null]])
+        [_data appendBytes:"nil" length:3];
+    else if ([obj isKindOfClass:[NSData class]])
         [self encodeDataObject:obj];
     else if ([obj conformsToProtocol:@protocol(BMOEDNRepresentation)])
         [self encodeTaggedObject:[obj ednRepresentation]];
@@ -234,15 +236,13 @@
         [self encodeNumber:obj];
     else if ([obj isKindOfClass:[BMOEDNSymbol class]])
         [self encodeSymbol:obj];
-    else if ([obj isEqual:[NSNull null]])
-        [_data appendBytes:"nil" length:3];
     else if ([obj isKindOfClass:[BMOEDNCharacter class]])
         [self encodeCharacter:obj];
     else if ([obj conformsToProtocol:@protocol(NSCoding)]) {
         [self encodeTag:NSStringFromClass([obj classForCoder])];
-        [_data appendBytes:"{" length:1];
+        [_data appendBytes:"{ " length:2];
         [obj encodeWithCoder:self];
-        [_data replaceBytesInRange:NSMakeRange([_data length]-1, 1) withBytes:"}"];
+        [_data replaceBytesInRange:NSMakeRange([_data length]-1, 1) withBytes:" }" length:2];
     } else {
         @throw [NSException exceptionWithName:BMOEDNException reason:@"Provided object cannot be EDN-serialized." userInfo:nil];
     }
