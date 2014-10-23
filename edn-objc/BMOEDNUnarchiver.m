@@ -45,7 +45,7 @@
         return nil;
     }
     if ([obj isKindOfClass:[BMOEDNTaggedElement class]]
-        && [[[obj tag] ns] isEqualToString:@"edn-objc"]) {
+        && [[[(BMOEDNTaggedElement *)obj tag] ns] isEqualToString:@"edn-objc"]) {
         BMOEDNUnarchiver *deeper = [[BMOEDNUnarchiver alloc] initForReadingWithTaggedElement:obj];
         return [deeper decodeRootObject];
     }
