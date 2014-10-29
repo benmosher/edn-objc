@@ -69,7 +69,7 @@
     NSError *err = nil;
     STAssertNil([BMOEDNSerialization ednObjectWithData:[@"1/2" dataUsingEncoding:NSUTF8StringEncoding] options:BMOEDNReadingStrict error:&err], @"should not parse in strict mode");
     STAssertNotNil(err, @"");
-    STAssertEquals(err.code, BMOEDNErrorInvalidData, @"should have return invalid data error");
+    STAssertEquals((BMOEDNError)err.code, BMOEDNErrorInvalidData, @"should have return invalid data error");
 }
 
 - (void)testCMathWorksHowIExpect
