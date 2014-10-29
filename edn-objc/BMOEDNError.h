@@ -9,7 +9,7 @@
 #ifndef edn_objc_BMOEDNError_h
 #define edn_objc_BMOEDNError_h
 
-typedef enum  {
+typedef enum : NSInteger  {
     BMOEDNErrorNone = 0,
     BMOEDNErrorNoData,
     BMOEDNErrorInvalidData,
