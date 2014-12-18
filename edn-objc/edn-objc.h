@@ -31,22 +31,22 @@
 #ifndef edn_objc_edn_objc_h
 #define edn_objc_edn_objc_h
 
-#import "BMOEDNError.h"
+#import "EDNError.h"
 
-#import "BMOEDNSerialization.h"
-#import "BMOEDNArchiver.h"
+#import "EDNSerialization.h"
+#import "EDNArchiver.h"
 
-#import "BMOEDNRoot.h"
-#import "BMOEDNList.h"
-#import "BMOEDNSymbol.h"
-#import "BMOEDNKeyword.h"
-#import "BMOEDNRepresentation.h"
-#import "BMOEDNTaggedElement.h"
-#import "NSString+BMOEDN.h"
-#import "NSObject+BMOEDN.h"
-#import "NSData+BMOEDN.h"
-#import "NSInputStream+BMOEDN.h"
-#import "BMOEDNCharacter.h"
-#import "BMOEDNRatio.h"
+#import "EDNRoot.h"
+#import "EDNList.h"
+#import "EDNSymbol.h"
+#import "EDNKeyword.h"
+#import "EDNRepresentation.h"
+#import "EDNTaggedElement.h"
+#import "NSString+EDN.h"
+#import "NSObject+EDN.h"
+#import "NSData+EDN.h"
+#import "NSInputStream+EDN.h"
+#import "EDNCharacter.h"
+#import "EDNRatio.h"
 
 #endif

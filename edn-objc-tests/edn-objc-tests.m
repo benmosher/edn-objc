@@ -8,7 +8,7 @@
 
 #import "edn-objc-tests.h"
 #import "edn-objc.h"
-#import "BMOLazyEnumerator.h"
+#import "EDNLazyEnumerator.h"
 
 // test files
 #import "NSCodingFoo.h"
@@ -55,11 +55,11 @@
     STAssertEqualObjects([@"0" ednObject], @(0), @"");
     STAssertEqualObjects([@"10000N" ednObject], @(10000), @"");
     STAssertEqualObjects([@"1000.1M" ednObject], [NSDecimalNumber decimalNumberWithMantissa:10001 exponent:-1 isNegative:NO], @"");
-    STAssertEqualObjects([@"1/2" ednObject], [BMOEDNRatio ratioWithNumerator:1 denominator:2], @"");
+    STAssertEqualObjects([@"1/2" ednObject], [EDNRatio ratioWithNumerator:1 denominator:2], @"");
 }
 
 - (void) testRatio {
-    BMOEDNRatio *r = [BMOEDNRatio ratioWithNumerator:1 denominator:2];
+    EDNRatio *r = [EDNRatio ratioWithNumerator:1 denominator:2];
     STAssertEquals(r.numerator, 1, @"bad numerator");
     STAssertEquals(r.denominator, 2, @"bad denominator");
     STAssertEqualObjects(r, @(0.5), @"bad value");
@@ -67,9 +67,9 @@
 
 - (void) testRatioStrictMode {
     NSError *err = nil;
-    STAssertNil([BMOEDNSerialization ednObjectWithData:[@"1/2" dataUsingEncoding:NSUTF8StringEncoding] options:BMOEDNReadingStrict error:&err], @"should not parse in strict mode");
+    STAssertNil([EDNSerialization ednObjectWithData:[@"1/2" dataUsingEncoding:NSUTF8StringEncoding] options:EDNReadingStrict error:&err], @"should not parse in strict mode");
     STAssertNotNil(err, @"");
-    STAssertEquals((BMOEDNError)err.code, BMOEDNErrorInvalidData, @"should have return invalid data error");
+    STAssertEquals((EDNErrorCode)err.code, EDNErrorInvalidData, @"should have return invalid data error");
 }
 
 - (void)testCMathWorksHowIExpect
@@ -92,14 +92,14 @@
 
 - (void)testParseLists
 {
-    BMOEDNList *list = (BMOEDNList *)[@"()" ednObject];
-    STAssertTrue([list isKindOfClass:[BMOEDNList class]], @"");
+    EDNList *list = (EDNList *)[@"()" ednObject];
+    STAssertTrue([list isKindOfClass:[EDNList class]], @"");
     STAssertNil([list head], @"");
     
-    list = (BMOEDNList *)[[@"[( 1 2 3 4 5 ) 1]" ednObject] objectAtIndex:0];
-    STAssertTrue([list isKindOfClass:[BMOEDNList class]], @"");
+    list = (EDNList *)[[@"[( 1 2 3 4 5 ) 1]" ednObject] objectAtIndex:0];
+    STAssertTrue([list isKindOfClass:[EDNList class]], @"");
     STAssertNotNil([list head], @"");
-    BMOEDNConsCell *current = list.head;
+    EDNConsCell *current = list.head;
     int i = 1;
     do {
         STAssertEqualObjects(current.first,@(i++), @"");
@@ -123,16 +123,16 @@
     STAssertEqualObjects([@"[ 1 #_ foo 2 ]" ednObject], array, @"");
     STAssertEqualObjects([@"[ 1 2 #_foo ]" ednObject], array, @"");
     NSError *err = nil;
-    id obj = [BMOEDNSerialization ednObjectWithData:[@"  #_fooooo  " dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&err];
+    id obj = [EDNSerialization ednObjectWithData:[@"  #_fooooo  " dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&err];
     STAssertNil(obj, @"");
     // TODO: error for totally empty string?
     //STAssertNotNil(err, @"");
-    //STAssertEquals(err.code, (NSInteger)BMOEDNErrorNoData, @"");
+    //STAssertEquals(err.code, (NSInteger)EDNErrorNoData, @"");
     
-    BMOEDNList *list = (BMOEDNList *)[@"( 1 #_foo 2 3 4 5 #_bar)" ednObject];
-    STAssertTrue([list isKindOfClass:[BMOEDNList class]], @"");
+    EDNList *list = (EDNList *)[@"( 1 #_foo 2 3 4 5 #_bar)" ednObject];
+    STAssertTrue([list isKindOfClass:[EDNList class]], @"");
     STAssertNotNil([list head], @"");
-    BMOEDNConsCell *current = list.head;
+    EDNConsCell *current = list.head;
     int i = 1;
     do {
         STAssertEqualObjects(current.first,@(i++), @"");
@@ -159,8 +159,8 @@
     STAssertEqualObjects([@"{ :one one :two + :three - :four \"four\" }" ednObject],
                          (@{
                           [@":one" ednObject]: [@"one" ednObject],
-                          [@":two" ednObject]: [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"+"],
-                          [@":three" ednObject]: [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"-"],
+                          [@":two" ednObject]: [[EDNSymbol alloc] initWithNamespace:nil name:@"+"],
+                          [@":three" ednObject]: [[EDNSymbol alloc] initWithNamespace:nil name:@"-"],
                           [@":four" ednObject]: @"four"
                           }), @"");
     STAssertNil([@"{:one 1 :one \"one\"}" ednObject],@"Repeat keys should fail.");
@@ -173,11 +173,11 @@
 
 - (void)testKeywords
 {
-    STAssertEqualObjects([@":keyword" ednObject], [[BMOEDNKeyword alloc] initWithNamespace:nil name:@"keyword"], @"");
-    STAssertEqualObjects([@":keyword" ednObject], [BMOEDNKeyword keywordWithName:@"keyword"], @"");
-    STAssertEqualObjects([@":namespaced/keyword" ednObject], [[BMOEDNKeyword alloc] initWithNamespace:@"namespaced" name:@"keyword"], @"");
+    STAssertEqualObjects([@":keyword" ednObject], [[EDNKeyword alloc] initWithNamespace:nil name:@"keyword"], @"");
+    STAssertEqualObjects([@":keyword" ednObject], [EDNKeyword keywordWithName:@"keyword"], @"");
+    STAssertEqualObjects([@":namespaced/keyword" ednObject], [[EDNKeyword alloc] initWithNamespace:@"namespaced" name:@"keyword"], @"");
     id keyword;
-    STAssertThrows(keyword = [[BMOEDNKeyword alloc] initWithNamespace:@"something" name:nil], @"");
+    STAssertThrows(keyword = [[EDNKeyword alloc] initWithNamespace:@"something" name:nil], @"");
     STAssertNil([@":" ednObject],@"");
     STAssertNil([@":/nonamespace" ednObject], @"");
     STAssertNil([@":so/many/names/paces" ednObject], @"");
@@ -187,19 +187,19 @@
 
 - (void)testSymbols
 {
-    STAssertEqualObjects([@"symbol" ednObject], [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"symbol"], @"");
-    STAssertEqualObjects([@"namespaced/symbol" ednObject], [[BMOEDNSymbol alloc] initWithNamespace:@"namespaced" name:@"symbol"], @"");
+    STAssertEqualObjects([@"symbol" ednObject], [[EDNSymbol alloc] initWithNamespace:nil name:@"symbol"], @"");
+    STAssertEqualObjects([@"namespaced/symbol" ednObject], [[EDNSymbol alloc] initWithNamespace:@"namespaced" name:@"symbol"], @"");
     id symbol;
-    STAssertThrows(symbol = [[BMOEDNSymbol alloc] initWithNamespace:@"something" name:nil], @"");
+    STAssertThrows(symbol = [[EDNSymbol alloc] initWithNamespace:@"something" name:nil], @"");
     STAssertNil([@"/nonamespace" ednObject], @"");
     STAssertNil([@"so/many/names/paces" ednObject], @"");
     // '/' is a special case...
-    STAssertEqualObjects([@"/" ednObject], [[BMOEDNSymbol alloc] initWithNamespace:nil name:@"/"], @"");
-    STAssertEqualObjects([@"foo//" ednObject], [[BMOEDNSymbol alloc] initWithNamespace:@"foo" name:@"/"], @"");
+    STAssertEqualObjects([@"/" ednObject], [[EDNSymbol alloc] initWithNamespace:nil name:@"/"], @"");
+    STAssertEqualObjects([@"foo//" ednObject], [[EDNSymbol alloc] initWithNamespace:@"foo" name:@"/"], @"");
     
-    STAssertEqualObjects([@"namespaced/<" ednObject], [[BMOEDNSymbol alloc] initWithNamespace:@"namespaced" name:@"<"], @"");
-    STAssertEqualObjects([@"namespaced/>" ednObject], [[BMOEDNSymbol alloc] initWithNamespace:@"namespaced" name:@">"], @"");
-    STAssertEqualObjects([@"html/<body>" ednObject], [[BMOEDNSymbol alloc] initWithNamespace:@"html" name:@"<body>"], @"");
+    STAssertEqualObjects([@"namespaced/<" ednObject], [[EDNSymbol alloc] initWithNamespace:@"namespaced" name:@"<"], @"");
+    STAssertEqualObjects([@"namespaced/>" ednObject], [[EDNSymbol alloc] initWithNamespace:@"namespaced" name:@">"], @"");
+    STAssertEqualObjects([@"html/<body>" ednObject], [[EDNSymbol alloc] initWithNamespace:@"html" name:@"<body>"], @"");
     STAssertNil([@"html/</body>" ednObject], @"");
 }
 
@@ -221,7 +221,7 @@
 
 - (void)testSerializeNumerals {
     STAssertEqualObjects([@(1) ednString], @"1", @"");
-    STAssertEqualObjects([[BMOEDNRatio ratioWithNumerator:22 denominator:7] ednString], @"22/7", @"");
+    STAssertEqualObjects([[EDNRatio ratioWithNumerator:22 denominator:7] ednString], @"22/7", @"");
     // TODO: test decimals, floats, etc. (esp for precision)
 }
 
@@ -244,7 +244,7 @@
 
 - (void)testSerializeSymbol {
     id foo = @"foo//";
-    STAssertEqualObjects([[BMOEDNSymbol symbolWithNamespace:@"foo" name:@"/"] ednString], foo, @"");
+    STAssertEqualObjects([[EDNSymbol symbolWithNamespace:@"foo" name:@"/"] ednString], foo, @"");
     id bar = @":my/bar";
     STAssertEqualObjects([[bar ednObject] ednString], bar, @"");
 }
@@ -260,20 +260,20 @@
     STAssertEqualObjects(([forComparison ednString]), date, @"");
     
     // arbitrary
-    BMOEDNTaggedElement *taggedElement = [BMOEDNTaggedElement elementWithTag:[BMOEDNSymbol symbolWithNamespace:@"my" name:@"foo"] element:@"bar-baz"];
+    EDNTaggedElement *taggedElement = [EDNTaggedElement elementWithTag:[EDNSymbol symbolWithNamespace:@"my" name:@"foo"] element:@"bar-baz"];
     NSString *taggedElementString = @"#my/foo \"bar-baz\"";
     STAssertEqualObjects([taggedElement ednString], taggedElementString, @"");
 }
 
 - (void)testSerializeMap {
-    id map = @{[BMOEDNKeyword keywordWithNamespace:@"my" name:@"one"]:@1,
-               [BMOEDNKeyword keywordWithNamespace:@"your" name:@"two"]:@2,
-               @3:[BMOEDNSymbol symbolWithNamespace:@"surprise" name:@"three"]};
+    id map = @{[EDNKeyword keywordWithNamespace:@"my" name:@"one"]:@1,
+               [EDNKeyword keywordWithNamespace:@"your" name:@"two"]:@2,
+               @3:[EDNSymbol symbolWithNamespace:@"surprise" name:@"three"]};
     STAssertEqualObjects([[map ednString] ednObject], map, @"Ordering is not guaranteed, so we round-trip it up.");
 }
 
 - (void)testListFastEnumeration {
-    BMOEDNList *list = (BMOEDNList *)[@"(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20)" ednObject];
+    EDNList *list = (EDNList *)[@"(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20)" ednObject];
     NSUInteger i = 1;
     for (NSNumber *num in list) {
         STAssertEquals(i++, [num unsignedIntegerValue], @"");
@@ -282,14 +282,14 @@
 
 - (void)testSerializeList {
     NSString *listString = @"( 1 2 3 4 my/symbol 6 7 8 9 #{ 10 :a :b see } 11 \"twelve\" 13 14 15 16 17 18 19 20 )";
-    BMOEDNList *list = (BMOEDNList *)[listString ednObject];
+    EDNList *list = (EDNList *)[listString ednObject];
     STAssertEqualObjects([[list ednString] ednObject], list, @"");
 }
 
 - (void)testListOperations {
-    BMOEDNList *list = [@"(4 3 2 1)" ednObject];
-    BMOEDNList *pushed = [@"(5 4 3 2 1)" ednObject];
-    BMOEDNList *popped = [@"(3 2 1)" ednObject];
+    EDNList *list = [@"(4 3 2 1)" ednObject];
+    EDNList *pushed = [@"(5 4 3 2 1)" ednObject];
+    EDNList *popped = [@"(3 2 1)" ednObject];
     STAssertEqualObjects([list listByPushing:@5], pushed, @"");
     STAssertEqualObjects([list listByPopping], popped, @"");
 }
@@ -356,7 +356,7 @@
     [array setEdnMetadata:@{ @1: @"one" }];
     STAssertEqualObjects([array ednString], @"^{ 1 \"one\" } [ 1 2 3 ]", @"");
     id list = [@"( one two three )" ednObject];
-    [list setEdnMetadata:@{ [BMOEDNKeyword keywordWithNamespace:nil name:@"type"] : [BMOEDNSymbol symbolWithNamespace:nil name:@"list"] }];
+    [list setEdnMetadata:@{ [EDNKeyword keywordWithNamespace:nil name:@"type"] : [EDNSymbol symbolWithNamespace:nil name:@"list"] }];
     array = [array arrayByAddingObject:list];
     STAssertEqualObjects([array ednString], @"[ 1 2 3 ^{ :type list } ( one two three ) ]", @"Array metadata is not preserved (array with added object is a new array).");
 }
@@ -365,7 +365,7 @@
     NSString * obj1String = @"( 1 2 3 )";
     NSString * obj2String = @"[ 1 2 3 ]";
     NSString * objsString = [NSString stringWithFormat:@"%@ %@",obj1String, obj2String];
-    id objs = [BMOEDNSerialization ednObjectWithData:[objsString dataUsingEncoding:NSUTF8StringEncoding] options:BMOEDNReadingMultipleObjects error:NULL];
+    id objs = [EDNSerialization ednObjectWithData:[objsString dataUsingEncoding:NSUTF8StringEncoding] options:EDNReadingMultipleObjects error:NULL];
     
     id expectedObjs = (@[[obj1String ednObject],[obj2String ednObject]]);
     
@@ -383,13 +383,13 @@
 
 - (void)testWriteMultipleRootObjects {
     id objs = (@[@1, @2, @{ @"three" : @3 }]);
-    STAssertEqualObjects([[[BMOEDNRoot alloc] initWithArray:objs] ednString], @"1\n2\n{ \"three\" 3 }\n", @"");
+    STAssertEqualObjects([[[EDNRoot alloc] initWithArray:objs] ednString], @"1\n2\n{ \"three\" 3 }\n", @"");
     
     id clojureCode = @"( + 1 2 )\n( map [ x y ] ( 3 4 5 ) )\n[ a root vector is \"weird\" ]\n";
     id clojureData = [[clojureCode dataUsingEncoding:NSUTF8StringEncoding] ednObject];
     STAssertEqualObjects([clojureData ednString], clojureCode, @"");
     
-    STAssertNil([(@[[[BMOEDNRoot alloc] initWithArray:@[@1, @2]], @3]) ednString],@"Root object not at root of graph must be treated as invalid data.");
+    STAssertNil([(@[[[EDNRoot alloc] initWithArray:@[@1, @2]], @3]) ednString],@"Root object not at root of graph must be treated as invalid data.");
 }
 /*
 - (void)testRootObjectEquality {
@@ -423,11 +423,11 @@
         
 }
 
-#pragma mark - BMOEDNRoot
+#pragma mark - EDNRoot
 
 - (void)testNSEnumeratorBackedRootRealization {
     id objs = [@"[ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 ]" ednObject];
-    id root = [[BMOEDNRoot alloc] initWithEnumerator:[objs objectEnumerator]];
+    id root = [[EDNRoot alloc] initWithEnumerator:[objs objectEnumerator]];
     NSUInteger currentNumber = 1;
     for (NSNumber *num in root) {
         STAssertEquals([num unsignedIntegerValue],currentNumber++, @"");
@@ -443,7 +443,7 @@
 
 - (void)testRootIndexing {
     id objs = [@"[ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 ]" ednObject];
-    id root = [[BMOEDNRoot alloc] initWithEnumerator:[objs objectEnumerator]];
+    id root = [[EDNRoot alloc] initWithEnumerator:[objs objectEnumerator]];
     // sequentially
     for (NSUInteger i = 0; i < 10; i++) {
         STAssertEquals(i+1, [root[i] unsignedIntegerValue], @"");
@@ -459,7 +459,7 @@
     STAssertThrows((blah = root[[objs count]]), @"");
     
     // same tests again, with an NSArray-backed root    
-    root = [[BMOEDNRoot alloc] initWithArray:objs];
+    root = [[EDNRoot alloc] initWithArray:objs];
     // sequentially
     for (NSUInteger i = 0; i < 10; i++) {
         STAssertEquals(i+1, [root[i] unsignedIntegerValue], @"");
@@ -477,7 +477,7 @@
 ///* TODO: fix 
 - (void)testRootEnumerator {
     id objs = [@"[ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 ]" ednObject];
-    id root = [[BMOEDNRoot alloc] initWithEnumerator:[objs objectEnumerator]];
+    id root = [[EDNRoot alloc] initWithEnumerator:[objs objectEnumerator]];
     NSMutableSet *collector1 = [NSMutableSet new];
     NSMutableSet *collector2 = [NSMutableSet new];
     NSEnumerator *enumerator = [root objectEnumerator];
@@ -509,7 +509,7 @@
 #pragma mark - Lazy enumerator 
 
 - (void)testLazyEnumerator {
-    NSEnumerator * enumerator = [[BMOLazyEnumerator alloc] initWithBlock:^id(NSUInteger idx, id last) {
+    NSEnumerator * enumerator = [[EDNLazyEnumerator alloc] initWithBlock:^id(NSUInteger idx, id last) {
         return idx < 1000 ? @(idx) : nil;
     }];
     for (int i = 0; i < 1000; i++) {
@@ -521,10 +521,10 @@
 - (void)testLazyErrors {
     NSError *err = nil;
     NSData *data = [@"[ 1 2 :::::}}}}}" dataUsingEncoding:NSUTF8StringEncoding];
-    [BMOEDNSerialization ednObjectWithData:data options:0 error:&err];
+    [EDNSerialization ednObjectWithData:data options:0 error:&err];
     STAssertTrue(err!=nil, @"Should produce an error.");
     err = nil;
-    id root = [BMOEDNSerialization ednObjectWithData:data options:BMOEDNReadingLazyParsing|BMOEDNReadingMultipleObjects error:&err];
+    id root = [EDNSerialization ednObjectWithData:data options:EDNReadingLazyParsing|EDNReadingMultipleObjects error:&err];
     STAssertNil(err, @"Error is not immediate w/ lazy parsing.");
     NSUInteger count = 0;
     for (id obj in root) {
@@ -542,14 +542,14 @@
     NSMutableArray *collector = [NSMutableArray array];
     for (int i = 0; i < 10; i++) {
         id obj = @{[NSString stringWithFormat:@"%d",i]:@(i)};
-        [BMOEDNSerialization writeEdnObject:obj toStream:stream error:&err];
+        [EDNSerialization writeEdnObject:obj toStream:stream error:&err];
         [testString appendFormat:@"{ \"%1$d\" %1$d }\n",i];
         [collector addObject:obj];
     }
     STAssertNil(err, @"");
     NSData *data = [stream propertyForKey:NSStreamDataWrittenToMemoryStreamKey];
     NSString *stringified = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    BMOEDNRoot *root = [[BMOEDNRoot alloc] initWithArray:collector];
+    EDNRoot *root = [[EDNRoot alloc] initWithArray:collector];
     STAssertEqualObjects(stringified, [root ednString], @"Sanity check for comparison.");
     STAssertEqualObjects(stringified, testString, @"Multi-object stream test.");
 }
@@ -561,29 +561,29 @@
     NSString *charVector = @"[ \\newline \\n \\! \\* \"fooey\" \\& \\space \\tab \\return]";
     id edn = [charVector ednObject];
     STAssertTrue(edn != nil, @"Should parse into something.");
-    STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'\n'], edn[0], @"");
-    STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'n'], edn[1], @"");
-    STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'!'], edn[2], @"");
-    STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'*'], edn[3], @"");
+    STAssertEqualObjects([EDNCharacter characterWithUnichar:'\n'], edn[0], @"");
+    STAssertEqualObjects([EDNCharacter characterWithUnichar:'n'], edn[1], @"");
+    STAssertEqualObjects([EDNCharacter characterWithUnichar:'!'], edn[2], @"");
+    STAssertEqualObjects([EDNCharacter characterWithUnichar:'*'], edn[3], @"");
     STAssertEqualObjects(@"fooey", edn[4], @"");
-    STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'&'], edn[5], @"");
-    STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:' '], edn[6], @"");
-    STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'\t'], edn[7], @"");
-    STAssertEqualObjects([BMOEDNCharacter characterWithUnichar:'\r'], edn[8], @"");
+    STAssertEqualObjects([EDNCharacter characterWithUnichar:'&'], edn[5], @"");
+    STAssertEqualObjects([EDNCharacter characterWithUnichar:' '], edn[6], @"");
+    STAssertEqualObjects([EDNCharacter characterWithUnichar:'\t'], edn[7], @"");
+    STAssertEqualObjects([EDNCharacter characterWithUnichar:'\r'], edn[8], @"");
     
     STAssertNil([@"\\ " ednObject], @"");
 }
 
 - (void)testWriteCharacters {
-    NSArray *charVector = @[[BMOEDNCharacter characterWithUnichar:'\n'],
-                            [BMOEDNCharacter characterWithUnichar:'n'],
-                            [BMOEDNCharacter characterWithUnichar:'!'],
-                            [BMOEDNCharacter characterWithUnichar:'*'],
+    NSArray *charVector = @[[EDNCharacter characterWithUnichar:'\n'],
+                            [EDNCharacter characterWithUnichar:'n'],
+                            [EDNCharacter characterWithUnichar:'!'],
+                            [EDNCharacter characterWithUnichar:'*'],
                             @"fooey",
-                            [BMOEDNCharacter characterWithUnichar:'&'],
-                            [BMOEDNCharacter characterWithUnichar:' '],
-                            [BMOEDNCharacter characterWithUnichar:'\t'],
-                            [BMOEDNCharacter characterWithUnichar:'\r']];
+                            [EDNCharacter characterWithUnichar:'&'],
+                            [EDNCharacter characterWithUnichar:' '],
+                            [EDNCharacter characterWithUnichar:'\t'],
+                            [EDNCharacter characterWithUnichar:'\r']];
     NSString *edn = [charVector ednString];
     STAssertEqualObjects(edn, @"[ \\newline \\n \\! \\* \"fooey\" \\& \\space \\tab \\return ]", @"");
 }
@@ -596,7 +596,7 @@
     NSInputStream *stream = [NSInputStream inputStreamWithData:[ednString dataUsingEncoding:NSUTF8StringEncoding]];
     
     NSError *err = nil;
-    id read = [BMOEDNSerialization ednObjectWithStream:stream options:0 error:&err];
+    id read = [EDNSerialization ednObjectWithStream:stream options:0 error:&err];
     STAssertNil(err, @"Error should be nil.");
     
     STAssertEqualObjects(utfString, read, @"String should be read back out as it went in.");
@@ -604,10 +604,10 @@
     // edn UTF-8 character
     NSInputStream *charStream = [NSInputStream inputStreamWithData:[@"[ \\π ]" dataUsingEncoding:NSUTF8StringEncoding]];
     
-    read = [BMOEDNSerialization ednObjectWithStream:charStream options:0 error:&err];
+    read = [EDNSerialization ednObjectWithStream:charStream options:0 error:&err];
     STAssertNil(err, @"Error should be nil.");
     
-    STAssertEqualObjects((@[[BMOEDNCharacter characterWithUnichar:0x03C0]]), read, @"Character array should be read back out as it went in.");
+    STAssertEqualObjects((@[[EDNCharacter characterWithUnichar:0x03C0]]), read, @"Character array should be read back out as it went in.");
     
 }
 
@@ -617,7 +617,7 @@
     NSData *data = [ednString dataUsingEncoding:NSUTF8StringEncoding];
     
     NSError *err = nil;
-    id read = [BMOEDNSerialization ednObjectWithData:data options:0 error:&err];
+    id read = [EDNSerialization ednObjectWithData:data options:0 error:&err];
     STAssertNil(err, @"Error should be nil.");
     
     STAssertEqualObjects(utfString, read, @"String should be read back out as it went in.");
@@ -625,10 +625,10 @@
     // edn UTF-8 character
     NSData *charData = [@"[ \\π ]" dataUsingEncoding:NSUTF8StringEncoding];
     
-    read = [BMOEDNSerialization ednObjectWithData:charData options:0 error:&err];
+    read = [EDNSerialization ednObjectWithData:charData options:0 error:&err];
     STAssertNil(err, @"Error should be nil.");
     
-    STAssertEqualObjects((@[[BMOEDNCharacter characterWithUnichar:0x03C0]]), read, @"Character array should be read back out as it went in.");
+    STAssertEqualObjects((@[[EDNCharacter characterWithUnichar:0x03C0]]), read, @"Character array should be read back out as it went in.");
 }
 
 - (void)testUTFWrite {
@@ -639,7 +639,7 @@
     // edn UTF-8 character
     ednString = @"[ \\π ]";
     
-    STAssertEqualObjects([ednString dataUsingEncoding:NSUTF8StringEncoding], [(@[[BMOEDNCharacter characterWithUnichar:0x03C0]]) ednData], @"Character array should be read back out as it went in.");
+    STAssertEqualObjects([ednString dataUsingEncoding:NSUTF8StringEncoding], [(@[[EDNCharacter characterWithUnichar:0x03C0]]) ednData], @"Character array should be read back out as it went in.");
     
 }
 

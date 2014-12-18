@@ -8,60 +8,60 @@
 
 /* Begin PBXBuildFile section */
 		B539281F17D1D31C00B94545 /* edn-objc-tests.m in Sources */ = {isa = PBXBuildFile; fileRef = B539281E17D1D31C00B94545 /* edn-objc-tests.m */; };
-		B539282717D2E53100B94545 /* BMOEDNError.m in Sources */ = {isa = PBXBuildFile; fileRef = B539282617D2E53100B94545 /* BMOEDNError.m */; };
-		B539282A17D2F24E00B94545 /* BMOEDNRoot.h in Headers */ = {isa = PBXBuildFile; fileRef = B539282817D2F24E00B94545 /* BMOEDNRoot.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B539282B17D2F24E00B94545 /* BMOEDNRoot.m in Sources */ = {isa = PBXBuildFile; fileRef = B539282917D2F24E00B94545 /* BMOEDNRoot.m */; };
-		B53AE3D017D16E2F000CBCC0 /* NSUUID+BMOEDN.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AE3CE17D16E2F000CBCC0 /* NSUUID+BMOEDN.h */; };
-		B53AE3D117D16E2F000CBCC0 /* NSUUID+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = B53AE3CF17D16E2F000CBCC0 /* NSUUID+BMOEDN.m */; };
-		B53AE3D417D1728E000CBCC0 /* BMOEDNRegistry.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AE3D317D1728E000CBCC0 /* BMOEDNRegistry.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B53AE3D817D17E3B000CBCC0 /* BMOEDNRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = B53AE3D517D17648000CBCC0 /* BMOEDNRegistry.m */; };
-		B53AE3DC17D18024000CBCC0 /* NSDate+BMOEDN.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AE3DA17D18024000CBCC0 /* NSDate+BMOEDN.h */; };
-		B53AE3DD17D18024000CBCC0 /* NSDate+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = B53AE3DB17D18024000CBCC0 /* NSDate+BMOEDN.m */; };
-		B59D8EA31970DBC300881D63 /* BMOEDNArchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = B59D8EA11970DBC300881D63 /* BMOEDNArchiver.h */; };
-		B59D8EA41970DBC300881D63 /* BMOEDNArchiver.m in Sources */ = {isa = PBXBuildFile; fileRef = B59D8EA21970DBC300881D63 /* BMOEDNArchiver.m */; };
+		B539282717D2E53100B94545 /* EDNError.m in Sources */ = {isa = PBXBuildFile; fileRef = B539282617D2E53100B94545 /* EDNError.m */; };
+		B539282A17D2F24E00B94545 /* EDNRoot.h in Headers */ = {isa = PBXBuildFile; fileRef = B539282817D2F24E00B94545 /* EDNRoot.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B539282B17D2F24E00B94545 /* EDNRoot.m in Sources */ = {isa = PBXBuildFile; fileRef = B539282917D2F24E00B94545 /* EDNRoot.m */; };
+		B53AE3D017D16E2F000CBCC0 /* NSUUID+EDN.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AE3CE17D16E2F000CBCC0 /* NSUUID+EDN.h */; };
+		B53AE3D117D16E2F000CBCC0 /* NSUUID+EDN.m in Sources */ = {isa = PBXBuildFile; fileRef = B53AE3CF17D16E2F000CBCC0 /* NSUUID+EDN.m */; };
+		B53AE3D417D1728E000CBCC0 /* EDNRegistry.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AE3D317D1728E000CBCC0 /* EDNRegistry.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B53AE3D817D17E3B000CBCC0 /* EDNRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = B53AE3D517D17648000CBCC0 /* EDNRegistry.m */; };
+		B53AE3DC17D18024000CBCC0 /* NSDate+EDN.h in Headers */ = {isa = PBXBuildFile; fileRef = B53AE3DA17D18024000CBCC0 /* NSDate+EDN.h */; };
+		B53AE3DD17D18024000CBCC0 /* NSDate+EDN.m in Sources */ = {isa = PBXBuildFile; fileRef = B53AE3DB17D18024000CBCC0 /* NSDate+EDN.m */; };
+		B59D8EA31970DBC300881D63 /* EDNArchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = B59D8EA11970DBC300881D63 /* EDNArchiver.h */; };
+		B59D8EA41970DBC300881D63 /* EDNArchiver.m in Sources */ = {isa = PBXBuildFile; fileRef = B59D8EA21970DBC300881D63 /* EDNArchiver.m */; };
 		B59D8EA71972EEC000881D63 /* NSCodingFoo.m in Sources */ = {isa = PBXBuildFile; fileRef = B59D8EA61972EEC000881D63 /* NSCodingFoo.m */; };
 		B59D8EAB1972EF2800881D63 /* NSCodingBar.m in Sources */ = {isa = PBXBuildFile; fileRef = B59D8EAA1972EF2800881D63 /* NSCodingBar.m */; };
-		B59D8EAE1972FCE800881D63 /* BMOEDNUnarchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = B59D8EAC1972FCE800881D63 /* BMOEDNUnarchiver.h */; };
-		B59D8EAF1972FCE800881D63 /* BMOEDNUnarchiver.m in Sources */ = {isa = PBXBuildFile; fileRef = B59D8EAD1972FCE800881D63 /* BMOEDNUnarchiver.m */; };
-		B5A7BA7A17DC280B00EE55A1 /* BMOEDNCharacter.h in Headers */ = {isa = PBXBuildFile; fileRef = B5A7BA7817DC280B00EE55A1 /* BMOEDNCharacter.h */; };
-		B5A7BA7B17DC280B00EE55A1 /* BMOEDNCharacter.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A7BA7917DC280B00EE55A1 /* BMOEDNCharacter.m */; };
-		B5B837D717D038B900AEA457 /* BMOEDNRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B837D617D038B900AEA457 /* BMOEDNRepresentation.h */; };
-		B5B837DA17D03B2900AEA457 /* BMOEDNTaggedElement.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B837D817D03B2900AEA457 /* BMOEDNTaggedElement.h */; };
-		B5B837DB17D03B2900AEA457 /* BMOEDNTaggedElement.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */; };
-		B5BCDA3C196EAD6A0007B42A /* BMOEDNRatio.h in Headers */ = {isa = PBXBuildFile; fileRef = B5BCDA3A196EAD6A0007B42A /* BMOEDNRatio.h */; };
-		B5BCDA3D196EAD6A0007B42A /* BMOEDNRatio.m in Sources */ = {isa = PBXBuildFile; fileRef = B5BCDA3B196EAD6A0007B42A /* BMOEDNRatio.m */; };
+		B59D8EAE1972FCE800881D63 /* EDNUnarchiver.h in Headers */ = {isa = PBXBuildFile; fileRef = B59D8EAC1972FCE800881D63 /* EDNUnarchiver.h */; };
+		B59D8EAF1972FCE800881D63 /* EDNUnarchiver.m in Sources */ = {isa = PBXBuildFile; fileRef = B59D8EAD1972FCE800881D63 /* EDNUnarchiver.m */; };
+		B5A7BA7A17DC280B00EE55A1 /* EDNCharacter.h in Headers */ = {isa = PBXBuildFile; fileRef = B5A7BA7817DC280B00EE55A1 /* EDNCharacter.h */; };
+		B5A7BA7B17DC280B00EE55A1 /* EDNCharacter.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A7BA7917DC280B00EE55A1 /* EDNCharacter.m */; };
+		B5B837D717D038B900AEA457 /* EDNRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B837D617D038B900AEA457 /* EDNRepresentation.h */; };
+		B5B837DA17D03B2900AEA457 /* EDNTaggedElement.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B837D817D03B2900AEA457 /* EDNTaggedElement.h */; };
+		B5B837DB17D03B2900AEA457 /* EDNTaggedElement.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B837D917D03B2900AEA457 /* EDNTaggedElement.m */; };
+		B5BCDA3C196EAD6A0007B42A /* EDNRatio.h in Headers */ = {isa = PBXBuildFile; fileRef = B5BCDA3A196EAD6A0007B42A /* EDNRatio.h */; };
+		B5BCDA3D196EAD6A0007B42A /* EDNRatio.m in Sources */ = {isa = PBXBuildFile; fileRef = B5BCDA3B196EAD6A0007B42A /* EDNRatio.m */; };
 		B5C7A62A17C8F282005E0615 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A62917C8F282005E0615 /* Foundation.framework */; };
-		B5C7A63117C8F282005E0615 /* BMOEDNSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A63017C8F282005E0615 /* BMOEDNSerialization.m */; };
+		B5C7A63117C8F282005E0615 /* EDNSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A63017C8F282005E0615 /* EDNSerialization.m */; };
 		B5C7A63917C8F282005E0615 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A63817C8F282005E0615 /* SenTestingKit.framework */; };
 		B5C7A63B17C8F282005E0615 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A63A17C8F282005E0615 /* UIKit.framework */; };
 		B5C7A63C17C8F282005E0615 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A62917C8F282005E0615 /* Foundation.framework */; };
 		B5C7A63F17C8F282005E0615 /* libedn-objc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5C7A62617C8F282005E0615 /* libedn-objc.a */; };
-		B5C7A65317C9B35D005E0615 /* BMOEDNKeyword.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65217C9B35D005E0615 /* BMOEDNKeyword.m */; };
-		B5C7A65917C9C1F4005E0615 /* BMOEDNList.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65817C9C1F4005E0615 /* BMOEDNList.m */; };
-		B5C7A65C17CAB740005E0615 /* BMOEDNSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65B17CAB73F005E0615 /* BMOEDNSymbol.m */; };
-		B5C7A65F17CC590A005E0615 /* NSString+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65E17CC590A005E0615 /* NSString+BMOEDN.m */; };
+		B5C7A65317C9B35D005E0615 /* EDNKeyword.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65217C9B35D005E0615 /* EDNKeyword.m */; };
+		B5C7A65917C9C1F4005E0615 /* EDNList.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65817C9C1F4005E0615 /* EDNList.m */; };
+		B5C7A65C17CAB740005E0615 /* EDNSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65B17CAB73F005E0615 /* EDNSymbol.m */; };
+		B5C7A65F17CC590A005E0615 /* NSString+EDN.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A65E17CC590A005E0615 /* NSString+EDN.m */; };
 		B5C7A66117CC5A31005E0615 /* edn-objc.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = B5C7A66017CC599B005E0615 /* edn-objc.h */; };
-		B5C7A66517CDBE74005E0615 /* BMOEDNReader.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A66417CDBE73005E0615 /* BMOEDNReader.m */; };
-		B5C7A66A17CDC20A005E0615 /* BMOEDNError.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A66617CDBF30005E0615 /* BMOEDNError.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B5C7A66B17CDC21A005E0615 /* BMOEDNSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A65A17CAB73F005E0615 /* BMOEDNSymbol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B5C7A66C17CDC21A005E0615 /* BMOEDNKeyword.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A65117C9B35D005E0615 /* BMOEDNKeyword.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B5C7A66D17CDC21A005E0615 /* BMOEDNSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A62E17C8F282005E0615 /* BMOEDNSerialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B5C7A66E17CDC21A005E0615 /* BMOEDNList.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A65717C9C1F4005E0615 /* BMOEDNList.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B5C7A66F17CDC21A005E0615 /* NSString+BMOEDN.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A65D17CC590A005E0615 /* NSString+BMOEDN.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B5C7A67317CEF1AE005E0615 /* BMOEDNWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A67117CEF1AE005E0615 /* BMOEDNWriter.h */; };
-		B5C7A67417CEF1AE005E0615 /* BMOEDNWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A67217CEF1AE005E0615 /* BMOEDNWriter.m */; };
-		B5C7A67817CEFB26005E0615 /* NSObject+BMOEDN.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A67617CEFB26005E0615 /* NSObject+BMOEDN.h */; };
-		B5C7A67917CEFB26005E0615 /* NSObject+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A67717CEFB26005E0615 /* NSObject+BMOEDN.m */; };
-		CFA008CE17D44C600077B8E2 /* BMOEDNReaderState.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008CC17D44C600077B8E2 /* BMOEDNReaderState.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		CFA008CF17D44C600077B8E2 /* BMOEDNReaderState.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008CD17D44C600077B8E2 /* BMOEDNReaderState.m */; };
-		CFA008D217D45E810077B8E2 /* NSInputStream+BMOEDN.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008D017D45E810077B8E2 /* NSInputStream+BMOEDN.h */; };
-		CFA008D317D45E810077B8E2 /* NSInputStream+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008D117D45E810077B8E2 /* NSInputStream+BMOEDN.m */; };
-		CFA008D617D45F4B0077B8E2 /* NSData+BMOEDN.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008D417D45F4B0077B8E2 /* NSData+BMOEDN.h */; };
-		CFA008D717D45F4B0077B8E2 /* NSData+BMOEDN.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008D517D45F4B0077B8E2 /* NSData+BMOEDN.m */; };
-		CFA008DA17D464AC0077B8E2 /* BMOEDNWriterState.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008D817D464AC0077B8E2 /* BMOEDNWriterState.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		CFA008DB17D464AC0077B8E2 /* BMOEDNWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008D917D464AC0077B8E2 /* BMOEDNWriterState.m */; };
-		CFA008E017D4D43C0077B8E2 /* BMOLazyEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008DE17D4D43C0077B8E2 /* BMOLazyEnumerator.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		CFA008E117D4D43C0077B8E2 /* BMOLazyEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008DF17D4D43C0077B8E2 /* BMOLazyEnumerator.m */; };
+		B5C7A66517CDBE74005E0615 /* EDNReader.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A66417CDBE73005E0615 /* EDNReader.m */; };
+		B5C7A66A17CDC20A005E0615 /* EDNError.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A66617CDBF30005E0615 /* EDNError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B5C7A66B17CDC21A005E0615 /* EDNSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A65A17CAB73F005E0615 /* EDNSymbol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B5C7A66C17CDC21A005E0615 /* EDNKeyword.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A65117C9B35D005E0615 /* EDNKeyword.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B5C7A66D17CDC21A005E0615 /* EDNSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A62E17C8F282005E0615 /* EDNSerialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B5C7A66E17CDC21A005E0615 /* EDNList.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A65717C9C1F4005E0615 /* EDNList.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B5C7A66F17CDC21A005E0615 /* NSString+EDN.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A65D17CC590A005E0615 /* NSString+EDN.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B5C7A67317CEF1AE005E0615 /* EDNWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A67117CEF1AE005E0615 /* EDNWriter.h */; };
+		B5C7A67417CEF1AE005E0615 /* EDNWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A67217CEF1AE005E0615 /* EDNWriter.m */; };
+		B5C7A67817CEFB26005E0615 /* NSObject+EDN.h in Headers */ = {isa = PBXBuildFile; fileRef = B5C7A67617CEFB26005E0615 /* NSObject+EDN.h */; };
+		B5C7A67917CEFB26005E0615 /* NSObject+EDN.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C7A67717CEFB26005E0615 /* NSObject+EDN.m */; };
+		CFA008CE17D44C600077B8E2 /* EDNReaderState.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008CC17D44C600077B8E2 /* EDNReaderState.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		CFA008CF17D44C600077B8E2 /* EDNReaderState.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008CD17D44C600077B8E2 /* EDNReaderState.m */; };
+		CFA008D217D45E810077B8E2 /* NSInputStream+EDN.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008D017D45E810077B8E2 /* NSInputStream+EDN.h */; };
+		CFA008D317D45E810077B8E2 /* NSInputStream+EDN.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008D117D45E810077B8E2 /* NSInputStream+EDN.m */; };
+		CFA008D617D45F4B0077B8E2 /* NSData+EDN.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008D417D45F4B0077B8E2 /* NSData+EDN.h */; };
+		CFA008D717D45F4B0077B8E2 /* NSData+EDN.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008D517D45F4B0077B8E2 /* NSData+EDN.m */; };
+		CFA008DA17D464AC0077B8E2 /* EDNWriterState.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008D817D464AC0077B8E2 /* EDNWriterState.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		CFA008DB17D464AC0077B8E2 /* EDNWriterState.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008D917D464AC0077B8E2 /* EDNWriterState.m */; };
+		CFA008E017D4D43C0077B8E2 /* EDNLazyEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = CFA008DE17D4D43C0077B8E2 /* EDNLazyEnumerator.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		CFA008E117D4D43C0077B8E2 /* EDNLazyEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = CFA008DF17D4D43C0077B8E2 /* EDNLazyEnumerator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,67 +88,68 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B508959D1A42FFEE008B1164 /* bmoedn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bmoedn.h; sourceTree = "<group>"; };
 		B539281D17D1D31C00B94545 /* edn-objc-tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = "edn-objc-tests.h"; path = "edn-objc-tests/edn-objc-tests.h"; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		B539281E17D1D31C00B94545 /* edn-objc-tests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = "edn-objc-tests.m"; path = "edn-objc-tests/edn-objc-tests.m"; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		B539282017D1D32E00B94545 /* edn-objc-tests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "edn-objc-tests-Info.plist"; path = "edn-objc-tests/edn-objc-tests-Info.plist"; sourceTree = SOURCE_ROOT; };
-		B539282617D2E53100B94545 /* BMOEDNError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNError.m; sourceTree = "<group>"; };
-		B539282817D2F24E00B94545 /* BMOEDNRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNRoot.h; sourceTree = "<group>"; };
-		B539282917D2F24E00B94545 /* BMOEDNRoot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNRoot.m; sourceTree = "<group>"; };
-		B53AE3CE17D16E2F000CBCC0 /* NSUUID+BMOEDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUUID+BMOEDN.h"; sourceTree = "<group>"; };
-		B53AE3CF17D16E2F000CBCC0 /* NSUUID+BMOEDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUUID+BMOEDN.m"; sourceTree = "<group>"; };
-		B53AE3D317D1728E000CBCC0 /* BMOEDNRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNRegistry.h; sourceTree = "<group>"; };
-		B53AE3D517D17648000CBCC0 /* BMOEDNRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BMOEDNRegistry.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		B53AE3DA17D18024000CBCC0 /* NSDate+BMOEDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+BMOEDN.h"; sourceTree = "<group>"; };
-		B53AE3DB17D18024000CBCC0 /* NSDate+BMOEDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+BMOEDN.m"; sourceTree = "<group>"; };
-		B59D8EA11970DBC300881D63 /* BMOEDNArchiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNArchiver.h; sourceTree = "<group>"; };
-		B59D8EA21970DBC300881D63 /* BMOEDNArchiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNArchiver.m; sourceTree = "<group>"; };
+		B539282617D2E53100B94545 /* EDNError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDNError.m; sourceTree = "<group>"; };
+		B539282817D2F24E00B94545 /* EDNRoot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDNRoot.h; sourceTree = "<group>"; };
+		B539282917D2F24E00B94545 /* EDNRoot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDNRoot.m; sourceTree = "<group>"; };
+		B53AE3CE17D16E2F000CBCC0 /* NSUUID+EDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUUID+EDN.h"; sourceTree = "<group>"; };
+		B53AE3CF17D16E2F000CBCC0 /* NSUUID+EDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUUID+EDN.m"; sourceTree = "<group>"; };
+		B53AE3D317D1728E000CBCC0 /* EDNRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDNRegistry.h; sourceTree = "<group>"; };
+		B53AE3D517D17648000CBCC0 /* EDNRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EDNRegistry.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		B53AE3DA17D18024000CBCC0 /* NSDate+EDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+EDN.h"; sourceTree = "<group>"; };
+		B53AE3DB17D18024000CBCC0 /* NSDate+EDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+EDN.m"; sourceTree = "<group>"; };
+		B59D8EA11970DBC300881D63 /* EDNArchiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDNArchiver.h; sourceTree = "<group>"; };
+		B59D8EA21970DBC300881D63 /* EDNArchiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDNArchiver.m; sourceTree = "<group>"; };
 		B59D8EA51972EEC000881D63 /* NSCodingFoo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSCodingFoo.h; path = "edn-objc-tests/NSCodingFoo.h"; sourceTree = SOURCE_ROOT; };
 		B59D8EA61972EEC000881D63 /* NSCodingFoo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSCodingFoo.m; path = "edn-objc-tests/NSCodingFoo.m"; sourceTree = SOURCE_ROOT; };
 		B59D8EA91972EF2800881D63 /* NSCodingBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSCodingBar.h; path = "edn-objc-tests/NSCodingBar.h"; sourceTree = SOURCE_ROOT; };
 		B59D8EAA1972EF2800881D63 /* NSCodingBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSCodingBar.m; path = "edn-objc-tests/NSCodingBar.m"; sourceTree = SOURCE_ROOT; };
-		B59D8EAC1972FCE800881D63 /* BMOEDNUnarchiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNUnarchiver.h; sourceTree = "<group>"; };
-		B59D8EAD1972FCE800881D63 /* BMOEDNUnarchiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNUnarchiver.m; sourceTree = "<group>"; };
-		B5A7BA7817DC280B00EE55A1 /* BMOEDNCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNCharacter.h; sourceTree = "<group>"; };
-		B5A7BA7917DC280B00EE55A1 /* BMOEDNCharacter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNCharacter.m; sourceTree = "<group>"; };
-		B5B837D617D038B900AEA457 /* BMOEDNRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BMOEDNRepresentation.h; sourceTree = "<group>"; };
-		B5B837D817D03B2900AEA457 /* BMOEDNTaggedElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNTaggedElement.h; sourceTree = "<group>"; };
-		B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNTaggedElement.m; sourceTree = "<group>"; };
-		B5BCDA3A196EAD6A0007B42A /* BMOEDNRatio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNRatio.h; sourceTree = "<group>"; };
-		B5BCDA3B196EAD6A0007B42A /* BMOEDNRatio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNRatio.m; sourceTree = "<group>"; };
+		B59D8EAC1972FCE800881D63 /* EDNUnarchiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDNUnarchiver.h; sourceTree = "<group>"; };
+		B59D8EAD1972FCE800881D63 /* EDNUnarchiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDNUnarchiver.m; sourceTree = "<group>"; };
+		B5A7BA7817DC280B00EE55A1 /* EDNCharacter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDNCharacter.h; sourceTree = "<group>"; };
+		B5A7BA7917DC280B00EE55A1 /* EDNCharacter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDNCharacter.m; sourceTree = "<group>"; };
+		B5B837D617D038B900AEA457 /* EDNRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EDNRepresentation.h; sourceTree = "<group>"; };
+		B5B837D817D03B2900AEA457 /* EDNTaggedElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDNTaggedElement.h; sourceTree = "<group>"; };
+		B5B837D917D03B2900AEA457 /* EDNTaggedElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDNTaggedElement.m; sourceTree = "<group>"; };
+		B5BCDA3A196EAD6A0007B42A /* EDNRatio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDNRatio.h; sourceTree = "<group>"; };
+		B5BCDA3B196EAD6A0007B42A /* EDNRatio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDNRatio.m; sourceTree = "<group>"; };
 		B5C7A62617C8F282005E0615 /* libedn-objc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libedn-objc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C7A62917C8F282005E0615 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B5C7A62D17C8F282005E0615 /* edn-objc-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "edn-objc-Prefix.pch"; sourceTree = "<group>"; };
-		B5C7A62E17C8F282005E0615 /* BMOEDNSerialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BMOEDNSerialization.h; sourceTree = "<group>"; };
-		B5C7A63017C8F282005E0615 /* BMOEDNSerialization.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BMOEDNSerialization.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		B5C7A62E17C8F282005E0615 /* EDNSerialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = EDNSerialization.h; sourceTree = "<group>"; };
+		B5C7A63017C8F282005E0615 /* EDNSerialization.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EDNSerialization.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		B5C7A63717C8F282005E0615 /* edn-objc-tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "edn-objc-tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C7A63817C8F282005E0615 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		B5C7A63A17C8F282005E0615 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		B5C7A65117C9B35D005E0615 /* BMOEDNKeyword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNKeyword.h; sourceTree = "<group>"; };
-		B5C7A65217C9B35D005E0615 /* BMOEDNKeyword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNKeyword.m; sourceTree = "<group>"; };
-		B5C7A65717C9C1F4005E0615 /* BMOEDNList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNList.h; sourceTree = "<group>"; };
-		B5C7A65817C9C1F4005E0615 /* BMOEDNList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNList.m; sourceTree = "<group>"; };
-		B5C7A65A17CAB73F005E0615 /* BMOEDNSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNSymbol.h; sourceTree = "<group>"; };
-		B5C7A65B17CAB73F005E0615 /* BMOEDNSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNSymbol.m; sourceTree = "<group>"; };
-		B5C7A65D17CC590A005E0615 /* NSString+BMOEDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+BMOEDN.h"; sourceTree = "<group>"; };
-		B5C7A65E17CC590A005E0615 /* NSString+BMOEDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+BMOEDN.m"; sourceTree = "<group>"; };
+		B5C7A65117C9B35D005E0615 /* EDNKeyword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDNKeyword.h; sourceTree = "<group>"; };
+		B5C7A65217C9B35D005E0615 /* EDNKeyword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDNKeyword.m; sourceTree = "<group>"; };
+		B5C7A65717C9C1F4005E0615 /* EDNList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDNList.h; sourceTree = "<group>"; };
+		B5C7A65817C9C1F4005E0615 /* EDNList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDNList.m; sourceTree = "<group>"; };
+		B5C7A65A17CAB73F005E0615 /* EDNSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDNSymbol.h; sourceTree = "<group>"; };
+		B5C7A65B17CAB73F005E0615 /* EDNSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDNSymbol.m; sourceTree = "<group>"; };
+		B5C7A65D17CC590A005E0615 /* NSString+EDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+EDN.h"; sourceTree = "<group>"; };
+		B5C7A65E17CC590A005E0615 /* NSString+EDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+EDN.m"; sourceTree = "<group>"; };
 		B5C7A66017CC599B005E0615 /* edn-objc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "edn-objc.h"; sourceTree = "<group>"; };
-		B5C7A66317CDBE73005E0615 /* BMOEDNReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNReader.h; sourceTree = "<group>"; };
-		B5C7A66417CDBE73005E0615 /* BMOEDNReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BMOEDNReader.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		B5C7A66617CDBF30005E0615 /* BMOEDNError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BMOEDNError.h; sourceTree = "<group>"; };
-		B5C7A67117CEF1AE005E0615 /* BMOEDNWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNWriter.h; sourceTree = "<group>"; };
-		B5C7A67217CEF1AE005E0615 /* BMOEDNWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BMOEDNWriter.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		B5C7A67617CEFB26005E0615 /* NSObject+BMOEDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+BMOEDN.h"; sourceTree = "<group>"; };
-		B5C7A67717CEFB26005E0615 /* NSObject+BMOEDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+BMOEDN.m"; sourceTree = "<group>"; };
-		CFA008CC17D44C600077B8E2 /* BMOEDNReaderState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNReaderState.h; sourceTree = "<group>"; };
-		CFA008CD17D44C600077B8E2 /* BMOEDNReaderState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNReaderState.m; sourceTree = "<group>"; };
-		CFA008D017D45E810077B8E2 /* NSInputStream+BMOEDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInputStream+BMOEDN.h"; sourceTree = "<group>"; };
-		CFA008D117D45E810077B8E2 /* NSInputStream+BMOEDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInputStream+BMOEDN.m"; sourceTree = "<group>"; };
-		CFA008D417D45F4B0077B8E2 /* NSData+BMOEDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+BMOEDN.h"; sourceTree = "<group>"; };
-		CFA008D517D45F4B0077B8E2 /* NSData+BMOEDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+BMOEDN.m"; sourceTree = "<group>"; };
-		CFA008D817D464AC0077B8E2 /* BMOEDNWriterState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOEDNWriterState.h; sourceTree = "<group>"; };
-		CFA008D917D464AC0077B8E2 /* BMOEDNWriterState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOEDNWriterState.m; sourceTree = "<group>"; };
-		CFA008DE17D4D43C0077B8E2 /* BMOLazyEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMOLazyEnumerator.h; sourceTree = "<group>"; };
-		CFA008DF17D4D43C0077B8E2 /* BMOLazyEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMOLazyEnumerator.m; sourceTree = "<group>"; };
+		B5C7A66317CDBE73005E0615 /* EDNReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDNReader.h; sourceTree = "<group>"; };
+		B5C7A66417CDBE73005E0615 /* EDNReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EDNReader.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		B5C7A66617CDBF30005E0615 /* EDNError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EDNError.h; sourceTree = "<group>"; };
+		B5C7A67117CEF1AE005E0615 /* EDNWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDNWriter.h; sourceTree = "<group>"; };
+		B5C7A67217CEF1AE005E0615 /* EDNWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EDNWriter.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		B5C7A67617CEFB26005E0615 /* NSObject+EDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+EDN.h"; sourceTree = "<group>"; };
+		B5C7A67717CEFB26005E0615 /* NSObject+EDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+EDN.m"; sourceTree = "<group>"; };
+		CFA008CC17D44C600077B8E2 /* EDNReaderState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDNReaderState.h; sourceTree = "<group>"; };
+		CFA008CD17D44C600077B8E2 /* EDNReaderState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDNReaderState.m; sourceTree = "<group>"; };
+		CFA008D017D45E810077B8E2 /* NSInputStream+EDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInputStream+EDN.h"; sourceTree = "<group>"; };
+		CFA008D117D45E810077B8E2 /* NSInputStream+EDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInputStream+EDN.m"; sourceTree = "<group>"; };
+		CFA008D417D45F4B0077B8E2 /* NSData+EDN.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+EDN.h"; sourceTree = "<group>"; };
+		CFA008D517D45F4B0077B8E2 /* NSData+EDN.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+EDN.m"; sourceTree = "<group>"; };
+		CFA008D817D464AC0077B8E2 /* EDNWriterState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDNWriterState.h; sourceTree = "<group>"; };
+		CFA008D917D464AC0077B8E2 /* EDNWriterState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDNWriterState.m; sourceTree = "<group>"; };
+		CFA008DE17D4D43C0077B8E2 /* EDNLazyEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDNLazyEnumerator.h; sourceTree = "<group>"; };
+		CFA008DF17D4D43C0077B8E2 /* EDNLazyEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDNLazyEnumerator.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,10 +178,10 @@
 		B53AE3D917D17FA5000CBCC0 /* Representation Implementations */ = {
 			isa = PBXGroup;
 			children = (
-				B53AE3CE17D16E2F000CBCC0 /* NSUUID+BMOEDN.h */,
-				B53AE3CF17D16E2F000CBCC0 /* NSUUID+BMOEDN.m */,
-				B53AE3DA17D18024000CBCC0 /* NSDate+BMOEDN.h */,
-				B53AE3DB17D18024000CBCC0 /* NSDate+BMOEDN.m */,
+				B53AE3CE17D16E2F000CBCC0 /* NSUUID+EDN.h */,
+				B53AE3CF17D16E2F000CBCC0 /* NSUUID+EDN.m */,
+				B53AE3DA17D18024000CBCC0 /* NSDate+EDN.h */,
+				B53AE3DB17D18024000CBCC0 /* NSDate+EDN.m */,
 			);
 			name = "Representation Implementations";
 			sourceTree = "<group>";
@@ -188,20 +189,20 @@
 		B597CD7017D1AB3F00FFF8F4 /* Primitives */ = {
 			isa = PBXGroup;
 			children = (
-				B539282817D2F24E00B94545 /* BMOEDNRoot.h */,
-				B539282917D2F24E00B94545 /* BMOEDNRoot.m */,
-				B5C7A65A17CAB73F005E0615 /* BMOEDNSymbol.h */,
-				B5C7A65B17CAB73F005E0615 /* BMOEDNSymbol.m */,
-				B5C7A65117C9B35D005E0615 /* BMOEDNKeyword.h */,
-				B5C7A65217C9B35D005E0615 /* BMOEDNKeyword.m */,
-				B5C7A65717C9C1F4005E0615 /* BMOEDNList.h */,
-				B5C7A65817C9C1F4005E0615 /* BMOEDNList.m */,
-				B5B837D817D03B2900AEA457 /* BMOEDNTaggedElement.h */,
-				B5B837D917D03B2900AEA457 /* BMOEDNTaggedElement.m */,
-				B5A7BA7817DC280B00EE55A1 /* BMOEDNCharacter.h */,
-				B5A7BA7917DC280B00EE55A1 /* BMOEDNCharacter.m */,
-				B5BCDA3A196EAD6A0007B42A /* BMOEDNRatio.h */,
-				B5BCDA3B196EAD6A0007B42A /* BMOEDNRatio.m */,
+				B539282817D2F24E00B94545 /* EDNRoot.h */,
+				B539282917D2F24E00B94545 /* EDNRoot.m */,
+				B5C7A65A17CAB73F005E0615 /* EDNSymbol.h */,
+				B5C7A65B17CAB73F005E0615 /* EDNSymbol.m */,
+				B5C7A65117C9B35D005E0615 /* EDNKeyword.h */,
+				B5C7A65217C9B35D005E0615 /* EDNKeyword.m */,
+				B5C7A65717C9C1F4005E0615 /* EDNList.h */,
+				B5C7A65817C9C1F4005E0615 /* EDNList.m */,
+				B5B837D817D03B2900AEA457 /* EDNTaggedElement.h */,
+				B5B837D917D03B2900AEA457 /* EDNTaggedElement.m */,
+				B5A7BA7817DC280B00EE55A1 /* EDNCharacter.h */,
+				B5A7BA7917DC280B00EE55A1 /* EDNCharacter.m */,
+				B5BCDA3A196EAD6A0007B42A /* EDNRatio.h */,
+				B5BCDA3B196EAD6A0007B42A /* EDNRatio.m */,
 			);
 			name = Primitives;
 			sourceTree = "<group>";
@@ -220,9 +221,9 @@
 		B5B837D517D0389B00AEA457 /* Representation */ = {
 			isa = PBXGroup;
 			children = (
-				B53AE3D317D1728E000CBCC0 /* BMOEDNRegistry.h */,
-				B53AE3D517D17648000CBCC0 /* BMOEDNRegistry.m */,
-				B5B837D617D038B900AEA457 /* BMOEDNRepresentation.h */,
+				B53AE3D317D1728E000CBCC0 /* EDNRegistry.h */,
+				B53AE3D517D17648000CBCC0 /* EDNRegistry.m */,
+				B5B837D617D038B900AEA457 /* EDNRepresentation.h */,
 			);
 			name = Representation;
 			sourceTree = "<group>";
@@ -260,15 +261,15 @@
 			isa = PBXGroup;
 			children = (
 				B5C7A66017CC599B005E0615 /* edn-objc.h */,
-				B5C7A62E17C8F282005E0615 /* BMOEDNSerialization.h */,
-				B5C7A63017C8F282005E0615 /* BMOEDNSerialization.m */,
+				B5C7A62E17C8F282005E0615 /* EDNSerialization.h */,
+				B5C7A63017C8F282005E0615 /* EDNSerialization.m */,
 				B597CD7017D1AB3F00FFF8F4 /* Primitives */,
 				B5B837D517D0389B00AEA457 /* Representation */,
 				B53AE3D917D17FA5000CBCC0 /* Representation Implementations */,
 				B5C7A67517CEFAE5005E0615 /* Categories */,
 				CFA008CB17D44C2F0077B8E2 /* Serialization */,
-				B5C7A66617CDBF30005E0615 /* BMOEDNError.h */,
-				B539282617D2E53100B94545 /* BMOEDNError.m */,
+				B5C7A66617CDBF30005E0615 /* EDNError.h */,
+				B539282617D2E53100B94545 /* EDNError.m */,
 				B5C7A62C17C8F282005E0615 /* Supporting Files */,
 			);
 			path = "edn-objc";
@@ -278,6 +279,7 @@
 			isa = PBXGroup;
 			children = (
 				B5C7A62D17C8F282005E0615 /* edn-objc-Prefix.pch */,
+				B508959D1A42FFEE008B1164 /* bmoedn.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -297,14 +299,14 @@
 		B5C7A67517CEFAE5005E0615 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				B5C7A67617CEFB26005E0615 /* NSObject+BMOEDN.h */,
-				B5C7A67717CEFB26005E0615 /* NSObject+BMOEDN.m */,
-				B5C7A65D17CC590A005E0615 /* NSString+BMOEDN.h */,
-				B5C7A65E17CC590A005E0615 /* NSString+BMOEDN.m */,
-				CFA008D017D45E810077B8E2 /* NSInputStream+BMOEDN.h */,
-				CFA008D117D45E810077B8E2 /* NSInputStream+BMOEDN.m */,
-				CFA008D417D45F4B0077B8E2 /* NSData+BMOEDN.h */,
-				CFA008D517D45F4B0077B8E2 /* NSData+BMOEDN.m */,
+				B5C7A67617CEFB26005E0615 /* NSObject+EDN.h */,
+				B5C7A67717CEFB26005E0615 /* NSObject+EDN.m */,
+				B5C7A65D17CC590A005E0615 /* NSString+EDN.h */,
+				B5C7A65E17CC590A005E0615 /* NSString+EDN.m */,
+				CFA008D017D45E810077B8E2 /* NSInputStream+EDN.h */,
+				CFA008D117D45E810077B8E2 /* NSInputStream+EDN.m */,
+				CFA008D417D45F4B0077B8E2 /* NSData+EDN.h */,
+				CFA008D517D45F4B0077B8E2 /* NSData+EDN.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -321,14 +323,14 @@
 		CFA008DC17D464CF0077B8E2 /* Reading */ = {
 			isa = PBXGroup;
 			children = (
-				CFA008CC17D44C600077B8E2 /* BMOEDNReaderState.h */,
-				CFA008CD17D44C600077B8E2 /* BMOEDNReaderState.m */,
-				B5C7A66317CDBE73005E0615 /* BMOEDNReader.h */,
-				B5C7A66417CDBE73005E0615 /* BMOEDNReader.m */,
-				CFA008DE17D4D43C0077B8E2 /* BMOLazyEnumerator.h */,
-				CFA008DF17D4D43C0077B8E2 /* BMOLazyEnumerator.m */,
-				B59D8EAC1972FCE800881D63 /* BMOEDNUnarchiver.h */,
-				B59D8EAD1972FCE800881D63 /* BMOEDNUnarchiver.m */,
+				CFA008CC17D44C600077B8E2 /* EDNReaderState.h */,
+				CFA008CD17D44C600077B8E2 /* EDNReaderState.m */,
+				B5C7A66317CDBE73005E0615 /* EDNReader.h */,
+				B5C7A66417CDBE73005E0615 /* EDNReader.m */,
+				CFA008DE17D4D43C0077B8E2 /* EDNLazyEnumerator.h */,
+				CFA008DF17D4D43C0077B8E2 /* EDNLazyEnumerator.m */,
+				B59D8EAC1972FCE800881D63 /* EDNUnarchiver.h */,
+				B59D8EAD1972FCE800881D63 /* EDNUnarchiver.m */,
 			);
 			name = Reading;
 			sourceTree = "<group>";
@@ -336,12 +338,12 @@
 		CFA008DD17D464DC0077B8E2 /* Writing */ = {
 			isa = PBXGroup;
 			children = (
-				CFA008D817D464AC0077B8E2 /* BMOEDNWriterState.h */,
-				CFA008D917D464AC0077B8E2 /* BMOEDNWriterState.m */,
-				B5C7A67117CEF1AE005E0615 /* BMOEDNWriter.h */,
-				B5C7A67217CEF1AE005E0615 /* BMOEDNWriter.m */,
-				B59D8EA11970DBC300881D63 /* BMOEDNArchiver.h */,
-				B59D8EA21970DBC300881D63 /* BMOEDNArchiver.m */,
+				CFA008D817D464AC0077B8E2 /* EDNWriterState.h */,
+				CFA008D917D464AC0077B8E2 /* EDNWriterState.m */,
+				B5C7A67117CEF1AE005E0615 /* EDNWriter.h */,
+				B5C7A67217CEF1AE005E0615 /* EDNWriter.m */,
+				B59D8EA11970DBC300881D63 /* EDNArchiver.h */,
+				B59D8EA21970DBC300881D63 /* EDNArchiver.m */,
 			);
 			name = Writing;
 			sourceTree = "<group>";
@@ -353,29 +355,29 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B59D8EAE1972FCE800881D63 /* BMOEDNUnarchiver.h in Headers */,
-				B5C7A66A17CDC20A005E0615 /* BMOEDNError.h in Headers */,
-				B5C7A66B17CDC21A005E0615 /* BMOEDNSymbol.h in Headers */,
-				B5C7A66C17CDC21A005E0615 /* BMOEDNKeyword.h in Headers */,
-				B5C7A66D17CDC21A005E0615 /* BMOEDNSerialization.h in Headers */,
-				B5C7A66E17CDC21A005E0615 /* BMOEDNList.h in Headers */,
-				B59D8EA31970DBC300881D63 /* BMOEDNArchiver.h in Headers */,
-				B5C7A66F17CDC21A005E0615 /* NSString+BMOEDN.h in Headers */,
-				B5C7A67317CEF1AE005E0615 /* BMOEDNWriter.h in Headers */,
-				B5C7A67817CEFB26005E0615 /* NSObject+BMOEDN.h in Headers */,
-				B5B837D717D038B900AEA457 /* BMOEDNRepresentation.h in Headers */,
-				B5B837DA17D03B2900AEA457 /* BMOEDNTaggedElement.h in Headers */,
-				B53AE3D017D16E2F000CBCC0 /* NSUUID+BMOEDN.h in Headers */,
-				B53AE3D417D1728E000CBCC0 /* BMOEDNRegistry.h in Headers */,
-				B53AE3DC17D18024000CBCC0 /* NSDate+BMOEDN.h in Headers */,
-				B539282A17D2F24E00B94545 /* BMOEDNRoot.h in Headers */,
-				CFA008CE17D44C600077B8E2 /* BMOEDNReaderState.h in Headers */,
-				CFA008D217D45E810077B8E2 /* NSInputStream+BMOEDN.h in Headers */,
-				CFA008D617D45F4B0077B8E2 /* NSData+BMOEDN.h in Headers */,
-				B5BCDA3C196EAD6A0007B42A /* BMOEDNRatio.h in Headers */,
-				CFA008DA17D464AC0077B8E2 /* BMOEDNWriterState.h in Headers */,
-				CFA008E017D4D43C0077B8E2 /* BMOLazyEnumerator.h in Headers */,
-				B5A7BA7A17DC280B00EE55A1 /* BMOEDNCharacter.h in Headers */,
+				B59D8EAE1972FCE800881D63 /* EDNUnarchiver.h in Headers */,
+				B5C7A66A17CDC20A005E0615 /* EDNError.h in Headers */,
+				B5C7A66B17CDC21A005E0615 /* EDNSymbol.h in Headers */,
+				B5C7A66C17CDC21A005E0615 /* EDNKeyword.h in Headers */,
+				B5C7A66D17CDC21A005E0615 /* EDNSerialization.h in Headers */,
+				B5C7A66E17CDC21A005E0615 /* EDNList.h in Headers */,
+				B59D8EA31970DBC300881D63 /* EDNArchiver.h in Headers */,
+				B5C7A66F17CDC21A005E0615 /* NSString+EDN.h in Headers */,
+				B5C7A67317CEF1AE005E0615 /* EDNWriter.h in Headers */,
+				B5C7A67817CEFB26005E0615 /* NSObject+EDN.h in Headers */,
+				B5B837D717D038B900AEA457 /* EDNRepresentation.h in Headers */,
+				B5B837DA17D03B2900AEA457 /* EDNTaggedElement.h in Headers */,
+				B53AE3D017D16E2F000CBCC0 /* NSUUID+EDN.h in Headers */,
+				B53AE3D417D1728E000CBCC0 /* EDNRegistry.h in Headers */,
+				B53AE3DC17D18024000CBCC0 /* NSDate+EDN.h in Headers */,
+				B539282A17D2F24E00B94545 /* EDNRoot.h in Headers */,
+				CFA008CE17D44C600077B8E2 /* EDNReaderState.h in Headers */,
+				CFA008D217D45E810077B8E2 /* NSInputStream+EDN.h in Headers */,
+				CFA008D617D45F4B0077B8E2 /* NSData+EDN.h in Headers */,
+				B5BCDA3C196EAD6A0007B42A /* EDNRatio.h in Headers */,
+				CFA008DA17D464AC0077B8E2 /* EDNWriterState.h in Headers */,
+				CFA008E017D4D43C0077B8E2 /* EDNLazyEnumerator.h in Headers */,
+				B5A7BA7A17DC280B00EE55A1 /* EDNCharacter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,7 +419,7 @@
 			name = "edn-objc-tests";
 			productName = "edn-objcTests";
 			productReference = B5C7A63717C8F282005E0615 /* edn-objc-tests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productType = "com.apple.product-type.bundle.ocunit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -477,29 +479,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B59D8EA41970DBC300881D63 /* BMOEDNArchiver.m in Sources */,
-				B59D8EAF1972FCE800881D63 /* BMOEDNUnarchiver.m in Sources */,
-				B5C7A63117C8F282005E0615 /* BMOEDNSerialization.m in Sources */,
-				B5C7A65317C9B35D005E0615 /* BMOEDNKeyword.m in Sources */,
-				B5C7A65917C9C1F4005E0615 /* BMOEDNList.m in Sources */,
-				B5C7A65C17CAB740005E0615 /* BMOEDNSymbol.m in Sources */,
-				B5C7A65F17CC590A005E0615 /* NSString+BMOEDN.m in Sources */,
-				B5C7A66517CDBE74005E0615 /* BMOEDNReader.m in Sources */,
-				B5C7A67417CEF1AE005E0615 /* BMOEDNWriter.m in Sources */,
-				B5C7A67917CEFB26005E0615 /* NSObject+BMOEDN.m in Sources */,
-				B5B837DB17D03B2900AEA457 /* BMOEDNTaggedElement.m in Sources */,
-				B53AE3D117D16E2F000CBCC0 /* NSUUID+BMOEDN.m in Sources */,
-				B53AE3D817D17E3B000CBCC0 /* BMOEDNRegistry.m in Sources */,
-				B53AE3DD17D18024000CBCC0 /* NSDate+BMOEDN.m in Sources */,
-				B539282717D2E53100B94545 /* BMOEDNError.m in Sources */,
-				B539282B17D2F24E00B94545 /* BMOEDNRoot.m in Sources */,
-				CFA008CF17D44C600077B8E2 /* BMOEDNReaderState.m in Sources */,
-				CFA008D317D45E810077B8E2 /* NSInputStream+BMOEDN.m in Sources */,
-				CFA008D717D45F4B0077B8E2 /* NSData+BMOEDN.m in Sources */,
-				CFA008DB17D464AC0077B8E2 /* BMOEDNWriterState.m in Sources */,
-				B5BCDA3D196EAD6A0007B42A /* BMOEDNRatio.m in Sources */,
-				CFA008E117D4D43C0077B8E2 /* BMOLazyEnumerator.m in Sources */,
-				B5A7BA7B17DC280B00EE55A1 /* BMOEDNCharacter.m in Sources */,
+				B59D8EA41970DBC300881D63 /* EDNArchiver.m in Sources */,
+				B59D8EAF1972FCE800881D63 /* EDNUnarchiver.m in Sources */,
+				B5C7A63117C8F282005E0615 /* EDNSerialization.m in Sources */,
+				B5C7A65317C9B35D005E0615 /* EDNKeyword.m in Sources */,
+				B5C7A65917C9C1F4005E0615 /* EDNList.m in Sources */,
+				B5C7A65C17CAB740005E0615 /* EDNSymbol.m in Sources */,
+				B5C7A65F17CC590A005E0615 /* NSString+EDN.m in Sources */,
+				B5C7A66517CDBE74005E0615 /* EDNReader.m in Sources */,
+				B5C7A67417CEF1AE005E0615 /* EDNWriter.m in Sources */,
+				B5C7A67917CEFB26005E0615 /* NSObject+EDN.m in Sources */,
+				B5B837DB17D03B2900AEA457 /* EDNTaggedElement.m in Sources */,
+				B53AE3D117D16E2F000CBCC0 /* NSUUID+EDN.m in Sources */,
+				B53AE3D817D17E3B000CBCC0 /* EDNRegistry.m in Sources */,
+				B53AE3DD17D18024000CBCC0 /* NSDate+EDN.m in Sources */,
+				B539282717D2E53100B94545 /* EDNError.m in Sources */,
+				B539282B17D2F24E00B94545 /* EDNRoot.m in Sources */,
+				CFA008CF17D44C600077B8E2 /* EDNReaderState.m in Sources */,
+				CFA008D317D45E810077B8E2 /* NSInputStream+EDN.m in Sources */,
+				CFA008D717D45F4B0077B8E2 /* NSData+EDN.m in Sources */,
+				CFA008DB17D464AC0077B8E2 /* EDNWriterState.m in Sources */,
+				B5BCDA3D196EAD6A0007B42A /* EDNRatio.m in Sources */,
+				CFA008E117D4D43C0077B8E2 /* EDNLazyEnumerator.m in Sources */,
+				B5A7BA7B17DC280B00EE55A1 /* EDNCharacter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
