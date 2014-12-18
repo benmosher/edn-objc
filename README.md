@@ -3,11 +3,11 @@ edn-objc
 
 A work-in-progress implementation of [edn-format](https://github.com/edn-format/edn) for Objective-C/Foundation platforms (e.g. iOS and OSX).
 
-Current design goals are completeness and spec adherence. Any valid edn data deserialized into Cocoa/BMOEDN objects should be serialized back to the same edn UTF-8 data (barring whitespace, both in strings and amidst the edn data). This includes the 'root'; the top-level objects that are not within any root container.
+Current design goals are completeness and spec adherence. Any valid edn data deserialized into Cocoa/EDN objects should be serialized back to the same edn UTF-8 data (barring whitespace, both in strings and amidst the edn data). This includes the 'root'; the top-level objects that are not within any root container.
 
-Tagged elements (such as the built-in `uuid` and `inst`) may be converted to concrete Cocoa objects (again, `NSUUID` and `NSDate`) via implementation of the `BMOEDNRepresentation` protocol, and registering with `BMOEDNRegistry` during `+load`. See the `NSUUID+BMOEDN` and `NSDate+BMOEDN` implementations for detail.
+Tagged elements (such as the built-in `uuid` and `inst`) may be converted to concrete Cocoa objects (again, `NSUUID` and `NSDate`) via implementation of the `EDNRepresentation` protocol, and registering with `EDNRegistry` during `+load`. See the `NSUUID+EDN` and `NSDate+EDN` implementations for detail.
 
-'Unknown' tagged elements will be converted to/from `BMOEDNTaggedElement` during de/serialization. 
+'Unknown' tagged elements will be converted to/from `EDNTaggedElement` during de/serialization. 
 
 Objects that implement keyed `NSCoding` will be written out as a map tagged with `#edn-objc/[the class name]`. Objects serialized this way may also be reconstituted at read time. Secure decoding is not yet supported.
 
@@ -19,7 +19,7 @@ Note: very little testing has occurred so far; the goal was to get a roughed-in 
 
 ##Entry points
 
-The primary entry point is `BMOEDNSerialization`, which exposes an `NSJSONSerialization`-style API for parsing strings, data, or streams, as well as writing object graphs back to the same.
+The primary entry point is `EDNSerialization`, which exposes an `NSJSONSerialization`-style API for parsing strings, data, or streams, as well as writing object graphs back to the same.
 
 There are a few categories defined; `NSData`, `NSInputStream`, and `NSString` each have an `-ednObject` category method that will attempt to parse the instance (returning `nil` on failure). `NSObject` defines `-ednString` and `-ednData` methods to attempt to write out the object as the root. 
 
@@ -57,19 +57,19 @@ bonus! `metadata` ⇌ `NSDictionary`
 
 #####Custom object mappings
 
-root (top-level)  `BMOEDNRoot`
+root (top-level)  `EDNRoot`
 
-`list` ⇌ `BMOEDNList`
+`list` ⇌ `EDNList`
 
-`character` ⇌ `BMOEDNCharacter`
+`character` ⇌ `EDNCharacter`
 
-`symbol` ⇌ `BMOEDNSymbol`
+`symbol` ⇌ `EDNSymbol`
 
-`keyword` ⇌ `BMOEDNKeyword`
+`keyword` ⇌ `EDNKeyword`
 
-arbitrary tags ⇌ `BMOEDNTaggedElement`
+arbitrary tags ⇌ `EDNTaggedElement`
 
-`ratio` ⇌ `BMOEDNRatio`
+`ratio` ⇌ `EDNRatio`
 
 
 ###License
