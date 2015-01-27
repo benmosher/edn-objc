@@ -58,6 +58,13 @@
     STAssertEqualObjects([@"1/2" ednObject], [EDNRatio ratioWithNumerator:1 denominator:2], @"");
 }
 
+- (void)testEscapeWithNewlinesInString {
+    STAssertEqualObjects([@"\"\n\"" ednObject], @"\n", @"Test newline");
+    STAssertEqualObjects([@"\"\\n\"" ednObject], @"\n", @"Test newline");
+    STAssertEqualObjects([@"\"\\\\n\"" ednObject], @"\\\n", @"Test newline");
+    STAssertEqualObjects([@"\"\\\\\n\"" ednObject], @"\\\n", @"Test backslash and newline");
+}
+
 - (void) testRatio {
     EDNRatio *r = [EDNRatio ratioWithNumerator:1 denominator:2];
     STAssertEquals(r.numerator, 1, @"bad numerator");
