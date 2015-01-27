@@ -1,3 +1,4 @@
 language: objective-c
 xcode_project: edn-objc.xcodeproj
 xcode_scheme: edn-objc
+xcode_sdk: iphonesimulator
