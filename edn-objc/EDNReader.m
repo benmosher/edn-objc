@@ -519,16 +519,33 @@ id EDNParseSymbolType(id<EDNReaderState> parserState, Class symbolClass) {
     NSString *string = @"";
     
     if ([parserState markedLength] > 0) {
-        NSMutableString *markedString = [parserState markedString];
-        // Replace escapes with proper values
-        // Have to regen the range each time, as the string may
-        // get shorter if replacements occur.
-        [markedString replaceOccurrencesOfString:@"\\\"" withString:@"\"" options:0 range:NSMakeRange(0, markedString.length)];
-        [markedString replaceOccurrencesOfString:@"\\t" withString:@"\t" options:0 range:NSMakeRange(0, markedString.length)];
-        [markedString replaceOccurrencesOfString:@"\\r" withString:@"\r" options:0 range:NSMakeRange(0, markedString.length)];
-        [markedString replaceOccurrencesOfString:@"\\n" withString:@"\n" options:0 range:NSMakeRange(0, markedString.length)];
-        [markedString replaceOccurrencesOfString:@"\\\\" withString:@"\\" options:0 range:NSMakeRange(0, markedString.length)];
-        string = [markedString copy]; // immutabilityyyy
+        // TODO: scanner as parser(State) instead of carving up string?
+        // TODO: move char set, escape map up to const somewhere
+        NSCharacterSet *escapeChars = [NSCharacterSet characterSetWithCharactersInString:@"\\"];
+        NSArray *escapes = @[@[@"\\\\", @"\\"], @[@"\\n", @"\n"], @[@"\\t", @"\t"], @[@"\\r", @"\r"], @[@"\\\"", @"\""], @[@"\\", @"\\"]];
+        
+        NSScanner *escapeScanner = [NSScanner scannerWithString:[parserState markedString]];
+        escapeScanner.caseSensitive = YES;
+        escapeScanner.charactersToBeSkipped = nil;
+        
+        NSMutableString *accumulator = [@"" mutableCopy];
+        NSString *scanned = @"";
+        
+        while (!escapeScanner.atEnd) {
+            if([escapeScanner scanUpToCharactersFromSet:escapeChars intoString:&scanned]) {
+                [accumulator appendString:scanned];
+            }
+            
+            if (escapeScanner.atEnd) { break; }
+            
+            [escapes enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                if((*stop = [escapeScanner scanString:obj[0] intoString:NULL])) {
+                    [accumulator appendString: obj[1]];
+                }
+            }];
+        }
+        
+        string = [accumulator copy];
     }
     [parserState moveAhead];
     return string;
