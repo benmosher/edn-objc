@@ -1,5 +1,7 @@
-edn-objc ![build](https://travis-ci.org/benmosher/edn-objc.svg?branch=master)
+edn-objc
 ========
+
+[![build](https://travis-ci.org/benmosher/edn-objc.svg?branch=master)](https://travis-ci.org/benmosher/edn-objc)
 
 A work-in-progress implementation of [edn-format](https://github.com/edn-format/edn) for Objective-C/Foundation platforms (e.g. iOS and OSX).
 
