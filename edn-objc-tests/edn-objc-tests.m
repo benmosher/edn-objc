@@ -65,6 +65,18 @@
     STAssertEqualObjects([@"\"\\\\\n\"" ednObject], @"\\\n", @"Test backslash and newline");
 }
 
+- (void)testJavaEscapeSequences {
+    // http://web.cerritos.edu/jwilson/SitePages/java_language_resources/Java_Escape_Sequences.htm
+    NSArray *escapes = @[@"\\",@"\\",@"\"",@"\n",@"\t",@"\b",@"\f",@"\r"];
+
+    for (NSString *item in escapes) {
+        STAssertTrue([item length] == 1, @"has to be one char");
+        NSString *parsed = [[item ednString] ednObject];
+        STAssertTrue([parsed length] == 1, @"has to be one char");
+        STAssertEqualObjects(parsed, item, @"has to be same value");
+    }
+}
+
 - (void) testRatio {
     EDNRatio *r = [EDNRatio ratioWithNumerator:1 denominator:2];
     STAssertEquals(r.numerator, 1, @"bad numerator");

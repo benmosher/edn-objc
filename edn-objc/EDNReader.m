@@ -142,7 +142,7 @@ id EDNParseSymbolType(id<EDNReaderState> parserState, Class symbolClass) {
         whitespace =  [ws copy];
     }
     if (quoted == nil) {
-        quoted = [NSCharacterSet characterSetWithCharactersInString:@"\\\"rnt"];
+        quoted = [NSCharacterSet characterSetWithCharactersInString:@"\\\"rntbf'"];
     }
     if (numberPrefix == nil) {
         numberPrefix = [NSCharacterSet characterSetWithCharactersInString:@"+-."];
@@ -522,7 +522,7 @@ id EDNParseSymbolType(id<EDNReaderState> parserState, Class symbolClass) {
         // TODO: scanner as parser(State) instead of carving up string?
         // TODO: move char set, escape map up to const somewhere
         NSCharacterSet *escapeChars = [NSCharacterSet characterSetWithCharactersInString:@"\\"];
-        NSArray *escapes = @[@[@"\\\\", @"\\"], @[@"\\n", @"\n"], @[@"\\t", @"\t"], @[@"\\r", @"\r"], @[@"\\\"", @"\""], @[@"\\", @"\\"]];
+        NSArray *escapes = @[@[@"\\\\", @"\\"], @[@"\\n", @"\n"], @[@"\\t", @"\t"], @[@"\\r", @"\r"], @[@"\\b", @"\b"], @[@"\\f", @"\f"], @[@"\\'", @"\'"], @[@"\\\"", @"\""], @[@"\\", @"\\"]];
         
         NSScanner *escapeScanner = [NSScanner scannerWithString:[parserState markedString]];
         escapeScanner.caseSensitive = YES;
